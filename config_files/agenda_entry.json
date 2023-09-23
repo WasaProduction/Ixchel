@@ -1,0 +1,11 @@
+{
+	"Comment": "# must be included along with the hex code",
+	"0_Default": "Blue",
+	"0": "#01ACE5",
+	"1_Accepted": "1 = Green",
+	"1": "#70D945",
+	"2_Canceled": "Red",
+	"2": "#D92128",
+	"3_Unknown": "Purple",
+	"3": "#8F14D9"
+}
