@@ -7,35 +7,35 @@ Classes:
 
 
 class C1(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c1, image_path=path_obj.c1, name=bone_names.c1)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c1, image_path=path_obj.c1, name=bone_names.c1, colors=colors)
 
 
 class C2(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c2, image_path=path_obj.c2, name=bone_names.c2)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c2, image_path=path_obj.c2, name=bone_names.c2, colors=colors)
 
 
 class C3(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c3, image_path=path_obj.c3, name=bone_names.c3)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c3, image_path=path_obj.c3, name=bone_names.c3, colors=colors)
 
 
 class C4(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c4, image_path=path_obj.c4, name=bone_names.c4)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c4, image_path=path_obj.c4, name=bone_names.c4, colors=colors)
 
 
 class C5(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c5, image_path=path_obj.c5, name=bone_names.c5)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c5, image_path=path_obj.c5, name=bone_names.c5, colors=colors)
 
 
 class C6(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c6, image_path=path_obj.c6, name=bone_names.c6)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c6, image_path=path_obj.c6, name=bone_names.c6, colors=colors)
 
 
 class C7(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None):
-        super().__init__(bone_id=bone_ids.c7, image_path=path_obj.c7, name=bone_names.c7)
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, colors=None):
+        super().__init__(bone_id=bone_ids.c7, image_path=path_obj.c7, name=bone_names.c7, colors=colors)

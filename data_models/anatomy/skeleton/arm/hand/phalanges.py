@@ -18,20 +18,20 @@ Nomenclature:
 
 
 class TProximal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_t_phalanx_proximal, image_path=path_obj.r_t_phalanx_proximal, name=bone_names.r_t_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.r_t_phalanx_proximal, image_path=path_obj.r_t_phalanx_proximal, name=bone_names.r_t_phalanx_proximal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_t_phalanx_proximal, image_path=path_obj.l_t_phalanx_proximal, name=bone_names.l_t_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.l_t_phalanx_proximal, image_path=path_obj.l_t_phalanx_proximal, name=bone_names.l_t_phalanx_proximal, colors=colors)
         self.right = right
 
 
 class TDistal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_t_phalanx_distal, image_path=path_obj.r_t_phalanx_distal, name=bone_names.r_t_phalanx_distal)
+            super().__init__(bone_id=bone_ids.r_t_phalanx_distal, image_path=path_obj.r_t_phalanx_distal, name=bone_names.r_t_phalanx_distal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_t_phalanx_distal, image_path=path_obj.l_t_phalanx_distal, name=bone_names.l_t_phalanx_distal)
+            super().__init__(bone_id=bone_ids.l_t_phalanx_distal, image_path=path_obj.l_t_phalanx_distal, name=bone_names.l_t_phalanx_distal, colors=colors)
         self.right = right
 
 
@@ -39,29 +39,29 @@ class TDistal(Bone):
 
 
 class IProximal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_i_phalanx_proximal, image_path=path_obj.r_i_phalanx_proximal, name=bone_names.r_i_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.r_i_phalanx_proximal, image_path=path_obj.r_i_phalanx_proximal, name=bone_names.r_i_phalanx_proximal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_i_phalanx_proximal, image_path=path_obj.l_i_phalanx_proximal, name=bone_names.l_i_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.l_i_phalanx_proximal, image_path=path_obj.l_i_phalanx_proximal, name=bone_names.l_i_phalanx_proximal, colors=colors)
         self.right = right
 
 
 class IIntermediate(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_i_phalanx_intermediate, image_path=path_obj.r_i_phalanx_intermediate, name=bone_names.r_i_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.r_i_phalanx_intermediate, image_path=path_obj.r_i_phalanx_intermediate, name=bone_names.r_i_phalanx_intermediate, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_i_phalanx_intermediate, image_path=path_obj.l_i_phalanx_intermediate, name=bone_names.l_i_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.l_i_phalanx_intermediate, image_path=path_obj.l_i_phalanx_intermediate, name=bone_names.l_i_phalanx_intermediate, colors=colors)
         self.right = right
 
 
 class IDistal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_i_phalanx_distal, image_path=path_obj.r_i_phalanx_distal, name=bone_names.r_i_phalanx_distal)
+            super().__init__(bone_id=bone_ids.r_i_phalanx_distal, image_path=path_obj.r_i_phalanx_distal, name=bone_names.r_i_phalanx_distal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_i_phalanx_distal, image_path=path_obj.l_i_phalanx_distal, name=bone_names.l_i_phalanx_distal)
+            super().__init__(bone_id=bone_ids.l_i_phalanx_distal, image_path=path_obj.l_i_phalanx_distal, name=bone_names.l_i_phalanx_distal, colors=colors)
         self.right = right
 
 
@@ -69,29 +69,29 @@ class IDistal(Bone):
 
 
 class MProximal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_m_phalanx_proximal, image_path=path_obj.r_m_phalanx_proximal, name=bone_names.r_m_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.r_m_phalanx_proximal, image_path=path_obj.r_m_phalanx_proximal, name=bone_names.r_m_phalanx_proximal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_m_phalanx_proximal, image_path=path_obj.l_m_phalanx_proximal, name=bone_names.l_m_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.l_m_phalanx_proximal, image_path=path_obj.l_m_phalanx_proximal, name=bone_names.l_m_phalanx_proximal, colors=colors)
         self.right = right
 
 
 class MIntermediate(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_m_phalanx_intermediate, image_path=path_obj.r_m_phalanx_intermediate, name=bone_names.r_m_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.r_m_phalanx_intermediate, image_path=path_obj.r_m_phalanx_intermediate, name=bone_names.r_m_phalanx_intermediate, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_m_phalanx_intermediate, image_path=path_obj.l_m_phalanx_intermediate, name=bone_names.l_m_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.l_m_phalanx_intermediate, image_path=path_obj.l_m_phalanx_intermediate, name=bone_names.l_m_phalanx_intermediate, colors=colors)
         self.right = right
 
 
 class MDistal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_m_phalanx_distal, image_path=path_obj.r_m_phalanx_distal, name=bone_names.r_m_phalanx_distal)
+            super().__init__(bone_id=bone_ids.r_m_phalanx_distal, image_path=path_obj.r_m_phalanx_distal, name=bone_names.r_m_phalanx_distal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_m_phalanx_distal, image_path=path_obj.l_m_phalanx_distal, name=bone_names.l_m_phalanx_distal)
+            super().__init__(bone_id=bone_ids.l_m_phalanx_distal, image_path=path_obj.l_m_phalanx_distal, name=bone_names.l_m_phalanx_distal, colors=colors)
         self.right = right
 
 
@@ -99,29 +99,29 @@ class MDistal(Bone):
 
 
 class RProximal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_r_phalanx_proximal, image_path=path_obj.r_r_phalanx_proximal, name=bone_names.r_r_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.r_r_phalanx_proximal, image_path=path_obj.r_r_phalanx_proximal, name=bone_names.r_r_phalanx_proximal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_r_phalanx_proximal, image_path=path_obj.l_r_phalanx_proximal, name=bone_names.l_r_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.l_r_phalanx_proximal, image_path=path_obj.l_r_phalanx_proximal, name=bone_names.l_r_phalanx_proximal, colors=colors)
         self.right = right
 
 
 class RIntermediate(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_r_phalanx_intermediate, image_path=path_obj.r_r_phalanx_intermediate, name=bone_names.r_r_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.r_r_phalanx_intermediate, image_path=path_obj.r_r_phalanx_intermediate, name=bone_names.r_r_phalanx_intermediate, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_r_phalanx_intermediate, image_path=path_obj.l_r_phalanx_intermediate, name=bone_names.l_r_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.l_r_phalanx_intermediate, image_path=path_obj.l_r_phalanx_intermediate, name=bone_names.l_r_phalanx_intermediate, colors=colors)
         self.right = right
 
 
 class RDistal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_r_phalanx_distal, image_path=path_obj.r_r_phalanx_distal, name=bone_names.r_r_phalanx_distal)
+            super().__init__(bone_id=bone_ids.r_r_phalanx_distal, image_path=path_obj.r_r_phalanx_distal, name=bone_names.r_r_phalanx_distal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_r_phalanx_distal, image_path=path_obj.l_r_phalanx_distal, name=bone_names.l_r_phalanx_distal)
+            super().__init__(bone_id=bone_ids.l_r_phalanx_distal, image_path=path_obj.l_r_phalanx_distal, name=bone_names.l_r_phalanx_distal, colors=colors)
         self.right = right
 
 
@@ -129,27 +129,27 @@ class RDistal(Bone):
 
 
 class PProximal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_p_phalanx_proximal, image_path=path_obj.r_p_phalanx_proximal, name=bone_names.r_p_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.r_p_phalanx_proximal, image_path=path_obj.r_p_phalanx_proximal, name=bone_names.r_p_phalanx_proximal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_p_phalanx_proximal, image_path=path_obj.l_p_phalanx_proximal, name=bone_names.l_p_phalanx_proximal)
+            super().__init__(bone_id=bone_ids.l_p_phalanx_proximal, image_path=path_obj.l_p_phalanx_proximal, name=bone_names.l_p_phalanx_proximal, colors=colors)
         self.right = right
 
 
 class PIntermediate(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_p_phalanx_intermediate, image_path=path_obj.r_p_phalanx_intermediate, name=bone_names.r_p_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.r_p_phalanx_intermediate, image_path=path_obj.r_p_phalanx_intermediate, name=bone_names.r_p_phalanx_intermediate, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_p_phalanx_intermediate, image_path=path_obj.l_p_phalanx_intermediate, name=bone_names.l_p_phalanx_intermediate)
+            super().__init__(bone_id=bone_ids.l_p_phalanx_intermediate, image_path=path_obj.l_p_phalanx_intermediate, name=bone_names.l_p_phalanx_intermediate, colors=colors)
         self.right = right
 
 
 class PDistal(Bone):
-    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True):
+    def __init__(self, bone_ids=None,  path_obj=None, bone_names=None, right=True, colors=None):
         if right:
-            super().__init__(bone_id=bone_ids.r_p_phalanx_distal, image_path=path_obj.r_p_phalanx_distal, name=bone_names.r_p_phalanx_distal)
+            super().__init__(bone_id=bone_ids.r_p_phalanx_distal, image_path=path_obj.r_p_phalanx_distal, name=bone_names.r_p_phalanx_distal, colors=colors)
         else:
-            super().__init__(bone_id=bone_ids.l_p_phalanx_distal, image_path=path_obj.l_p_phalanx_distal, name=bone_names.l_p_phalanx_distal)
+            super().__init__(bone_id=bone_ids.l_p_phalanx_distal, image_path=path_obj.l_p_phalanx_distal, name=bone_names.l_p_phalanx_distal, colors=colors)
         self.right = right

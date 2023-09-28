@@ -6,6 +6,7 @@ from config_files.startup_check import StartupCheck
 from UI.TopBar.top_bar import TopBar
 from UI.SideBar.side_bar import SideBar
 from mongodb.read.get_patient import GetPatient
+from assets.icons.buttons.button_paths import ButtonPaths
 
 
 class MainWindow(QMainWindow):
@@ -22,15 +23,16 @@ class MainWindow(QMainWindow):
         self.init_ui()
 
     def init_ui(self):
-        """Frames"""
-        frame_prescription = PrescriptionFrame(self)
-        frame_agenda = ScheduleFrame()
-        frame_summary = SummaryFrame(GetPatient('JaimeGq'))
+        button_paths = ButtonPaths()
+        """     Frames      """
+        frame_prescription = PrescriptionFrame(self, button_paths)
+        frame_agenda = ScheduleFrame(self, button_paths)
+        frame_summary = SummaryFrame(self, GetPatient('JaimeGq'), button_paths)
 
         """Stack"""
         stacked_frames = QStackedWidget()
-        stacked_frames.addWidget(frame_prescription)
         stacked_frames.addWidget(frame_summary)
+        stacked_frames.addWidget(frame_prescription)
         stacked_frames.addWidget(frame_agenda)
 
         # Main horizontal widgets

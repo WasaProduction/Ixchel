@@ -1,6 +1,5 @@
-from UI.Widgets.image_button import ImageButton
 from PyQt6.QtWidgets import QGraphicsView
-from PyQt6.QtGui import QBrush, QColor
+from PyQt6.QtGui import QColor
 from UI.TwoD.skeleton_graphic_scene import SkeletonGraphicScene
 
 
@@ -11,10 +10,11 @@ class GraphicView(QGraphicsView):
         self.init_ui()
 
     def update_button(self):
-        self.scene.update_button()
-
+        self.scene.update_skeleton()
+        # self.repaint()
 
     """     UI      """
+
     def init_ui(self):
         self.setScene(self.scene)
         self.setBackgroundBrush(QColor(49, 154, 94))

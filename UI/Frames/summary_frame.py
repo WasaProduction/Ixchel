@@ -1,3 +1,4 @@
+from UI.Frames.frame import Frame
 from PyQt6.QtWidgets import QWidget, QVBoxLayout,  QHBoxLayout, QLabel, QScrollArea
 from PyQt6.QtGui import QFont
 from UI.Widgets.status_widget_layout import StatusWidget
@@ -7,12 +8,14 @@ from UI.Widgets.background import *
 from PyQt6.QtCore import Qt
 from UI.Widgets.patient_name import PatientName
 from data_models.model_allergy import ModelAllergy
+from UI.TwoD.graphic_view import GraphicView
 import random
 
 
-class SummaryFrame(QWidget):
-    def __init__(self, patient):
-        super().__init__()
+class SummaryFrame(Frame):
+    def __init__(self, parent=None, patient=None, button_paths=None):
+        super().__init__(parent, button_path=button_paths.summary)
+        self.name = 'Summary'
         self.patient = patient
         self.init_ui()
 
@@ -105,7 +108,11 @@ class SummaryFrame(QWidget):
         patient_status_bar_widget.setFixedWidth(50)
 
         """     3D Models   """
+        #   Skeleton
+        skeleton_view = GraphicView(self)
         three_d_models_bar_layout = QVBoxLayout()
+        three_d_models_bar_layout.addWidget(skeleton_view)
+        three_d_models_bar_layout.addStretch()
         three_d_models_bar_widget = QWidget()
         three_d_models_bar_widget.setLayout(three_d_models_bar_layout)
 

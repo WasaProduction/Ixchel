@@ -1,11 +1,13 @@
+from UI.Frames.frame import Frame
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QComboBox
 from PyQt6.QtCore import pyqtSlot
 from UI.Frames.editing_area.editingarea import EditingArea
 
 
-class PrescriptionFrame(QWidget):
-    def __init__(self, parent=None):
-        super(PrescriptionFrame, self).__init__(parent)
+class PrescriptionFrame(Frame):
+    def __init__(self, parent=None, button_paths=None):
+        super().__init__(parent, button_path=button_paths.diagnosis)
+        self.name = 'Diagnosis'
         # Stacked view
         self.my_editing_area = EditingArea(self)
         # Button

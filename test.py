@@ -13,8 +13,7 @@ class MainWindow(QMainWindow):
         # QRcode()
         my_layout = QVBoxLayout()
         my_test_obj = GraphicView(self)
-
-        """----------------------"""
+#        """----------------------"""
         def pusheado():
             print('pusheado')
             my_test_obj.update_button()

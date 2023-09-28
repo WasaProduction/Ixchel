@@ -1,7 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout
 from PySide6.QtCore import Slot
-from PyQt6.QtGui import QPixmap
-from os import listdir
 
 
 class SideBar(QWidget):
@@ -9,37 +7,47 @@ class SideBar(QWidget):
         super().__init__()
         self.frame_stack = frame_stack
         self.sidebar_layout = QVBoxLayout()
+        #   Add buttons into layout
         self.add_buttons()
-        self.set_layout_properties()
+        self.init_ui()
 
     def create_buttons(self):
-        images_folder_dir = "/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/assets/icons/buttons"
-        button_images_dict = {}
-        for index, image in enumerate(listdir(images_folder_dir)):
-            # check if the image ends with png
-            if image.endswith(".png"):
-                button_images_dict[index] = (image.split('.')[0], QPixmap(image))
-
+        #   Buttons array
         button_arr = []
-        # One per frame
-        frames_folder_dir = "/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/UI/Frame"
-        listdir(images_folder_dir)
+        #   Create a button per frame.
         for index in range(self.frame_stack.count()):
-            new_button = QPushButton('button {}'.format(index))
-            new_button.clicked.connect(lambda _, l_index=index: self.frame_stack_change(self.frame_stack, l_index))
+            #   Change widget atop
+            self.frame_stack_change(index)
+            #   Button
+            new_button = QPushButton()
+            #   Button text
+            new_button.setText(self.frame_stack.widget(index).name)
+            #   Button tooltip
+            new_button.setToolTip(self.frame_stack.widget(index).name)
+            #   Button icon
+            new_button.setIcon(self.frame_stack.widget(index).icon)
+            #   Button action
+            new_button.clicked.connect(lambda _, l_index=index: self.frame_stack_change(l_index))
+            #   Add button to array
             button_arr.append(new_button)
+            #   Delete button
             del new_button
+        #   Return first widget atop the stack
+        self.frame_stack_change(0)
+        #   Return buttons array
         return button_arr
 
     @Slot()
-    def frame_stack_change(self, stack, destination):
-        stack.setCurrentIndex(destination)
+    def frame_stack_change(self, destination):
+        self.frame_stack.setCurrentIndex(destination)
 
     def add_buttons(self):
         for button in self.create_buttons():
             self.sidebar_layout.addWidget(button)
 
-    def set_layout_properties(self):
+    """     UI      """
+
+    def init_ui(self):
         self.sidebar_layout.addStretch(5)
         self.sidebar_layout.setSpacing(20)
         self.setLayout(self.sidebar_layout)
