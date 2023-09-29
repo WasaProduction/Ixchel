@@ -1,5 +1,4 @@
 from UI.Frames.frame import Frame
-from PyQt6.QtWidgets import QWidget, QVBoxLayout,  QHBoxLayout, QLabel, QScrollArea
 from PyQt6.QtGui import QFont
 from UI.Widgets.status_widget_layout import StatusWidget
 from UI.Widgets.tags.tag_container_widget import TagContainerWidget
@@ -9,15 +8,19 @@ from PyQt6.QtCore import Qt
 from UI.Widgets.patient_name import PatientName
 from data_models.model_allergy import ModelAllergy
 from UI.TwoD.graphic_view import GraphicView
+from UI.Widgets.collapsible_box import CollapsibleBox
 import random
 
 
 class SummaryFrame(Frame):
-    def __init__(self, parent=None, patient=None, button_paths=None):
-        super().__init__(parent, button_path=button_paths.summary)
-        self.name = 'Summary'
+    def __init__(self, parent=None, patient=None, button_paths=None, text_labels=None):
+        super().__init__(parent, button_path=button_paths.summary, text_labels=text_labels)
+        self.name = self.text_labels.summary_btn
         self.patient = patient
         self.init_ui()
+
+    def update_frame(self):
+        self.patient_general_information_widget.update_widget()
 
     def init_ui(self):
         """General data"""
@@ -51,19 +54,19 @@ class SummaryFrame(Frame):
         patient_essential_data_widget.setFixedHeight(100)
 
         # General information
-        patient_general_information_widget = GeneralInformation(0)
+        self.patient_general_information_widget = GeneralInformation(self, self.text_labels)
         # Hereditary background
-        patient_hereditary_background_widget = HereditaryBackground(0)
+        patient_hereditary_background_widget = HereditaryBackground(self, self.text_labels, 0)
         # Pathologic background
-        patient_pathologic_background_widget = PathologicBackground(0)
+        patient_pathologic_background_widget = PathologicBackground(self, self.text_labels, 0)
         # Immunizations
-        patient_immunizations_widget = Immunizations(0)
+        patient_immunizations_widget = Immunizations(self, self.text_labels, 0)
         # Allergies
 
         my_array = []
         for i in range(33):
             my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
-        patient_allergies_widget = Allergy(my_array)
+        patient_allergies_widget = Allergy(self, self.text_labels, my_array)
         """     Tags Section    """
         tags_container_widget = QScrollArea()
         tags_container_widget.setFixedHeight(150)
@@ -91,7 +94,7 @@ class SummaryFrame(Frame):
         """     Section Container   """
         patient_general_info_layout = QVBoxLayout()
         patient_general_info_layout.addWidget(patient_essential_data_widget)
-        patient_general_info_layout.addWidget(patient_general_information_widget)
+        patient_general_info_layout.addWidget(self.patient_general_information_widget)
         patient_general_info_layout.addWidget(patient_hereditary_background_widget)
         patient_general_info_layout.addWidget(patient_pathologic_background_widget)
         patient_general_info_layout.addWidget(patient_immunizations_widget)

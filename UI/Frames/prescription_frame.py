@@ -5,9 +5,9 @@ from UI.Frames.editing_area.editingarea import EditingArea
 
 
 class PrescriptionFrame(Frame):
-    def __init__(self, parent=None, button_paths=None):
-        super().__init__(parent, button_path=button_paths.diagnosis)
-        self.name = 'Diagnosis'
+    def __init__(self, parent=None, button_paths=None, text_labels=None):
+        super().__init__(parent, button_path=button_paths.diagnosis, text_labels=text_labels)
+        self.name = text_labels.diagnosis_btn
         # Stacked view
         self.my_editing_area = EditingArea(self)
         # Button

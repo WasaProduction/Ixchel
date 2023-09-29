@@ -1,0 +1,48 @@
+{
+  "text": {
+    "agenda_btn": [
+      "Agenda",
+      "Agenda"
+    ],
+    "diagnosis_btn": [
+      "Diagnosis",
+      "Diagnostico"
+    ],
+    "summary_btn": [
+      "Summary",
+      "Resumen"
+    ],
+    "general_information_lbl": [
+      "General information",
+      "Información general"
+    ],
+    "age_lbl": [
+      "Age",
+      "Edad"
+    ],
+    "weight_lbl": [
+      "Weight",
+      "Peso"
+    ],
+    "height_lbl": [
+      "height",
+      "Altura"
+    ],
+    "hereditary_lbl": [
+      "Hereditary",
+      "Hereditario"
+    ],
+    "pathologic_lbl": [
+      "Pathologic",
+      "Patológico"
+    ],
+    "immunizations_lbl": [
+      "Immunizations",
+      "inmunizaciónes"
+    ],
+    "allergies_lbl": [
+      "Allergies",
+      "Alergias"
+    ]
+  }
+}

@@ -6,57 +6,93 @@ from UI.Widgets.collapsible_box import CollapsibleBox
 
 
 class GeneralInformation(QWidget):
-    def __init__(self, general_information):
-        super().__init__()
-        general_layout = QVBoxLayout()
-        section_title = QLabel("General Information")
-        general_layout.addWidget(section_title)
-        arr = ['Age: 28', 'Weight: 70', 'Height: 1.76']
-        # My tree
-        tree = QTreeWidget(self)
-        general_layout.addWidget(tree)
-        self.setLayout(general_layout)
-        for element in arr:
-            element_itm = QTreeWidgetItem(tree)
-            element_itm.setText(0, element)
+    def __init__(self, parent=None, text_labels=None, general_information=None):
+        super().__init__(parent)
+        self.text_labels = text_labels
+        self.tittle = self.text_labels.general_info_lbl
+        self.dict = {'Age': 28, 'Weight': 70, 'Height': 1.76}
+        #   Layout
+        self.general_layout = QVBoxLayout()
+        #   Tree widget
+        self.tree = QTreeWidget(self)
+        #   Set tree header
+        self.tree.setHeaderLabels([self.tittle])
+        #   Hide header
+        self.tree.setHeaderHidden(True)
+        #   Populate tree
+        self.populate_tree()
+        #   Adjust tree height
+        self.adjust_tree_widget_height()
+        #   Collapsible height
+        self.collapsible_widget = CollapsibleBox(self, self.tittle, self.tree)
+        self.init_ui()
 
-        height_lbl = QLabel('1.76')
-        weight = QLabel('70')
-        tattoos = True
+    def populate_tree(self):
+        #   Traverse self.dict keys and values.
+        for key in self.dict:
+            item = QTreeWidgetItem(self.tree)
+            #   Insert item "Key: Value" format
+            item.setText(0, key + ': ' + str(self.dict[key]))
+
+    def adjust_tree_widget_height(self):
+        #   Calculate height
+        total_height = self.tree.sizeHintForRow(0) * (len(self.dict) * 2) + self.tree.sizeHintForRow(0)
+        #   Set height
+        self.tree.setMinimumHeight(total_height)
+
+    def update_widget(self, general_information=None):
+        if general_information is None:
+            self.dict = {}
+        else:
+            self.dict = general_information
+        #   Clear tree
+        self.tree.clear()
+        #   Repopulate tree
+        self.populate_tree()
+
+    def init_ui(self):
+        #   Add expandable widget to layout
+        self.general_layout.addWidget(self.collapsible_widget)
+        #   Set layout
+        self.setLayout(self.general_layout)
 
 
 class HereditaryBackground(QWidget):
-    def __init__(self, hereditary_information):
-        super().__init__()
+    def __init__(self, parent=None, text_labels=None, hereditary_information=None):
+        super().__init__(parent)
+        self.text_labels = text_labels
         hereditary_layout = QVBoxLayout()
-        section_title = QLabel('Hereditary Background')
+        section_title = QLabel(self.text_labels.hereditary_lbl)
         hereditary_layout.addWidget(section_title)
         self.setLayout(hereditary_layout)
 
 
 class PathologicBackground(QWidget):
-    def __init__(self, pathologic_information):
-        super().__init__()
+    def __init__(self, parent=None, text_labels=None, pathologic_information=None):
+        super().__init__(parent)
+        self.text_labels = text_labels
         pathologic_layout = QVBoxLayout()
-        section_title = QLabel('Pathologic Background')
+        section_title = QLabel(self.text_labels.pathologic_lbl)
         pathologic_layout.addWidget(section_title)
         self.setLayout(pathologic_layout)
 
 
 class Immunizations(QWidget):
-    def __init__(self, immunizations_information):
-        super().__init__()
+    def __init__(self, parent=None, text_labels=None, immunizations_information=None):
+        super().__init__(parent)
+        self.text_labels = text_labels
         immunizations_layout = QVBoxLayout()
-        section_title = QLabel('Hereditary Background')
+        section_title = QLabel(self.text_labels.immunizations_lbl)
         immunizations_layout.addWidget(section_title)
         self.setLayout(immunizations_layout)
 
 
 class Allergy (QWidget):
-    def __init__(self, allergies_information):
-        super().__init__()
+    def __init__(self, parent=None, text_labels=None, allergies_information=None):
+        super().__init__(parent)
+        self.text_labels = text_labels
         allergies_layout = QVBoxLayout()
-        section_title = QLabel("Allergies")
+        section_title = QLabel(self.text_labels.allergies_lbl)
         allergies_layout.addWidget(section_title)
         # Grid containing allergies
         grid_layout = QGridLayout()

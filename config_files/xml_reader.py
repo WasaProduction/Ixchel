@@ -2,7 +2,7 @@ import xml.etree.ElementTree as Et
 from datetime import datetime
 
 
-class XMLReader():
+class XMLReader:
     path = '/Users/jaimegonzalezquirarte/Desktop/App/XML_Files/summary_a01260410.xml'
     def pull_info(tree):
         for section in tree:

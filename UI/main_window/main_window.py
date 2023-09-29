@@ -7,6 +7,7 @@ from UI.TopBar.top_bar import TopBar
 from UI.SideBar.side_bar import SideBar
 from mongodb.read.get_patient import GetPatient
 from assets.icons.buttons.button_paths import ButtonPaths
+from mongodb.read.get_text_labels import GetTextLabels
 
 
 class MainWindow(QMainWindow):
@@ -24,10 +25,12 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         button_paths = ButtonPaths()
+        text_labels = GetTextLabels()
+        patient = GetPatient('JaimeGq')
         """     Frames      """
-        frame_prescription = PrescriptionFrame(self, button_paths)
-        frame_agenda = ScheduleFrame(self, button_paths)
-        frame_summary = SummaryFrame(self, GetPatient('JaimeGq'), button_paths)
+        frame_prescription = PrescriptionFrame(self, button_paths, text_labels)
+        frame_agenda = ScheduleFrame(self, button_paths, text_labels)
+        frame_summary = SummaryFrame(self, patient, button_paths, text_labels)
 
         """Stack"""
         stacked_frames = QStackedWidget()
