@@ -1,10 +1,11 @@
 from UI.Frames.frame import Frame
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QLabel, QScrollArea, QHBoxLayout, QVBoxLayout
 from UI.Widgets.status_widget_layout import StatusWidget
 from UI.Widgets.tags.tag_container_widget import TagContainerWidget
 from UI.Widgets.icons.sex_icon import SexIconWidget
-from UI.Widgets.background import *
-from PyQt6.QtCore import Qt
+from UI.Widgets.background import GeneralInformation, HereditaryBackground, PathologicBackground, Immunizations, Allergy
 from UI.Widgets.patient_name import PatientName
 from data_models.model_allergy import ModelAllergy
 from UI.TwoD.graphic_view import GraphicView
@@ -94,13 +95,21 @@ class SummaryFrame(Frame):
         """     Section Container   """
         patient_general_info_layout = QVBoxLayout()
         patient_general_info_layout.addWidget(patient_essential_data_widget)
+        patient_general_info_layout.setStretch(0, 1)
         patient_general_info_layout.addWidget(self.patient_general_information_widget)
+        patient_general_info_layout.setStretch(1, 1)
         patient_general_info_layout.addWidget(patient_hereditary_background_widget)
+        patient_general_info_layout.setStretch(2, 1)
         patient_general_info_layout.addWidget(patient_pathologic_background_widget)
+        patient_general_info_layout.setStretch(3, 1)
         patient_general_info_layout.addWidget(patient_immunizations_widget)
+        patient_general_info_layout.setStretch(4, 1)
         patient_general_info_layout.addWidget(patient_allergies_widget)
+        patient_general_info_layout.setStretch(5, 1)
         patient_general_info_layout.addWidget(tags_container_widget)
+        patient_general_info_layout.setStretch(6, 4)
         patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        patient_general_info_layout.setSpacing(5)
         patient_general_info_widget = QWidget()
         patient_general_info_widget.setLayout(patient_general_info_layout)
         """     Patient statusbar   """

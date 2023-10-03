@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QToolButton, QWidget, QSizePolicy, QFrame, QScrollArea, QVBoxLayout
-from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot
+from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot, QTimer
 
 
 class CollapsibleBox(QWidget):
@@ -8,16 +8,30 @@ class CollapsibleBox(QWidget):
         self.tag_list = []
         # Toggle button
         self.toggle_button = QToolButton()
+        #   Flag to prevent button spamming
+        self.button_enabled = True
+        #   Timer to re-enable the button after a delay
+        self.re_enable_timer = QTimer()
+        self.re_enable_timer.timeout.connect(self.enable_button)
+        #   Expanded flag
+        self.expanded = False
+        """
         self.toggle_button.setCheckable(True)
         self.toggle_button.setChecked(False)
+        """
         self.toggle_button.setText(title)
         self.toggle_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.toggle_button.setArrowType(Qt.ArrowType.RightArrow)
-        self.toggle_button.pressed.connect(self.on_pressed)
+        self.toggle_button.clicked.connect(self.on_clicked)
         self.toggle_animation = QParallelAnimationGroup(self)
 
         # Expandable area
-        self.content_area = QScrollArea(maximumHeight=0, minimumHeight=0)
+        self.content = content
+        print('widget:', type(self.content), 'size', self.content.minimumSizeHint())
+        self.content_area = QScrollArea()
+        #self.content_area.setMinimumSize(self.content.minimumSizeHint())
+        self.content_area.setMinimumHeight(0)
+        self.content_area.setMaximumHeight(1)
         self.content_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.content_area.setFrameShape(QFrame.Shape.NoFrame)
 
@@ -28,7 +42,7 @@ class CollapsibleBox(QWidget):
         # Content inside expandable area
         content_widget = QWidget()
         v_lay = QVBoxLayout()
-        v_lay.addWidget(content)
+        v_lay.addWidget(self.content)
         content_widget.setLayout(v_lay)
         self.content_area.setWidget(content_widget)
 
@@ -58,15 +72,33 @@ class CollapsibleBox(QWidget):
         content_animation.setEndValue(content_height)
 
     @pyqtSlot()
-    def on_pressed(self):
-        # Get the check status of the button
-        checked = self.toggle_button.isChecked()
-        # Change the arrow on the button
-        self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not checked else Qt.ArrowType.RightArrow)
-        # Set the animation direction
-        self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not checked else
-                                           QAbstractAnimation.Direction.Backward)
-        # Call the animation group
-        self.toggle_animation.start()
-        # Revert the button status
-        self.toggle_button.setChecked(not self.toggle_button.isChecked())
+    def on_clicked(self):
+        if self.button_enabled:
+            """
+            # Get the check status of the button
+            checked = self.toggle_button.isChecked()
+            # Change the arrow on the button
+            self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not checked else Qt.ArrowType.RightArrow)
+            # Set the animation direction
+            self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not checked else
+                                               QAbstractAnimation.Direction.Backward)
+            """
+            # Change the arrow on the button
+            self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not self.expanded else Qt.ArrowType.RightArrow)
+            # Set the animation direction
+            self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not self.expanded else
+                                               QAbstractAnimation.Direction.Backward)
+
+            # Call the animation group
+            self.toggle_animation.start()
+            # Revert the button status
+            self.toggle_button.setChecked(not self.toggle_button.isChecked())
+            #   Reset expanded flag
+            self.expanded = not self.expanded
+            self.button_enabled = False
+            #   Re-enable the button after x time
+            self.re_enable_timer.start(1000)
+
+    def enable_button(self):
+        self.button_enabled = True
+        self.re_enable_timer.stop()

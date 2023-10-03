@@ -2,7 +2,7 @@ from mongodb.connection_handlers.mongo_local_database import MongoLocalDatabase
 
 
 class GetTextLabels:
-    def __init__(self, language=0):
+    def __init__(self, language=1):
         self.name = ''
         self.language = language
         self.bone_names = MongoLocalDatabase('text_labels').collection

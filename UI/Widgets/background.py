@@ -10,7 +10,7 @@ class GeneralInformation(QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         self.tittle = self.text_labels.general_info_lbl
-        self.dict = {'Age': 28, 'Weight': 70, 'Height': 1.76}
+        self.dict = {'Age': 28, 'Weight': 70, 'Height': 1.76, 'Sex': 'M'}
         #   Layout
         self.general_layout = QVBoxLayout()
         #   Tree widget
@@ -36,9 +36,10 @@ class GeneralInformation(QWidget):
 
     def adjust_tree_widget_height(self):
         #   Calculate height
-        total_height = self.tree.sizeHintForRow(0) * (len(self.dict) * 2) + self.tree.sizeHintForRow(0)
+        total_height = self.tree.sizeHintForRow(0) * (len(self.dict)) #+ self.tree.sizeHintForRow(0)
         #   Set height
         self.tree.setMinimumHeight(total_height)
+        self.tree.setMaximumHeight(total_height + 1)
 
     def update_widget(self, general_information=None):
         if general_information is None:
@@ -62,8 +63,9 @@ class HereditaryBackground(QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         hereditary_layout = QVBoxLayout()
-        section_title = QLabel(self.text_labels.hereditary_lbl)
-        hereditary_layout.addWidget(section_title)
+        self.widget = QWidget()
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.hereditary_lbl, self.widget)
+        hereditary_layout.addWidget(self.collapsible_widget)
         self.setLayout(hereditary_layout)
 
 
@@ -72,8 +74,9 @@ class PathologicBackground(QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         pathologic_layout = QVBoxLayout()
-        section_title = QLabel(self.text_labels.pathologic_lbl)
-        pathologic_layout.addWidget(section_title)
+        self.widget = QWidget()
+        #self.collapsible_widget = CollapsibleBox(self, self.text_labels.pathologic_lbl, self.widget)
+        #pathologic_layout.addWidget(self.collapsible_widget)
         self.setLayout(pathologic_layout)
 
 
@@ -82,8 +85,9 @@ class Immunizations(QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         immunizations_layout = QVBoxLayout()
-        section_title = QLabel(self.text_labels.immunizations_lbl)
-        immunizations_layout.addWidget(section_title)
+        self.widget = QWidget()
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.immunizations_lbl, self.widget)
+        immunizations_layout.addWidget(self.collapsible_widget)
         self.setLayout(immunizations_layout)
 
 
@@ -92,8 +96,9 @@ class Allergy (QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         allergies_layout = QVBoxLayout()
-        section_title = QLabel(self.text_labels.allergies_lbl)
-        allergies_layout.addWidget(section_title)
+        self.widget = QWidget()
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.widget)
+        allergies_layout.addWidget(self.widget)
         # Grid containing allergies
         grid_layout = QGridLayout()
         # Columns of the Grid (Rows will be added as needed)
