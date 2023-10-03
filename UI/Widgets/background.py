@@ -90,52 +90,73 @@ class Immunizations(QWidget):
         immunizations_layout.addWidget(self.collapsible_widget)
         self.setLayout(immunizations_layout)
 
+from data_models.model_allergy import ModelAllergy
+import random
 
 class Allergy (QWidget):
     def __init__(self, parent=None, text_labels=None, allergies_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
-        allergies_layout = QVBoxLayout()
-        self.widget = QWidget()
-        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.widget)
-        allergies_layout.addWidget(self.widget)
-        # Grid containing allergies
+        #   Contain individual tags.
+        self.allergy_widgets = []
+        #   Widget containing all tags.
+        self.widget = self.allergies_into_widget(allergies_information)
+        self.scroll_widget = QScrollArea()
+        self.scroll_widget.setWidget(self.widget)
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl)
+
+    def update_allergies(self, allergies=None):
+        allergies = []
+        #   Remove self.widget contents
+        self.remove_allergies()
+        #   Remove self.widget
+        for i in range(5):
+            allergies.append(ModelAllergy('Alergia', random.randrange(1, 5), random.randrange(1, 5)))
+        #   Create new self.widget with new contents
+        self.widget = self.allergies_into_widget(allergies)
+        self.scroll_widget.setWidget(self.widget)
+        #   Update content inside collapsible widget
+        self.collapsible_widget.update_content(self.scroll_widget)
+
+    def remove_allergies(self):
+        for widget in self.allergy_widgets:
+            del widget
+
+    def allergies_into_widget(self, allergies=None):
+        #   Widget to be returned.
+        widget = QWidget()
+        #   Grid layout.
         grid_layout = QGridLayout()
-        # Columns of the Grid (Rows will be added as needed)
-        grid_columns = 6
-        # Variables to navigate Grid
+        #   Columns of the Grid (Rows will be added as needed).
+        grid_columns = 4
+        # Variables to navigate Grid.
         column_counter = 0
         row_counter = 0
-        for allergy in allergies_information:
-            # Icon/label into widget
+        #   Traverse grid.
+        for allergy in allergies:
+            #   Layout to contain Icon + Label.
             allergy_layout = QHBoxLayout()
             allergy_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+            #   Icon.
             allergy_icon = AllergyIcon(allergy)
+            #   Label.
             allergy_label = QLabel(allergy.allergen)
             allergy_layout.addWidget(allergy_icon)
             allergy_layout.addWidget(allergy_label)
             allergy_layout.addStretch()
+            #   Container widget.
             allergy_widget = QWidget()
             allergy_widget.setLayout(allergy_layout)
-            # Add Icon/label widget into the Grid
-            grid_layout.addWidget(allergy_widget, row_counter, column_counter)
-            if column_counter == grid_columns - 1:
-                row_counter += 1
-                column_counter = 0
-            else:
+            #   Place widget into Grid Layout.
+            grid_layout.addWidget(allergy_widget, row_counter, column_counter, Qt.AlignmentFlag.AlignLeft)
+            #   Keep track of widgets added.
+            self.allergy_widgets.append(allergy_widget)
+            #   Implement column/row order.
+            if column_counter < grid_columns:
                 column_counter += 1
-        # Grid into Widget
-        content_scroll_widget = QWidget()
-        content_scroll_widget.setLayout(grid_layout)
-        # Widget into scroll
-        allergies_scroll = QScrollArea()
-        allergies_scroll.setWidget(content_scroll_widget)
-        allergies_scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        allergies_scroll.setFrameShape(QFrame.Shape.NoFrame)
-        allergies_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        # Scroll into our layout
-        allergies_layout.addWidget(allergies_scroll)
-        allergies_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.setFixedHeight(150)
-        # Layout into widget
-        self.setLayout(allergies_layout)
+            else:
+                column_counter = 0
+                row_counter += 1
+        #   Set grid into widget.
+        widget.setLayout(grid_layout)
+        return widget

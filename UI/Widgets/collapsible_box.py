@@ -1,13 +1,20 @@
-from PyQt6.QtWidgets import QToolButton, QWidget, QSizePolicy, QFrame, QScrollArea, QVBoxLayout
+from PyQt6.QtWidgets import QToolButton, QWidget, QSizePolicy, QFrame, QScrollArea, QVBoxLayout, QLabel
 from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot, QTimer
 
 
 class CollapsibleBox(QWidget):
-    def __init__(self, parent=None, title="Title", content=None):
+    def __init__(self, parent=None, title=None, content=None):
         super(CollapsibleBox, self).__init__(parent)
-        self.tag_list = []
-        # Toggle button
-        self.toggle_button = QToolButton()
+        if title is None:
+            self.title = 'Missing title'
+        else:
+            self.title = title
+        if content is None:
+            self.received_content = QLabel('Nothing to display :)')
+        else:
+            self.received_content = content
+        #   Toggle button
+        self.toggle_button = self.create_toggle_button(self.title)
         #   Flag to prevent button spamming
         self.button_enabled = True
         #   Timer to re-enable the button after a delay
@@ -15,74 +22,101 @@ class CollapsibleBox(QWidget):
         self.re_enable_timer.timeout.connect(self.enable_button)
         #   Expanded flag
         self.expanded = False
-        """
-        self.toggle_button.setCheckable(True)
-        self.toggle_button.setChecked(False)
-        """
-        self.toggle_button.setText(title)
-        self.toggle_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.toggle_button.setArrowType(Qt.ArrowType.RightArrow)
-        self.toggle_button.clicked.connect(self.on_clicked)
-        self.toggle_animation = QParallelAnimationGroup(self)
-
         # Expandable area
-        self.content = content
-        print('widget:', type(self.content), 'size', self.content.minimumSizeHint())
-        self.content_area = QScrollArea()
-        #self.content_area.setMinimumSize(self.content.minimumSizeHint())
-        self.content_area.setMinimumHeight(0)
-        self.content_area.setMaximumHeight(1)
-        self.content_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.content_area.setFrameShape(QFrame.Shape.NoFrame)
 
-        my_layout = QVBoxLayout(self)
-        my_layout.setSpacing(0)
-        my_layout.setContentsMargins(0, 0, 0, 0)
+        self.content_area = self.create_content_area()
+        # Use proxy to place received_content inside scroll area
+        self.proxy_content_widget = self.received_content_into_proxy()
+        self.content_area.setWidget(self.proxy_content_widget)
+        """     Layout      """
+        self.my_layout = self.create_layout()
+        #   Add widgets
+        self.my_layout.addWidget(self.toggle_button)
+        self.my_layout.addWidget(self.content_area)
+        self.setLayout(self.my_layout)
+        """     Animations      """
+        #   Animations to be executed simultaneously
+        self.toggle_animation = self.create_anim_group()
+        #   Calculate heights
+        self.collapsed_height = self.calculate_collapsed_height()
+        self.content_height = self.calculate_content_height()
+        #   Tune animations based on heights
+        self.tune_anim_group()
 
-        # Content inside expandable area
-        content_widget = QWidget()
-        v_lay = QVBoxLayout()
-        v_lay.addWidget(self.content)
-        content_widget.setLayout(v_lay)
-        self.content_area.setWidget(content_widget)
+    def calculate_collapsed_height(self):
+        return self.sizeHint().height() - self.content_area.maximumHeight()
 
-        my_layout.addWidget(self.toggle_button)
-        my_layout.addWidget(self.content_area)
+    def calculate_content_height(self):
+        return self.proxy_content_widget.sizeHint().height()
 
-        self.toggle_animation.addAnimation(QPropertyAnimation(self, b"minimumHeight"))
-        self.toggle_animation.addAnimation(QPropertyAnimation(self, b"maximumHeight"))
-        self.toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
-
-        collapsed_height = (self.sizeHint().height() - self.content_area.maximumHeight())
-        content_height = content_widget.sizeHint().height()
-
+    def tune_anim_group(self):
         for i in range(self.toggle_animation.animationCount()):
             # Settings for animations inside the group (for the widget containing the scroll area)
             animation = self.toggle_animation.animationAt(i)
             # Animation in ms, 500 makes it smooth
             animation.setDuration(500)
             # Height will change from collapsed
-            animation.setStartValue(collapsed_height)
+            animation.setStartValue(self.collapsed_height)
             # to collapsed plus the contents.
-            animation.setEndValue(collapsed_height + content_height)
+            animation.setEndValue(self.collapsed_height + self.content_height)
+        """
         # Override animation for the last animation (affects only the scroll area)
         content_animation = self.toggle_animation.animationAt(self.toggle_animation.animationCount() - 1)
         content_animation.setDuration(500)
         content_animation.setStartValue(0)
-        content_animation.setEndValue(content_height)
+        content_animation.setEndValue(self.content_height)
+        """
+
+    def create_anim_group(self):
+        toggle_animation = QParallelAnimationGroup(self)
+        toggle_animation.addAnimation(QPropertyAnimation(self, b"minimumHeight"))
+        toggle_animation.addAnimation(QPropertyAnimation(self, b"maximumHeight"))
+        toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
+        return toggle_animation
+
+    def create_layout(self):
+        #   Configure layout
+        my_layout = QVBoxLayout(self)
+        my_layout.setSpacing(0)
+        my_layout.setContentsMargins(0, 0, 0, 0)
+        return my_layout
+
+    def received_content_into_proxy(self):
+        proxy_content_widget = QWidget()
+        #   Proxy layout
+        v_lay = QVBoxLayout()
+        v_lay.addWidget(self.received_content)
+        proxy_content_widget.setLayout(v_lay)
+        return proxy_content_widget
+
+    def update_content(self, content=None):
+        self.received_content = content
+
+    def create_toggle_button(self, title):
+        toggle_button = QToolButton()
+        # Set stylesheet to remove the border
+        toggle_button.setStyleSheet("border: none;")
+        toggle_button.setText(title)
+        toggle_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        toggle_button.setArrowType(Qt.ArrowType.RightArrow)
+        toggle_button.clicked.connect(self.on_clicked)
+        return toggle_button
+
+    def create_content_area(self):
+        content_area = QScrollArea()
+        content_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        content_area.setMinimumHeight(0)
+        content_area.setMaximumHeight(1)
+        content_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        content_area.setFrameShape(QFrame.Shape.NoFrame)
+        return content_area
+
+    def create_animations(self):
+        pass
 
     @pyqtSlot()
     def on_clicked(self):
         if self.button_enabled:
-            """
-            # Get the check status of the button
-            checked = self.toggle_button.isChecked()
-            # Change the arrow on the button
-            self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not checked else Qt.ArrowType.RightArrow)
-            # Set the animation direction
-            self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not checked else
-                                               QAbstractAnimation.Direction.Backward)
-            """
             # Change the arrow on the button
             self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not self.expanded else Qt.ArrowType.RightArrow)
             # Set the animation direction
@@ -100,5 +134,6 @@ class CollapsibleBox(QWidget):
             self.re_enable_timer.start(1000)
 
     def enable_button(self):
+        #   Prevent button spamming
         self.button_enabled = True
         self.re_enable_timer.stop()

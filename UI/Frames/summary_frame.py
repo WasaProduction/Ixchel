@@ -20,8 +20,10 @@ class SummaryFrame(Frame):
         self.patient = patient
         self.init_ui()
 
-    def update_frame(self):
+    def update_summary(self):
         self.patient_general_information_widget.update_widget()
+        self.patient_allergies_widget.update_allergies()
+
 
     def init_ui(self):
         """General data"""
@@ -65,9 +67,9 @@ class SummaryFrame(Frame):
         # Allergies
 
         my_array = []
-        for i in range(33):
+        for i in range(100):
             my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
-        patient_allergies_widget = Allergy(self, self.text_labels, my_array)
+        self.patient_allergies_widget = Allergy(self, self.text_labels, my_array)
         """     Tags Section    """
         tags_container_widget = QScrollArea()
         tags_container_widget.setFixedHeight(150)
@@ -98,18 +100,18 @@ class SummaryFrame(Frame):
         patient_general_info_layout.setStretch(0, 1)
         patient_general_info_layout.addWidget(self.patient_general_information_widget)
         patient_general_info_layout.setStretch(1, 1)
-        patient_general_info_layout.addWidget(patient_hereditary_background_widget)
+        #patient_general_info_layout.addWidget(patient_hereditary_background_widget)
+        #patient_general_info_layout.setStretch(2, 1)
+        #patient_general_info_layout.addWidget(patient_pathologic_background_widget)
+        #patient_general_info_layout.setStretch(3, 1)
+        #patient_general_info_layout.addWidget(patient_immunizations_widget)
+        #patient_general_info_layout.setStretch(4, 1)
+        patient_general_info_layout.addWidget(self.patient_allergies_widget)
         patient_general_info_layout.setStretch(2, 1)
-        patient_general_info_layout.addWidget(patient_pathologic_background_widget)
-        patient_general_info_layout.setStretch(3, 1)
-        patient_general_info_layout.addWidget(patient_immunizations_widget)
-        patient_general_info_layout.setStretch(4, 1)
-        patient_general_info_layout.addWidget(patient_allergies_widget)
-        patient_general_info_layout.setStretch(5, 1)
         patient_general_info_layout.addWidget(tags_container_widget)
         patient_general_info_layout.setStretch(6, 4)
         patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        patient_general_info_layout.setSpacing(5)
+        patient_general_info_layout.setSpacing(1)
         patient_general_info_widget = QWidget()
         patient_general_info_widget.setLayout(patient_general_info_layout)
         """     Patient statusbar   """

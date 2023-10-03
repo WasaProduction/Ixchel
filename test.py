@@ -15,14 +15,14 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("My App")
         self.setGeometry(100, 600, 1000, 500)
+        patient = GetPatient('JaimeGq')
         button_paths = ButtonPaths()
         # QRcode()
         text_labels = GetTextLabels()
         my_layout = QVBoxLayout()
-        my_test_obj = GeneralInformation(self, text_labels) #SummaryFrame(self, GetPatient('JaimeGq'), button_paths, text_labels)
+        my_test_obj = SummaryFrame(self, patient, button_paths, text_labels)
         def pusheado():
-            print('pusheado')
-            my_test_obj.update_frame()
+            my_test_obj.update_summary()
         throttle = ThrottleDebounce(pusheado)
 #"""
 #        """----------------------"""
