@@ -1,3 +1,4 @@
+import time
 from PyQt6.QtWidgets import QToolButton, QWidget, QSizePolicy, QFrame, QScrollArea, QVBoxLayout, QLabel
 from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot, QTimer
 
@@ -42,22 +43,25 @@ class CollapsibleBox(QWidget):
         self.content_height = self.calculate_content_height()
         #   Tune animations based on heights
         self.tune_anim_group()
+        self.setMinimumWidth(parent.width())
+        # self.setStyleSheet("background-color: grey;")
 
-    def calculate_collapsed_height(self):
-        return self.sizeHint().height() - self.content_area.maximumHeight()
+    @staticmethod
+    def calculate_collapsed_height():
+        return 25# self.sizeHint().height() - self.content_area.maximumHeight()
 
     def calculate_content_height(self):
         return self.proxy_content_widget.sizeHint().height()
 
     def tune_anim_group(self):
         for i in range(self.toggle_animation.animationCount()):
-            # Settings for animations inside the group (for the widget containing the scroll area)
+            #   Settings for animations inside the group (for the widget containing the scroll area)
             animation = self.toggle_animation.animationAt(i)
-            # Animation in ms, 500 makes it smooth
+            #   Animation in ms, 500 makes it smooth
             animation.setDuration(500)
-            # Height will change from collapsed
+            #   Height will change from collapsed
             animation.setStartValue(self.collapsed_height)
-            # to collapsed plus the contents.
+            #   To collapsed plus the contents.
             animation.setEndValue(self.collapsed_height + self.content_height)
         """
         # Override animation for the last animation (affects only the scroll area)
@@ -89,8 +93,29 @@ class CollapsibleBox(QWidget):
         proxy_content_widget.setLayout(v_lay)
         return proxy_content_widget
 
+    def force_collapse(self):
+        if self.expanded:
+            self.button_enabled = True
+            self.on_clicked()
+
     def update_content(self, content=None):
+        #   TODO Fix update content of collapsible box while expanded
+        #   Prevent bug
+        self.force_collapse()
+        time.sleep(5.5)
+        self.actually_update_content(content)
+
+    def actually_update_content(self, content=None):
         self.received_content = content
+        self.proxy_content_widget = self.received_content_into_proxy()
+        self.content_area.setWidget(self.proxy_content_widget)
+        #   Calculate heights
+        print('collapsed_height', self.collapsed_height, 'content_height', self.content_height)
+        self.collapsed_height = self.calculate_collapsed_height()
+        self.content_height = self.calculate_content_height()
+        print('collapsed_height', self.collapsed_height, 'content_height', self.content_height)
+        #   Tune animations based on heights
+        self.tune_anim_group()
 
     def create_toggle_button(self, title):
         toggle_button = QToolButton()

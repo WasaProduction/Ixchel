@@ -1,9 +1,43 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout
+from PyQt6.QtWidgets import QWidget, QGridLayout, QScrollArea, QVBoxLayout
+from UI.Widgets.collapsible_box import CollapsibleBox
+from PyQt6.QtCore import Qt
 from data_models.model_tag import ModelTag
 from mongodb.read.get_affection import GetAffection
 from mongodb.read.get_color import GetColor
 from UI.Widgets.tags.tag_individual_widget import TagIndividualWidget
 import math
+
+
+class PathologicalContainer(QScrollArea):
+    def __init__(self, parent=None, patient=None):
+        super().__init__(parent)
+        """     Tags Section    """
+        self.setFixedHeight(150)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        tags_container_layout = QVBoxLayout()
+        tags_container_layout.setSpacing(5)
+        # Tags will be displayed in a yearly manner
+        year_diagnoses_dict = {}
+        for diagnosis in patient.diagnosis_entries:
+            # List all years with existing records
+            if diagnosis.creation_date.year not in year_diagnoses_dict:
+                year_diagnoses_dict[diagnosis.creation_date.year] = [diagnosis]
+            else:
+                year_diagnoses_dict[diagnosis.creation_date.year].append(diagnosis)
+        # Sort dict
+        years_list = list(year_diagnoses_dict.keys())
+        years_list.sort(reverse=True)
+        year_diagnoses_dict = {key: year_diagnoses_dict[key] for key in years_list}
+        # Add a CollapsibleBox per Year into scroll area
+        for index, year in enumerate(year_diagnoses_dict):
+            tags_container_layout.addWidget(CollapsibleBox(self, title=str(year),
+                                                           content=TagContainerWidget(year_diagnoses_dict[year])))
+            #   Add spacing, to avoud overlaping
+            tags_container_layout.setStretch(index, 10)
+        self.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.setLayout(tags_container_layout)
+
 
 
 class TagContainerWidget(QWidget):

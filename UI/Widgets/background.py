@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout,  QHBoxLayout, QLabel, QScrollArea, QTreeWidgetItem, QTreeWidget,\
-    QSizePolicy, QFrame, QGridLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QTreeWidgetItem, QTreeWidget,\
+    QGridLayout
 from PyQt6.QtCore import Qt
 from UI.Widgets.icons.allergy_icon import AllergyIcon
 from UI.Widgets.collapsible_box import CollapsibleBox
@@ -62,33 +62,51 @@ class HereditaryBackground(QWidget):
     def __init__(self, parent=None, text_labels=None, hereditary_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
-        hereditary_layout = QVBoxLayout()
+        self.hereditary_layout = QVBoxLayout()
         self.widget = QWidget()
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.hereditary_lbl, self.widget)
-        hereditary_layout.addWidget(self.collapsible_widget)
-        self.setLayout(hereditary_layout)
+        #   UI
+        self.init_ui()
+
+    def init_ui(self):
+        #   Add expandable widget to layout
+        self.hereditary_layout.addWidget(self.collapsible_widget)
+        #   Set layout
+        self.setLayout(self.hereditary_layout)
 
 
 class PathologicBackground(QWidget):
     def __init__(self, parent=None, text_labels=None, pathologic_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
-        pathologic_layout = QVBoxLayout()
+        self.pathologic_layout = QVBoxLayout()
         self.widget = QWidget()
-        #self.collapsible_widget = CollapsibleBox(self, self.text_labels.pathologic_lbl, self.widget)
-        #pathologic_layout.addWidget(self.collapsible_widget)
-        self.setLayout(pathologic_layout)
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.pathologic_lbl, self.widget)
+        #   UI
+        self.init_ui()
+
+    def init_ui(self):
+        #   Add expandable widget to layout
+        self.pathologic_layout.addWidget(self.collapsible_widget)
+        #   Set layout
+        self.setLayout(self.pathologic_layout)
 
 
 class Immunizations(QWidget):
     def __init__(self, parent=None, text_labels=None, immunizations_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
-        immunizations_layout = QVBoxLayout()
+        self.immunizations_layout = QVBoxLayout()
         self.widget = QWidget()
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.immunizations_lbl, self.widget)
-        immunizations_layout.addWidget(self.collapsible_widget)
-        self.setLayout(immunizations_layout)
+        #   UI
+        self.init_ui()
+
+    def init_ui(self):
+        #   Add expandable widget to layout
+        self.immunizations_layout.addWidget(self.collapsible_widget)
+        #   Set layout
+        self.setLayout(self.immunizations_layout)
 
 from data_models.model_allergy import ModelAllergy
 import random
@@ -96,21 +114,27 @@ import random
 class Allergy (QWidget):
     def __init__(self, parent=None, text_labels=None, allergies_information=None):
         super().__init__(parent)
+        #   Layout
+        self.allergies_layout = QVBoxLayout()
         self.text_labels = text_labels
         #   Contain individual tags.
         self.allergy_widgets = []
         #   Widget containing all tags.
         self.widget = self.allergies_into_widget(allergies_information)
         self.scroll_widget = QScrollArea()
+        self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll_widget.setStyleSheet("border: none;")
         self.scroll_widget.setWidget(self.widget)
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl)
+        #   UI
+        self.init_ui()
 
     def update_allergies(self, allergies=None):
         allergies = []
         #   Remove self.widget contents
         self.remove_allergies()
         #   Remove self.widget
-        for i in range(5):
+        for i in range(10):
             allergies.append(ModelAllergy('Alergia', random.randrange(1, 5), random.randrange(1, 5)))
         #   Create new self.widget with new contents
         self.widget = self.allergies_into_widget(allergies)
@@ -160,3 +184,9 @@ class Allergy (QWidget):
         #   Set grid into widget.
         widget.setLayout(grid_layout)
         return widget
+
+    def init_ui(self):
+        #   Add expandable widget to layout
+        self.allergies_layout.addWidget(self.collapsible_widget)
+        #   Set layout
+        self.setLayout(self.allergies_layout)

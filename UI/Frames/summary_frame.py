@@ -21,7 +21,7 @@ class SummaryFrame(Frame):
         self.init_ui()
 
     def update_summary(self):
-        self.patient_general_information_widget.update_widget()
+        # self.patient_general_information_widget.update_widget()
         self.patient_allergies_widget.update_allergies()
 
 
@@ -100,14 +100,14 @@ class SummaryFrame(Frame):
         patient_general_info_layout.setStretch(0, 1)
         patient_general_info_layout.addWidget(self.patient_general_information_widget)
         patient_general_info_layout.setStretch(1, 1)
-        #patient_general_info_layout.addWidget(patient_hereditary_background_widget)
-        #patient_general_info_layout.setStretch(2, 1)
-        #patient_general_info_layout.addWidget(patient_pathologic_background_widget)
-        #patient_general_info_layout.setStretch(3, 1)
-        #patient_general_info_layout.addWidget(patient_immunizations_widget)
-        #patient_general_info_layout.setStretch(4, 1)
-        patient_general_info_layout.addWidget(self.patient_allergies_widget)
+        patient_general_info_layout.addWidget(patient_hereditary_background_widget)
         patient_general_info_layout.setStretch(2, 1)
+        patient_general_info_layout.addWidget(patient_pathologic_background_widget)
+        patient_general_info_layout.setStretch(3, 1)
+        patient_general_info_layout.addWidget(patient_immunizations_widget)
+        patient_general_info_layout.setStretch(4, 1)
+        patient_general_info_layout.addWidget(self.patient_allergies_widget)
+        patient_general_info_layout.setStretch(5, 1)
         patient_general_info_layout.addWidget(tags_container_widget)
         patient_general_info_layout.setStretch(6, 4)
         patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
@@ -121,7 +121,7 @@ class SummaryFrame(Frame):
         # For testing
         patient_status_bar_widget.setFixedWidth(50)
 
-        """     3D Models   """
+        """     Models   """
         #   Skeleton
         skeleton_view = GraphicView(self)
         three_d_models_bar_layout = QVBoxLayout()
