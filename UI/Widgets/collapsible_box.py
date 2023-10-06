@@ -14,6 +14,7 @@ class CollapsibleBox(QWidget):
             self.received_content = QLabel('Nothing to display :)')
         else:
             self.received_content = content
+        self.setStyleSheet("background-color: gery;")
         #   Toggle button
         self.toggle_button = self.create_toggle_button(self.title)
         #   Flag to prevent button spamming
@@ -24,16 +25,18 @@ class CollapsibleBox(QWidget):
         #   Expanded flag
         self.expanded = False
         # Expandable area
-
-        self.content_area = self.create_content_area()
+        #self.content_area = self.create_content_area()
         # Use proxy to place received_content inside scroll area
         self.proxy_content_widget = self.received_content_into_proxy()
-        self.content_area.setWidget(self.proxy_content_widget)
+        #self.content_area.setWidget(self.proxy_content_widget)
         """     Layout      """
         self.my_layout = self.create_layout()
         #   Add widgets
         self.my_layout.addWidget(self.toggle_button)
-        self.my_layout.addWidget(self.content_area)
+        self.my_layout.setStretchFactor(self.toggle_button, 1)
+        #self.my_layout.addWidget(self.content_area)
+        self.my_layout.addWidget(self.proxy_content_widget)
+        self.my_layout.setStretchFactor(self.toggle_button, 1)
         self.setLayout(self.my_layout)
         """     Animations      """
         #   Animations to be executed simultaneously
@@ -45,6 +48,13 @@ class CollapsibleBox(QWidget):
         self.tune_anim_group()
         self.setMinimumWidth(parent.width())
         # self.setStyleSheet("background-color: grey;")
+
+    def first_expand_collapse(self):
+        #   Bug
+        self.on_clicked()
+        self.button_enabled = True
+        #   Expand back
+        self.on_clicked()
 
     @staticmethod
     def calculate_collapsed_height():
@@ -75,7 +85,8 @@ class CollapsibleBox(QWidget):
         toggle_animation = QParallelAnimationGroup(self)
         toggle_animation.addAnimation(QPropertyAnimation(self, b"minimumHeight"))
         toggle_animation.addAnimation(QPropertyAnimation(self, b"maximumHeight"))
-        toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
+        toggle_animation.addAnimation(QPropertyAnimation(self.proxy_content_widget, b"maximumHeight"))
+        #toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
         return toggle_animation
 
     def create_layout(self):
@@ -108,7 +119,7 @@ class CollapsibleBox(QWidget):
     def actually_update_content(self, content=None):
         self.received_content = content
         self.proxy_content_widget = self.received_content_into_proxy()
-        self.content_area.setWidget(self.proxy_content_widget)
+        #self.content_area.setWidget(self.proxy_content_widget)
         #   Calculate heights
         print('collapsed_height', self.collapsed_height, 'content_height', self.content_height)
         self.collapsed_height = self.calculate_collapsed_height()

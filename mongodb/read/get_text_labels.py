@@ -30,3 +30,4 @@ class GetTextLabels:
             self.pathologic_lbl = element['text']['pathologic_lbl'][self.language]
             self.immunizations_lbl = element['text']['immunizations_lbl'][self.language]
             self.allergies_lbl = element['text']['allergies_lbl'][self.language]
+            self.no_data_lbl = element['text']['no_data_lbl'][self.language]

@@ -54,6 +54,8 @@ class GeneralInformation(QWidget):
     def init_ui(self):
         #   Add expandable widget to layout
         self.general_layout.addWidget(self.collapsible_widget)
+        #   Remove margins
+        self.general_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.general_layout)
 
@@ -71,6 +73,8 @@ class HereditaryBackground(QWidget):
     def init_ui(self):
         #   Add expandable widget to layout
         self.hereditary_layout.addWidget(self.collapsible_widget)
+        #   Remove margins
+        self.hereditary_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.hereditary_layout)
 
@@ -88,6 +92,8 @@ class PathologicBackground(QWidget):
     def init_ui(self):
         #   Add expandable widget to layout
         self.pathologic_layout.addWidget(self.collapsible_widget)
+        #   Remove margins
+        self.pathologic_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.pathologic_layout)
 
@@ -105,6 +111,8 @@ class Immunizations(QWidget):
     def init_ui(self):
         #   Add expandable widget to layout
         self.immunizations_layout.addWidget(self.collapsible_widget)
+        #   Remove margins
+        self.immunizations_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.immunizations_layout)
 
@@ -188,5 +196,7 @@ class Allergy (QWidget):
     def init_ui(self):
         #   Add expandable widget to layout
         self.allergies_layout.addWidget(self.collapsible_widget)
+        #   Remove margins
+        self.allergies_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.allergies_layout)

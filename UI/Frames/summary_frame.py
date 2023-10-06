@@ -3,13 +3,12 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QLabel, QScrollArea, QHBoxLayout, QVBoxLayout
 from UI.Widgets.status_widget_layout import StatusWidget
-from UI.Widgets.tags.tag_container_widget import TagContainerWidget
+from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
 from UI.Widgets.icons.sex_icon import SexIconWidget
 from UI.Widgets.background import GeneralInformation, HereditaryBackground, PathologicBackground, Immunizations, Allergy
 from UI.Widgets.patient_name import PatientName
 from data_models.model_allergy import ModelAllergy
 from UI.TwoD.graphic_view import GraphicView
-from UI.Widgets.collapsible_box import CollapsibleBox
 import random
 
 
@@ -65,55 +64,36 @@ class SummaryFrame(Frame):
         # Immunizations
         patient_immunizations_widget = Immunizations(self, self.text_labels, 0)
         # Allergies
-
         my_array = []
         for i in range(100):
             my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
         self.patient_allergies_widget = Allergy(self, self.text_labels, my_array)
         """     Tags Section    """
-        tags_container_widget = QScrollArea()
-        tags_container_widget.setFixedHeight(150)
-        tags_container_widget.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        tags_container_layout = QVBoxLayout()
-        # Tags will be displayed in a yearly manner
-        year_diagnoses_dict = {}
-        for diagnosis in self.patient.diagnosis_entries:
-            # List all years with existing records
-            if diagnosis.creation_date.year not in year_diagnoses_dict:
-                year_diagnoses_dict[diagnosis.creation_date.year] = [diagnosis]
-            else:
-                year_diagnoses_dict[diagnosis.creation_date.year].append(diagnosis)
-        # Sort dict
-        years_list = list(year_diagnoses_dict.keys())
-        years_list.sort(reverse=True)
-        year_diagnoses_dict = {key: year_diagnoses_dict[key] for key in years_list}
-        # Add a CollapsibleBox per Year into scroll area
-        for year in year_diagnoses_dict:
-            tags_container_layout.addWidget(CollapsibleBox(self, title=str(year),
-                                                           content=TagContainerWidget(year_diagnoses_dict[year])))
-        tags_container_widget.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        tags_container_widget.setLayout(tags_container_layout)
-        # tags_container_widget.setStyleSheet('background-color: cyan;')
+        pathological_container = PathologicalCollapsible(self, text_labels=self.text_labels, patient=self.patient)
         """     Section Container   """
         patient_general_info_layout = QVBoxLayout()
         patient_general_info_layout.addWidget(patient_essential_data_widget)
-        patient_general_info_layout.setStretch(0, 1)
         patient_general_info_layout.addWidget(self.patient_general_information_widget)
-        patient_general_info_layout.setStretch(1, 1)
         patient_general_info_layout.addWidget(patient_hereditary_background_widget)
-        patient_general_info_layout.setStretch(2, 1)
         patient_general_info_layout.addWidget(patient_pathologic_background_widget)
-        patient_general_info_layout.setStretch(3, 1)
         patient_general_info_layout.addWidget(patient_immunizations_widget)
-        patient_general_info_layout.setStretch(4, 1)
         patient_general_info_layout.addWidget(self.patient_allergies_widget)
-        patient_general_info_layout.setStretch(5, 1)
-        patient_general_info_layout.addWidget(tags_container_widget)
-        patient_general_info_layout.setStretch(6, 4)
+        patient_general_info_layout.addWidget(pathological_container)
         patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         patient_general_info_layout.setSpacing(1)
         patient_general_info_widget = QWidget()
         patient_general_info_widget.setLayout(patient_general_info_layout)
+
+        patient_general_info_widget.setContentsMargins(0, 0, 0, 0)
+        # Traverse and print the widgets in the QVBoxLayout.
+        for i in range(patient_general_info_layout.count()):
+            item = patient_general_info_layout.itemAt(i)
+            if item is not None:
+                #   Allow widget to occupy the whole layout width.
+                patient_general_info_layout.setStretchFactor(item.widget(), 1)
+                #   Allow widgets stretch to avoid overlapping.
+                patient_general_info_layout.setStretch(i, 1)
+
         """     Patient statusbar   """
         patient_status_bar_widget = QWidget()
         patient_status_widget_layout = StatusWidget()

@@ -43,6 +43,10 @@
     "allergies_lbl": [
       "Allergies",
       "Alergias"
+    ],
+    "no_data_lbl": [
+      "Previous information could not be retrieved :)",
+      "No se pudo recuperar la información previa :)"
     ]
   }
 }
