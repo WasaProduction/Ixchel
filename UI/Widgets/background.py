@@ -36,12 +36,12 @@ class GeneralInformation(QWidget):
 
     def adjust_tree_widget_height(self):
         #   Calculate height
-        total_height = self.tree.sizeHintForRow(0) * (len(self.dict)) #+ self.tree.sizeHintForRow(0)
+        total_height = self.tree.sizeHintForRow(0) * (len(self.dict))
         #   Set height
         self.tree.setMinimumHeight(total_height)
         self.tree.setMaximumHeight(total_height + 1)
 
-    def update_widget(self, general_information=None):
+    def update_general_info(self, general_information=None):
         if general_information is None:
             self.dict = {}
         else:
@@ -119,6 +119,7 @@ class Immunizations(QWidget):
 from data_models.model_allergy import ModelAllergy
 import random
 
+
 class Allergy (QWidget):
     def __init__(self, parent=None, text_labels=None, allergies_information=None):
         super().__init__(parent)
@@ -138,12 +139,12 @@ class Allergy (QWidget):
         self.init_ui()
 
     def update_allergies(self, allergies=None):
-        allergies = []
+        allergies = allergies
         #   Remove self.widget contents
         self.remove_allergies()
         #   Remove self.widget
-        for i in range(10):
-            allergies.append(ModelAllergy('Alergia', random.randrange(1, 5), random.randrange(1, 5)))
+        #for i in range(10):
+        #    allergies.append(ModelAllergy('Alergia', random.randrange(1, 5), random.randrange(1, 5)))
         #   Create new self.widget with new contents
         self.widget = self.allergies_into_widget(allergies)
         self.scroll_widget.setWidget(self.widget)

@@ -41,14 +41,14 @@ class MainWindow(QMainWindow):
         # Main horizontal widgets
         main_h_layout = QHBoxLayout()
         # main_h_layout.addWidget(sidebar_widget)
-        main_h_layout.addWidget(SideBar(stacked_frames))
-        main_h_layout.addWidget(stacked_frames)
+        main_h_layout.addWidget(SideBar(stacked_frames), 1)
+        main_h_layout.addWidget(stacked_frames, 9)
         main_h_widget = QWidget()
         main_h_widget.setLayout(main_h_layout)
         # Main vertical widgets
         main_v_layout = QVBoxLayout()
-        main_v_layout.addWidget(TopBar())
-        main_v_layout.addWidget(main_h_widget)
+        main_v_layout.addWidget(TopBar(), 1)
+        main_v_layout.addWidget(main_h_widget, 9)
 
         main_widget = QWidget()
         main_widget.setLayout(main_v_layout)

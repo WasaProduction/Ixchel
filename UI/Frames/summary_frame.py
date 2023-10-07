@@ -1,15 +1,12 @@
 from UI.Frames.frame import Frame
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QLabel, QScrollArea, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout
 from UI.Widgets.status_widget_layout import StatusWidget
-from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
 from UI.Widgets.icons.sex_icon import SexIconWidget
-from UI.Widgets.background import GeneralInformation, HereditaryBackground, PathologicBackground, Immunizations, Allergy
+from UI.Widgets.summary_scroll_area import SummaryScrollArea
 from UI.Widgets.patient_name import PatientName
-from data_models.model_allergy import ModelAllergy
 from UI.TwoD.graphic_view import GraphicView
-import random
 
 
 class SummaryFrame(Frame):
@@ -21,8 +18,8 @@ class SummaryFrame(Frame):
 
     def update_summary(self):
         # self.patient_general_information_widget.update_widget()
-        self.patient_allergies_widget.update_allergies()
-
+        pass
+        # self.patient_allergies_widget.update_allergies()
 
     def init_ui(self):
         """General data"""
@@ -55,44 +52,15 @@ class SummaryFrame(Frame):
         patient_essential_data_widget.setLayout(patient_essential_data_v_layout)
         patient_essential_data_widget.setFixedHeight(100)
 
-        # General information
-        self.patient_general_information_widget = GeneralInformation(self, self.text_labels)
-        # Hereditary background
-        patient_hereditary_background_widget = HereditaryBackground(self, self.text_labels, 0)
-        # Pathologic background
-        patient_pathologic_background_widget = PathologicBackground(self, self.text_labels, 0)
-        # Immunizations
-        patient_immunizations_widget = Immunizations(self, self.text_labels, 0)
-        # Allergies
-        my_array = []
-        for i in range(100):
-            my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
-        self.patient_allergies_widget = Allergy(self, self.text_labels, my_array)
-        """     Tags Section    """
-        pathological_container = PathologicalCollapsible(self, text_labels=self.text_labels, patient=self.patient)
         """     Section Container   """
         patient_general_info_layout = QVBoxLayout()
+        self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
         patient_general_info_layout.addWidget(patient_essential_data_widget)
-        patient_general_info_layout.addWidget(self.patient_general_information_widget)
-        patient_general_info_layout.addWidget(patient_hereditary_background_widget)
-        patient_general_info_layout.addWidget(patient_pathologic_background_widget)
-        patient_general_info_layout.addWidget(patient_immunizations_widget)
-        patient_general_info_layout.addWidget(self.patient_allergies_widget)
-        patient_general_info_layout.addWidget(pathological_container)
-        patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        patient_general_info_layout.setSpacing(1)
-        patient_general_info_widget = QWidget()
-        patient_general_info_widget.setLayout(patient_general_info_layout)
-
-        patient_general_info_widget.setContentsMargins(0, 0, 0, 0)
-        # Traverse and print the widgets in the QVBoxLayout.
-        for i in range(patient_general_info_layout.count()):
-            item = patient_general_info_layout.itemAt(i)
-            if item is not None:
-                #   Allow widget to occupy the whole layout width.
-                patient_general_info_layout.setStretchFactor(item.widget(), 1)
-                #   Allow widgets stretch to avoid overlapping.
-                patient_general_info_layout.setStretch(i, 1)
+        patient_general_info_layout.addWidget(self.summary_scroll_area)
+        patient_general_info_layout.setContentsMargins(0, 0, 0, 0)
+        #patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        section_container = QWidget()
+        section_container.setLayout(patient_general_info_layout)
 
         """     Patient statusbar   """
         patient_status_bar_widget = QWidget()
@@ -115,7 +83,7 @@ class SummaryFrame(Frame):
 
         """Add main widgets to the containers"""
         container_layout = QHBoxLayout()
-        container_layout.addWidget(patient_general_info_widget)
-        container_layout.addWidget(patient_status_bar_widget)
-        container_layout.addWidget(three_d_models_bar_widget)
+        container_layout.addWidget(section_container, 7)
+        container_layout.addWidget(patient_status_bar_widget, 1)
+        container_layout.addWidget(three_d_models_bar_widget, 2)
         self.setLayout(container_layout)

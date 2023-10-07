@@ -13,7 +13,6 @@ from UI.Widgets.collapsible_box import CollapsibleBox
 from throttle_debounce import ThrottleDebounce
 from UI.Widgets.background import GeneralInformation, HereditaryBackground, PathologicBackground, Immunizations, Allergy
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()

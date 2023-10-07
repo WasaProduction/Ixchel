@@ -14,7 +14,6 @@ class CollapsibleBox(QWidget):
             self.received_content = QLabel('Nothing to display :)')
         else:
             self.received_content = content
-        self.setStyleSheet("background-color: gery;")
         #   Toggle button
         self.toggle_button = self.create_toggle_button(self.title)
         #   Flag to prevent button spamming
@@ -33,10 +32,7 @@ class CollapsibleBox(QWidget):
         self.my_layout = self.create_layout()
         #   Add widgets
         self.my_layout.addWidget(self.toggle_button)
-        self.my_layout.setStretchFactor(self.toggle_button, 1)
-        #self.my_layout.addWidget(self.content_area)
         self.my_layout.addWidget(self.proxy_content_widget)
-        self.my_layout.setStretchFactor(self.toggle_button, 1)
         self.setLayout(self.my_layout)
         """     Animations      """
         #   Animations to be executed simultaneously
@@ -46,15 +42,6 @@ class CollapsibleBox(QWidget):
         self.content_height = self.calculate_content_height()
         #   Tune animations based on heights
         self.tune_anim_group()
-        self.setMinimumWidth(parent.width())
-        # self.setStyleSheet("background-color: grey;")
-
-    def first_expand_collapse(self):
-        #   Bug
-        self.on_clicked()
-        self.button_enabled = True
-        #   Expand back
-        self.on_clicked()
 
     @staticmethod
     def calculate_collapsed_height():
@@ -138,7 +125,9 @@ class CollapsibleBox(QWidget):
         toggle_button.clicked.connect(self.on_clicked)
         return toggle_button
 
-    def create_content_area(self):
+    #   TODO remove function
+    @staticmethod
+    def create_content_area():
         content_area = QScrollArea()
         content_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         content_area.setMinimumHeight(0)
@@ -147,26 +136,26 @@ class CollapsibleBox(QWidget):
         content_area.setFrameShape(QFrame.Shape.NoFrame)
         return content_area
 
-    def create_animations(self):
-        pass
+    def play_animation(self):
+        # Change the arrow on the button
+        self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not self.expanded else Qt.ArrowType.RightArrow)
+        # Set the animation direction
+        self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not self.expanded else
+                                           QAbstractAnimation.Direction.Backward)
+        # Call the animation group
+        self.toggle_animation.start()
 
     @pyqtSlot()
     def on_clicked(self):
         if self.button_enabled:
-            # Change the arrow on the button
-            self.toggle_button.setArrowType(Qt.ArrowType.DownArrow if not self.expanded else Qt.ArrowType.RightArrow)
-            # Set the animation direction
-            self.toggle_animation.setDirection(QAbstractAnimation.Direction.Forward if not self.expanded else
-                                               QAbstractAnimation.Direction.Backward)
-
-            # Call the animation group
-            self.toggle_animation.start()
-            # Revert the button status
+            #   Replace arrow & expand/collapse.
+            self.play_animation()
+            # Revert the button status.
             self.toggle_button.setChecked(not self.toggle_button.isChecked())
-            #   Reset expanded flag
+            #   Reset expanded flag.
             self.expanded = not self.expanded
             self.button_enabled = False
-            #   Re-enable the button after x time
+            #   Re-enable the button after x time.
             self.re_enable_timer.start(1000)
 
     def enable_button(self):
