@@ -17,6 +17,7 @@ class SummaryFrame(Frame):
         self.init_ui()
 
     def update_summary(self):
+        self.patient_status_bar_widget.update_statuses()
         # self.patient_general_information_widget.update_widget()
         pass
         # self.patient_allergies_widget.update_allergies()
@@ -63,11 +64,9 @@ class SummaryFrame(Frame):
         section_container.setLayout(patient_general_info_layout)
 
         """     Patient statusbar   """
-        patient_status_bar_widget = QWidget()
-        patient_status_widget_layout = StatusWidget()
-        patient_status_bar_widget.setLayout(patient_status_widget_layout)
+        self.patient_status_bar_widget = StatusWidget()
         # For testing
-        patient_status_bar_widget.setFixedWidth(50)
+        self.patient_status_bar_widget.setFixedWidth(50)
 
         """     Models   """
         #   Skeleton
@@ -84,6 +83,6 @@ class SummaryFrame(Frame):
         """Add main widgets to the containers"""
         container_layout = QHBoxLayout()
         container_layout.addWidget(section_container, 7)
-        container_layout.addWidget(patient_status_bar_widget, 1)
+        container_layout.addWidget(self.patient_status_bar_widget, 1)
         container_layout.addWidget(three_d_models_bar_widget, 2)
         self.setLayout(container_layout)

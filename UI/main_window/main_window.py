@@ -43,6 +43,8 @@ class MainWindow(QMainWindow):
         # main_h_layout.addWidget(sidebar_widget)
         main_h_layout.addWidget(SideBar(stacked_frames), 1)
         main_h_layout.addWidget(stacked_frames, 9)
+        main_h_layout.setSpacing(0)
+        main_h_layout.setContentsMargins(0, 0, 0, 0)
         main_h_widget = QWidget()
         main_h_widget.setLayout(main_h_layout)
         # Main vertical widgets

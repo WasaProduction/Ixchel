@@ -9,9 +9,8 @@ from assets.icons.buttons.button_paths import ButtonPaths
 from mongodb.read.get_patient import GetPatient
 from mongodb.read.get_text_labels import GetTextLabels
 from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
-from UI.Widgets.collapsible_box import CollapsibleBox
-from throttle_debounce import ThrottleDebounce
-from UI.Widgets.background import GeneralInformation, HereditaryBackground, PathologicBackground, Immunizations, Allergy
+from UI.Widgets.status_widget_layout import StatusWidget
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,11 +23,12 @@ class MainWindow(QMainWindow):
         self.text_labels = GetTextLabels()
         my_layout = QVBoxLayout()
         #my_test_obj = SummaryFrame(self, patient, button_paths, text_labels)
-        my_test_obj = PathologicalCollapsible(self, text_labels=self.text_labels, patient=self.patient)
+        my_test_obj = StatusWidget(self)
 
         """     Tags Section    """
 
         def pusheado():
+            my_test_obj.update_statuses()
             pass
             #my_test_obj.update_summary()
             #throttle = ThrottleDebounce(pusheado)

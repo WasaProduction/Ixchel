@@ -121,32 +121,32 @@ import random
 
 
 class Allergy (QWidget):
-    def __init__(self, parent=None, text_labels=None, allergies_information=None):
+    def __init__(self, parent=None, text_labels=None, allergies=None):
         super().__init__(parent)
         #   Layout
         self.allergies_layout = QVBoxLayout()
         self.text_labels = text_labels
         #   Contain individual tags.
         self.allergy_widgets = []
+        #   Allergies
+        self.allergies = allergies
         #   Widget containing all tags.
-        self.widget = self.allergies_into_widget(allergies_information)
+        self.widget = self.allergies_into_widget(self.allergies)
         self.scroll_widget = QScrollArea()
         self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll_widget.setStyleSheet("border: none;")
         self.scroll_widget.setWidget(self.widget)
-        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl)
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.scroll_widget)
         #   UI
         self.init_ui()
 
     def update_allergies(self, allergies=None):
-        allergies = allergies
+        self.allergies = allergies
         #   Remove self.widget contents
         self.remove_allergies()
         #   Remove self.widget
-        #for i in range(10):
-        #    allergies.append(ModelAllergy('Alergia', random.randrange(1, 5), random.randrange(1, 5)))
         #   Create new self.widget with new contents
-        self.widget = self.allergies_into_widget(allergies)
+        self.widget = self.allergies_into_widget(self.allergies)
         self.scroll_widget.setWidget(self.widget)
         #   Update content inside collapsible widget
         self.collapsible_widget.update_content(self.scroll_widget)

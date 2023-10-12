@@ -86,9 +86,8 @@ class CollapsibleBox(QWidget):
     def received_content_into_proxy(self):
         proxy_content_widget = QWidget()
         #   Proxy layout
-        v_lay = QVBoxLayout()
+        v_lay = QVBoxLayout(proxy_content_widget)
         v_lay.addWidget(self.received_content)
-        proxy_content_widget.setLayout(v_lay)
         return proxy_content_widget
 
     def force_collapse(self):

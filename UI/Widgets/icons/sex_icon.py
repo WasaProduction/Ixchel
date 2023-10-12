@@ -6,17 +6,18 @@ from PyQt6.QtCore import QSize
 class SexIconWidget(QAbstractButton):
     def __init__(self, sex, parent=None):
         super(SexIconWidget, self).__init__(parent)
+        folder = '/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/assets/icons/sex/'
         if sex == 1:
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Gender-Symbol_Female.png")
+            self.pixmap = QPixmap(folder + "male.png")
             self.setToolTip("Man")
         elif sex == 2:
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Gender-Symbol_Male.png")
+            self.pixmap = QPixmap(folder + "female.png")
             self.setToolTip("Woman")
         elif sex == 3:
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Gender-Symbol_Female.png")
+            self.pixmap = QPixmap(folder + "trans_female.png")
             self.setToolTip("Trans-Woman")
         elif sex == 4:
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Gender-Symbol_Male.png")
+            self.pixmap = QPixmap(folder + "trans_male.png")
             self.setToolTip("Trans-Man")
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         # self.pressed.connect(self.update)

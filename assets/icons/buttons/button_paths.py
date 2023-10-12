@@ -6,6 +6,6 @@ class ButtonPaths:
         """     Files       """
         self.default = folder + 'Taurus-Zodiac.png'
         #   Sidebar
-        self.summary = folder + 'Taurus-Zodiac.png'
-        self.diagnosis = folder + 'Taurus-Zodiac.png'
-        self.agenda = folder + 'Taurus-Zodiac.png'
+        self.summary = folder + 'summary.png'
+        self.diagnosis = folder + 'diagnosis.png'
+        self.agenda = folder + 'calendar.png'

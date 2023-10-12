@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QCalendarWidget
 from PyQt6.QtGui import QColor, QTextCharFormat
+from PyQt6.QtCore import QLocale
 
 
-#   https://www.geeksforgeeks.org/pyqt5-qcalendarwidget-selection-changed-signal/
 class CustomCalendar(QCalendarWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -24,4 +24,5 @@ class CustomCalendar(QCalendarWidget):
             self.setDateTextFormat(holiday['date'], holiday_txt_frmt)
 
     def tune_ui(self):
-        print()
+        #   Grab local language
+        self.setLocale(QLocale.system())

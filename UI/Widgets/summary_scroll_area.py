@@ -79,4 +79,5 @@ class SummaryScrollArea(QScrollArea):
     """     UI      """
     def init_ui(self):
         # self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.setFrameShape(QFrame.Shape.NoFrame)
