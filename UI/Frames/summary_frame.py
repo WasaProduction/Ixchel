@@ -14,32 +14,57 @@ class SummaryFrame(Frame):
         super().__init__(parent, button_path=button_paths.summary, text_labels=text_labels)
         self.name = self.text_labels.summary_btn
         self.patient = patient
+        #   Name
+        self.patient_name_label = PatientName(self, name=self.patient.name, lastname_1=self.patient.lastname_1,
+                                              lastname_2=self.patient.lastname_2)
+        print('test', self.patient.immutables.birthday)
+        self.patient_age_label = QLabel(self.patient.immutables.birthday)
+        self.customize_age_lbl()
+        #
+        self.patient_blood_label = QLabel("O+")
+        self.customize_blood_lbl()
+        #   Summary scroll area
+        self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
+        #   Status bar
+        self.patient_status_bar_widget = StatusWidget()
+        self.customize_status_bar()
+        #   Models
+        self.skeleton_view = GraphicView(self)
         self.init_ui()
 
-    def update_summary(self):
+    def update_summary(self, patient=None):
+        #   Update patient obj
+        self.patient = patient
+        """     Update widgets      """
+        #   Update name
+        self.patient_name_label.update_text(self.patient.name, self.patient.lastname_1, self.patient.lastname_2)
+        #   Update status bar
         self.patient_status_bar_widget.update_statuses()
         # self.patient_general_information_widget.update_widget()
-        pass
         # self.patient_allergies_widget.update_allergies()
+        pass
+
+    def update_blood_type(self):
+        self.patient_blood_label.setText()
+
+    def customize_status_bar(self):
+        self.patient_status_bar_widget.setFixedWidth(50)
+
+    def customize_age_lbl(self):
+        self.patient_age_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+    def customize_blood_lbl(self):
+        blood_label_font = QFont('Arial', 30)
+        blood_label_font.setBold(True)
+        self.patient_blood_label.setFont(blood_label_font)
 
     def init_ui(self):
         """General data"""
-        # Essential data
-        # First row name, blood type, sex = patient_essential_data_h_layout
-        # Second row age
-        patient_name_label = PatientName(name=self.patient.name, lastname_1=self.patient.lastname_1,
-                                         lastname_2=self.patient.lastname_2)
-        patient_age_label = QLabel("Age:")
-        patient_age_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        blood_label_font = QFont('Arial', 30)
-        blood_label_font.setBold(True)
-        patient_blood_label = QLabel("O+")
-        patient_blood_label.setFont(blood_label_font)
-
         # First row
         patient_essential_data_h_layout = QHBoxLayout()
-        patient_essential_data_h_layout.addWidget(patient_name_label)
-        patient_essential_data_h_layout.addWidget(patient_blood_label)
+        patient_essential_data_h_layout.setContentsMargins(0, 0, 0, 0)
+        patient_essential_data_h_layout.addWidget(self.patient_name_label)
+        patient_essential_data_h_layout.addWidget(self.patient_blood_label)
         patient_essential_data_h_layout.addWidget(SexIconWidget(2))
         patient_essential_data_h_widget = QWidget()
         patient_essential_data_h_widget.setLayout(patient_essential_data_h_layout)
@@ -47,40 +72,34 @@ class SummaryFrame(Frame):
 
         # First second row
         patient_essential_data_v_layout = QVBoxLayout()
+        patient_essential_data_v_layout.setContentsMargins(0, 0, 0, 0)
         patient_essential_data_v_layout.addWidget(patient_essential_data_h_widget)
-        patient_essential_data_v_layout.addWidget(patient_age_label)
+        patient_essential_data_v_layout.addWidget(self.patient_age_label)
         patient_essential_data_widget = QWidget()
         patient_essential_data_widget.setLayout(patient_essential_data_v_layout)
         patient_essential_data_widget.setFixedHeight(100)
 
         """     Section Container   """
         patient_general_info_layout = QVBoxLayout()
-        self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
         patient_general_info_layout.addWidget(patient_essential_data_widget)
         patient_general_info_layout.addWidget(self.summary_scroll_area)
         patient_general_info_layout.setContentsMargins(0, 0, 0, 0)
-        #patient_general_info_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         section_container = QWidget()
         section_container.setLayout(patient_general_info_layout)
 
-        """     Patient statusbar   """
-        self.patient_status_bar_widget = StatusWidget()
-        # For testing
-        self.patient_status_bar_widget.setFixedWidth(50)
-
         """     Models   """
-        #   Skeleton
-        skeleton_view = GraphicView(self)
+        #   Models container
         three_d_models_bar_layout = QVBoxLayout()
-        three_d_models_bar_layout.addWidget(skeleton_view)
+        #   Skeleton
+        three_d_models_bar_layout.addWidget(self.skeleton_view)
+        #   Organs
+        #   Muscles
+        #   Stack up
         three_d_models_bar_layout.addStretch()
         three_d_models_bar_widget = QWidget()
         three_d_models_bar_widget.setLayout(three_d_models_bar_layout)
 
-        # For testing
-        three_d_models_bar_widget.setFixedWidth(200)
-
-        """Add main widgets to the containers"""
+        """     Add main widgets to the container        """
         container_layout = QHBoxLayout()
         container_layout.addWidget(section_container, 7)
         container_layout.addWidget(self.patient_status_bar_widget, 1)
