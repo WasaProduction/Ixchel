@@ -14,7 +14,7 @@ class SummaryScrollArea(QScrollArea):
         self.text_labels = text_labels
         self.patient = patient
         #   Widgets
-        self.general_information = GeneralInformation(self, self.text_labels)
+        self.general_information = GeneralInformation(self, self.text_labels, patient.general_info)
         self.hereditary_background = HereditaryBackground(self, self.text_labels, 0)
         self.immunizations = Immunizations(self, self.text_labels, 0)
         my_array = []

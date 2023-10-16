@@ -6,18 +6,18 @@ from data_models.external_habitus import HabitusFullDict
 
 
 class PhysicalExamination(QWidget):
-    def __init__(self, parent=None):
-        #   Call super
+    def __init__(self, parent=None, text_labels=None):
         super(PhysicalExamination, self).__init__(parent)
+        self.text_labels = text_labels
 
         """     Exterior Habitus        """
-        habitus_lbl_str = 'Exterior Habitus'
+        habitus_lbl_str = self.text_labels.habitus
         self.habitus_dict = HabitusFullDict().my_dict
         self.habitus_widget = CustomFormularyTable(self, self.habitus_dict)
         systems_section = SectionWidget(self, habitus_lbl_str, [self.habitus_widget])
 
         """     History      """
-        history_lbl_str = 'History log'
+        history_lbl_str = self.text_labels.history_log
         historic_widget = CustomTreeview()
         examination_section = SectionWidget(self, history_lbl_str, [historic_widget])
 

@@ -10,7 +10,7 @@ class GeneralInformation(QWidget):
         super().__init__(parent)
         self.text_labels = text_labels
         self.tittle = self.text_labels.general_info_lbl
-        self.dict = {'Age': 28, 'Weight': 70, 'Height': 1.76, 'Sex': 'M'}
+        self.content_dict = general_information
         #   Layout
         self.general_layout = QVBoxLayout()
         #   Tree widget
@@ -29,23 +29,23 @@ class GeneralInformation(QWidget):
 
     def populate_tree(self):
         #   Traverse self.dict keys and values.
-        for key in self.dict:
+        for key in self.content_dict:
             item = QTreeWidgetItem(self.tree)
             #   Insert item "Key: Value" format
-            item.setText(0, key + ': ' + str(self.dict[key]))
+            item.setText(0, key + ': ' + str(self.content_dict[key]))
 
     def adjust_tree_widget_height(self):
         #   Calculate height
-        total_height = self.tree.sizeHintForRow(0) * (len(self.dict))
+        total_height = self.tree.sizeHintForRow(0) * (len(self.content_dict))
         #   Set height
         self.tree.setMinimumHeight(total_height)
         self.tree.setMaximumHeight(total_height + 1)
 
     def update_general_info(self, general_information=None):
         if general_information is None:
-            self.dict = {}
+            self.content_dict = {}
         else:
-            self.dict = general_information
+            self.content_dict = general_information
         #   Clear tree
         self.tree.clear()
         #   Repopulate tree
@@ -115,9 +115,6 @@ class Immunizations(QWidget):
         self.immunizations_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.immunizations_layout)
-
-from data_models.model_allergy import ModelAllergy
-import random
 
 
 class Allergy (QWidget):

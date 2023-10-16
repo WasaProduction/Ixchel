@@ -9,9 +9,9 @@ class PrescriptionFrame(Frame):
         super().__init__(parent, button_path=button_paths.diagnosis, text_labels=text_labels)
         self.name = text_labels.diagnosis_btn
         # Stacked view
-        self.my_editing_area = EditingArea(self)
+        self.my_editing_area = EditingArea(self, text_labels)
         # Button
-        save_button = QPushButton("Save")
+        save_button = QPushButton(text_labels.save_changes)
         save_button.clicked.connect(lambda: self.retrieve_data())
         # Combobox
         self.my_options = QComboBox()

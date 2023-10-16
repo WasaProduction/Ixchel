@@ -1,5 +1,4 @@
 {
-  "text": {
     "agenda_btn": [
       "Agenda",
       "Agenda"
@@ -47,6 +46,125 @@
     "no_data_lbl": [
       "Previous information could not be retrieved :)",
       "Imposible recuperar información previa :)"
-    ]
-  }
+    ],
+    "pulse": [
+      "Pulse",
+      "Pulso"
+    ],
+    "temperature": [
+      "Temperature",
+      "Temperatura"
+    ],
+    "pressure": [
+      "Pressure",
+      "Presión"
+    ],
+    "heart_rate": [
+      "Heart rate",
+      "Frecuencia cardíaca"
+    ],
+    "respiratory_rate": [
+      "Respiratory rate",
+      "Frecuencia respiratoria"
+    ],
+    "o2_saturation": [
+      "O2 Saturation",
+      "Saturación 02"
+    ],
+    "interrogatory": [
+      "Interrogatory",
+      "Interrogatorio"
+    ],
+    "examination": [
+      "Examination",
+      "Examinación"
+    ],
+    "diagnosis_prescription": [
+      "Diagnosis prescription",
+      "Diagnostico prescripcion"
+    ],
+    "diagnosis": [
+      "Diagnosis",
+      "Diagnostico"
+    ],
+    "prescription": [
+      "Prescription",
+      "Prescripcion"
+    ],
+    "habitus": [
+      "External habitus",
+      "Habitus exterior"
+    ],
+    "history_log": [
+      "History",
+      "Historial"
+    ],
+    "id_card": [
+      "Id card",
+      "Ficha de identificación "
+    ],
+    "hereditary_background": [
+      "Hereditary background",
+      "Antecedentes heredofamiliares"
+    ],
+    "pathologic_background": [
+      "Pathological background",
+      "Antecedentes patológicos"
+    ],
+    "non_path_background": [
+      "Non pathological background",
+      "Antecedentes no patológicos"
+    ],
+    "physical_examination": [
+      "Physical examination",
+      "Exploración física"
+    ],
+    "notifications": [
+      "Notifications",
+      "Notificaciones"
+    ],
+    "user": [
+      "User",
+      "Usuario"
+    ],
+    "config": [
+      "Configuration",
+      "Configuracion"
+    ],
+    "search": [
+      "Search",
+      "Buscar"
+    ],
+    "add": [
+      "Add",
+      "Añadir"
+    ],
+    "date": [
+      "Date",
+      "Fecha"
+    ],
+    "start": [
+      "Start",
+      "Inicio"
+    ],
+    "end": [
+      "End",
+      "Finalizacion"
+    ],
+    "new_appointment": [
+      "New appointment",
+      "Nueva cita"
+    ],
+    "no_appointment_past": [
+      "Impossible to meet in the past",
+      "Imposible reunirse en el pasado"
+    ],
+    "appointment_overlap": [
+      "Appointment overlap",
+      "Empalme de citas"
+    ],
+  "save_changes": [
+    "Save changes",
+    "Guardar cambios"
+  ]
 }

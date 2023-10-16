@@ -10,25 +10,26 @@ from data_models.physical_examination import PhysicalExamination
 
 
 class DiagnosisPrescription(QScrollArea):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, text_labels=None):
         super(DiagnosisPrescription, self).__init__(parent)
+        self.text_labels = text_labels
 
         self.scroll_content_layout = QVBoxLayout()
         #   Interrogatory
         self.my_interrogatory = CustomFormularyTable(self, SystemsAparatus())
-        my_collapsible_interrogatory = CollapsibleBox(self, "Interrogatory", self.my_interrogatory)
+        my_collapsible_interrogatory = CollapsibleBox(self, self.text_labels.interrogatory, self.my_interrogatory)
 
         #   Examination
         self.my_physical_examination = CustomFormularyTable(self, PhysicalExamination())
-        my_collapsible_examination = CollapsibleBox(self, "Examination", self.my_physical_examination)
+        my_collapsible_examination = CollapsibleBox(self, self.text_labels.examination, self.my_physical_examination)
 
         #   Create label & Text Area
-        diagnosis_label = QLabel('Diagnosis')
+        diagnosis_label = QLabel(self.text_labels.diagnosis)
         self.my_diagnosis = CustomTextEdit(self, '/Users/jaimegonzalezquirarte/Desktop/App/vocabulario.txt')
-        prescription_label = QLabel('Prescription')
+        prescription_label = QLabel(self.text_labels.prescription)
         self.my_prescription = PrescriptionTextEdit(self, '/Users/jaimegonzalezquirarte/Desktop/App/vocabulario.txt')
         #   Container widget layout
-        self.vitals_widget = VitalsGrid()
+        self.vitals_widget = VitalsGrid(self.text_labels)
         #   Adding elements to layouts
         self.scroll_content_layout.addWidget(self.vitals_widget)
         self.scroll_content_layout.addWidget(my_collapsible_interrogatory)

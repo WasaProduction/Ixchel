@@ -5,21 +5,22 @@ from data_models.model_vital_signs import ModelVitalSigns
 
 
 class VitalsGrid(QWidget):
-    def __init__(self):
+    def __init__(self, text_labels=None):
         super().__init__()
+        self.text_labels = text_labels
         # Labels
         self.labels = []
-        pulse_label = QLabel('Pulse')
+        pulse_label = QLabel(self.text_labels.pulse)
         self.labels.append(pulse_label)
-        temperature_label = QLabel('Temperature')
+        temperature_label = QLabel(self.text_labels.temperature)
         self.labels.append(temperature_label)
-        blood_pressure_label = QLabel('Pressure')
+        blood_pressure_label = QLabel(self.text_labels.pressure)
         self.labels.append(blood_pressure_label)
-        heart_rate_label = QLabel('Heart rate')
+        heart_rate_label = QLabel(self.text_labels.heart_rate)
         self.labels.append(heart_rate_label)
-        respiratory_rate_label = QLabel('Respiratory rate')
+        respiratory_rate_label = QLabel(self.text_labels.respiratory_rate)
         self.labels.append(respiratory_rate_label)
-        peripheral_oxygen_saturation_label = QLabel('Oxygen saturation')
+        peripheral_oxygen_saturation_label = QLabel(self.text_labels.o2_saturation)
         self.labels.append(peripheral_oxygen_saturation_label)
         # Line edits
         self.line_edits = []

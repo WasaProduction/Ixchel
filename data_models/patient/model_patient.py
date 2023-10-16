@@ -1,6 +1,11 @@
+from data_models.patient.model_patient_immutable import ModelPatientImmutable
+from data_models.patient.general_info import GeneralInfo
+from data_models.patient.user_contact import UserContact
+
+
 class ModelPatient:
     def __init__(self, object_id='', user_id='', username='', name='', lastname_1='', lastname_2='',
-                 diagnosis_entries=None):
+                 diagnosis_entries=None, immutables=None, general_info=None, user_contact=None):
         self.object_id = object_id
         self.user_id = user_id
         self.username = username
@@ -11,52 +16,18 @@ class ModelPatient:
             self.diagnosis_entries = []
         else:
             self.diagnosis_entries = diagnosis_entries
+        if immutables is None:
+            self.immutables = ModelPatientImmutable()
+        else:
+            self.immutables = diagnosis_entries
+        if general_info is None:
+            self.general_info = GeneralInfo()
+        else:
+            self.general_info = general_info
+        if user_contact is None:
+            self.user_contact = UserContact()
+        else:
+            self.user_contact = user_contact
 
-    """             Getters/Setters             """
-    @property
-    def object_id(self):
-        return self._object_id
 
-    @object_id.setter
-    def object_id(self, value):
-        self._object_id = value
 
-    @property
-    def user_id(self):
-        return self._user_id
-
-    @user_id.setter
-    def user_id(self, value):
-        self._user_id = value
-
-    @property
-    def username(self):
-        return self._username
-
-    @username.setter
-    def username(self, value):
-        self._username = value
-
-    @property
-    def lastname_1(self):
-        return self._lastname_1
-
-    @lastname_1.setter
-    def lastname_1(self, value):
-        self._lastname_1 = value
-
-    @property
-    def lastname_2(self):
-        return self._lastname_2
-
-    @lastname_2.setter
-    def lastname_2(self, value):
-        self._lastname_2 = value
-
-    @property
-    def diagnosis_entries(self):
-        return self._diagnosis_entries
-
-    @diagnosis_entries.setter
-    def diagnosis_entries(self, value):
-        self._diagnosis_entries = value

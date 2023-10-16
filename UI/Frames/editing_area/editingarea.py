@@ -5,7 +5,8 @@ from UI.Frames.editing_area.interrogatory import Interrogatory
 
 
 class EditingArea(QStackedWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, text_labels=None):
+        self.text_labels = text_labels
         super(EditingArea, self).__init__(parent)
         # Match frames contained
         self.containing_frames = {}
@@ -15,14 +16,14 @@ class EditingArea(QStackedWidget):
         """Frames"""
         #   Frames coupled with widgets
         #   Diagnosis
-        diagnosis_prescription = DiagnosisPrescription(self)
-        self.containing_frames['Diagnosis Prescription'] = 0
+        diagnosis_prescription = DiagnosisPrescription(self, self.text_labels)
+        self.containing_frames[self.text_labels.diagnosis_prescription] = 0
         #   Physical Examination
-        physical_examination = PhysicalExamination(self)
-        self.containing_frames['Physical Examination'] = 1
+        physical_examination = PhysicalExamination(self, self.text_labels)
+        self.containing_frames[self.text_labels.physical_examination] = 1
         #   Interrogatory
-        interrogatory = Interrogatory(self)
-        self.containing_frames['Interrogatory'] = 2
+        interrogatory = Interrogatory(self, self.text_labels)
+        self.containing_frames[self.text_labels.interrogatory] = 2
 
         """     Stack       """
         #   Frames added to the stack in the same order as before

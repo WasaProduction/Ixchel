@@ -7,6 +7,7 @@ from UI.Widgets.icons.sex_icon import SexIconWidget
 from UI.Widgets.summary_scroll_area import SummaryScrollArea
 from UI.Widgets.patient_name import PatientName
 from UI.TwoD.graphic_view import GraphicView
+import datetime
 
 
 class SummaryFrame(Frame):
@@ -17,11 +18,11 @@ class SummaryFrame(Frame):
         #   Name
         self.patient_name_label = PatientName(self, name=self.patient.name, lastname_1=self.patient.lastname_1,
                                               lastname_2=self.patient.lastname_2)
-        print('test', self.patient.immutables.birthday)
-        self.patient_age_label = QLabel(self.patient.immutables.birthday)
+        #   Age
+        self.patient_age_label = QLabel(str(self.calculate_age(self.patient.immutables.birthday)))
         self.customize_age_lbl()
         #
-        self.patient_blood_label = QLabel("O+")
+        self.patient_blood_label = QLabel(self.patient.immutables.blood_type)
         self.customize_blood_lbl()
         #   Summary scroll area
         self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
@@ -32,25 +33,36 @@ class SummaryFrame(Frame):
         self.skeleton_view = GraphicView(self)
         self.init_ui()
 
+    @staticmethod
+    def calculate_age(birthdate):
+        current_date = datetime.datetime.now()
+        age = current_date.year - birthdate.year - ((current_date.month, current_date.day) <
+                                                    (birthdate.month, birthdate.day))
+        return age
+
     def update_summary(self, patient=None):
         #   Update patient obj
         self.patient = patient
         """     Update widgets      """
         #   Update name
         self.patient_name_label.update_text(self.patient.name, self.patient.lastname_1, self.patient.lastname_2)
+        #   Update age
+        self.patient_age_label.setText(str(self.calculate_age(self.patient.immutables.birthday)))
+        #   Update blood type
+        self.patient_blood_label.setText(self.patient.immutables.blood_type)
         #   Update status bar
         self.patient_status_bar_widget.update_statuses()
         # self.patient_general_information_widget.update_widget()
         # self.patient_allergies_widget.update_allergies()
         pass
 
-    def update_blood_type(self):
-        self.patient_blood_label.setText()
-
     def customize_status_bar(self):
         self.patient_status_bar_widget.setFixedWidth(50)
 
     def customize_age_lbl(self):
+        age_label_font = QFont('Arial', 20)
+        age_label_font.setBold(True)
+        self.patient_age_label.setFont(age_label_font)
         self.patient_age_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def customize_blood_lbl(self):
