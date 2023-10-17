@@ -13,3 +13,13 @@ class GeneralInfo(defaultdict):
         self['occupation'] = occupation
         self['religion'] = religion
         self['scholarship'] = scholarship
+
+    def restore_model(self):
+        self.used_id = None
+        self['weight'] = None
+        self['height'] = None
+        self['sex'] = None
+        self['marital_status'] = None
+        self['occupation'] = None
+        self['religion'] = None
+        self['scholarship'] = None

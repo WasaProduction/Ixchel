@@ -7,4 +7,3 @@ class BackgroundData:
         self.last_update = last_update
         self.background = background
         self.creation_date = creation_date
-

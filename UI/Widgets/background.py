@@ -79,25 +79,6 @@ class HereditaryBackground(QWidget):
         self.setLayout(self.hereditary_layout)
 
 
-class PathologicBackground(QWidget):
-    def __init__(self, parent=None, text_labels=None, pathologic_information=None):
-        super().__init__(parent)
-        self.text_labels = text_labels
-        self.pathologic_layout = QVBoxLayout()
-        self.widget = QWidget()
-        self.collapsible_widget = CollapsibleBox(self, self.text_labels.pathologic_lbl, self.widget)
-        #   UI
-        self.init_ui()
-
-    def init_ui(self):
-        #   Add expandable widget to layout
-        self.pathologic_layout.addWidget(self.collapsible_widget)
-        #   Remove margins
-        self.pathologic_layout.setContentsMargins(0, 0, 0, 0)
-        #   Set layout
-        self.setLayout(self.pathologic_layout)
-
-
 class Immunizations(QWidget):
     def __init__(self, parent=None, text_labels=None, immunizations_information=None):
         super().__init__(parent)

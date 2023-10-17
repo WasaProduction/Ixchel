@@ -29,5 +29,14 @@ class ModelPatient:
         else:
             self.user_contact = user_contact
 
-
-
+    def restore_model(self):
+        self.object_id = ''
+        self.user_id = ''
+        self.username = ''
+        self.name = ''
+        self.lastname_1 = ''
+        self.lastname_2 = ''
+        self.diagnosis_entries = []
+        self.immutables = ModelPatientImmutable()
+        self.general_info = GeneralInfo()
+        self.user_contact = UserContact()

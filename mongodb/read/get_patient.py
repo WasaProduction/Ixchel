@@ -15,15 +15,12 @@ class GetPatient(ModelPatient):
         self.retrieve_user_data()
 
     def update_model(self, username=None):
-        #   Clear data
-        self.clear_model()
+        #   Restore data
+        self.restore_model()
         #   Update username
         self.username = username
         #   Fill data
         self.retrieve_user_data()
-
-    def clear_model(self):
-        pass
 
     def retrieve_user_data(self):
         """     Get patient data        """
