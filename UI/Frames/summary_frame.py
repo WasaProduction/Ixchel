@@ -52,9 +52,8 @@ class SummaryFrame(Frame):
         self.patient_blood_label.setText(self.patient.immutables.blood_type)
         #   Update status bar
         self.patient_status_bar_widget.update_statuses()
-        # self.patient_general_information_widget.update_widget()
-        # self.patient_allergies_widget.update_allergies()
-        pass
+        #   Update scroll area
+        self.summary_scroll_area.update_summary_scroll_area()
 
     def customize_status_bar(self):
         self.patient_status_bar_widget.setFixedWidth(50)

@@ -166,5 +166,29 @@
   "save_changes": [
     "Save changes",
     "Guardar cambios"
+  ],
+  "morning": [
+    "Good morning",
+    "Buenos días"
+  ],
+  "afternoon": [
+    "Good afternoon",
+    "Buenas tardes"
+  ],
+  "evening": [
+    "Good evening",
+    "Buenas noches"
+  ],
+  "night": [
+    "Good night",
+    "Buenas noches"
+  ],
+  "see_you": [
+    "See you later",
+    "Hasta luego"
+  ],
+  "come_again": [
+    "Come again",
+    "Vuelve pronto"
   ]
 }

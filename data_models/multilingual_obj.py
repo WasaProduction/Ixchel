@@ -43,3 +43,9 @@ class MultilingualOBJ:
         self.no_appointment_past = None
         self.appointment_overlap = None
         self.save_changes = None
+        self.morning = None
+        self.afternoon = None
+        self.evening = None
+        self.night = None
+        self.see_you = None
+        self.come_again = None

@@ -15,24 +15,24 @@ class GetPatient(ModelPatient):
         self.retrieve_user_data()
 
     def update_model(self, username=None):
-        #   Restore data
+        #   Restore data.
         self.restore_model()
-        #   Update username
+        #   Update username.
         self.username = username
-        #   Fill data
+        #   Fill data.
         self.retrieve_user_data()
 
     def retrieve_user_data(self):
         """     Get patient data        """
-        #   Basics
+        #   Basics.
         self.get_patient_basics()
-        #   Diagnoses
+        #   Diagnoses.
         self.get_patient_diagnoses()
-        #   Immutables
+        #   Immutables.
         self.get_patient_immutables()
-        #   General info
+        #   General info.
         self.get_user_general_info()
-        #   Contact info
+        #   Contact info.
         self.get_user_contact()
 
     def get_patient_basics(self):

@@ -15,29 +15,34 @@ class MainWindow(QMainWindow):
         # Look for all required files
         StartupCheck()
         super().__init__()
-        # Setting window title
+        #   Setting window title
         self.setWindowTitle("Ixchel")
-        # Setting window properties
+        #   Setting window properties
         self.Width = 800
         self.height = int(0.618 * self.Width)
         self.resize(self.Width, self.height)
+        self.patient = GetPatient() # 'JaimeGQ'
+
+        #   EN = 0
+        #   ES = 1
+        self.text_labels = GetTextLabels(0)
+        self.top_bar = TopBar(self, self.text_labels)
+
+        button_paths = ButtonPaths()
+
+        """     Frames      """
+        self.frame_prescription = PrescriptionFrame(self, button_paths, self.text_labels)
+        self.frame_agenda = ScheduleFrame(self, button_paths, self.text_labels)
+        self.frame_summary = SummaryFrame(self, self.patient, button_paths, self.text_labels)
+
         self.init_ui()
 
     def init_ui(self):
-        button_paths = ButtonPaths()
-        text_labels = GetTextLabels()
-        patient = GetPatient('JaimeGq')
-        """     Frames      """
-        frame_prescription = PrescriptionFrame(self, button_paths, text_labels)
-        frame_agenda = ScheduleFrame(self, button_paths, text_labels)
-        frame_summary = SummaryFrame(self, patient, button_paths, text_labels)
-
         """Stack"""
         stacked_frames = QStackedWidget()
-        stacked_frames.addWidget(frame_summary)
-        stacked_frames.addWidget(frame_prescription)
-        stacked_frames.addWidget(frame_agenda)
-
+        stacked_frames.addWidget(self.frame_summary)
+        stacked_frames.addWidget(self.frame_prescription)
+        stacked_frames.addWidget(self.frame_agenda)
         # Main horizontal widgets
         main_h_layout = QHBoxLayout()
         # main_h_layout.addWidget(sidebar_widget)
@@ -49,10 +54,18 @@ class MainWindow(QMainWindow):
         main_h_widget.setLayout(main_h_layout)
         # Main vertical widgets
         main_v_layout = QVBoxLayout()
-        main_v_layout.addWidget(TopBar(), 1)
+        self.top_bar.patient_signal.connect(self.update_patient)
+        main_v_layout.addWidget(self.top_bar, 1)
+
         main_v_layout.addWidget(main_h_widget, 9)
 
         main_widget = QWidget()
         main_widget.setLayout(main_v_layout)
 
         self.setCentralWidget(main_widget)
+        #   Prevent any widget from being the focus.
+        self.setFocus()
+
+    def update_patient(self):
+        self.patient = self.top_bar.patient
+        self.frame_summary.update_summary(self.patient)

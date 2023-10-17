@@ -4,7 +4,7 @@ from data_models.patient.user_contact import UserContact
 
 
 class ModelPatient:
-    def __init__(self, object_id='', user_id='', username='', name='', lastname_1='', lastname_2='',
+    def __init__(self, object_id='', user_id='', username='ARC-77', name='Frodo', lastname_1='', lastname_2='',
                  diagnosis_entries=None, immutables=None, general_info=None, user_contact=None):
         self.object_id = object_id
         self.user_id = user_id

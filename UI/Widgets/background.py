@@ -109,7 +109,7 @@ class Allergy (QWidget):
         #   Allergies
         self.allergies = allergies
         #   Widget containing all tags.
-        self.widget = self.allergies_into_widget(self.allergies)
+        self.widget = self.allergies_into_widget()
         self.scroll_widget = QScrollArea()
         self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll_widget.setStyleSheet("border: none;")
@@ -119,21 +119,25 @@ class Allergy (QWidget):
         self.init_ui()
 
     def update_allergies(self, allergies=None):
-        self.allergies = allergies
-        #   Remove self.widget contents
-        self.remove_allergies()
-        #   Remove self.widget
-        #   Create new self.widget with new contents
-        self.widget = self.allergies_into_widget(self.allergies)
-        self.scroll_widget.setWidget(self.widget)
-        #   Update content inside collapsible widget
-        self.collapsible_widget.update_content(self.scroll_widget)
+        if allergies is None:
+            self.allergies = allergies
+            self.remove_allergies()
+        else:
+            self.allergies = allergies
+            #   Remove self.widget contents
+            self.remove_allergies()
+            #   Remove self.widget
+            #   Create new self.widget with new contents
+            self.widget = self.allergies_into_widget()
+            self.scroll_widget.setWidget(self.widget)
+            #   Update content inside collapsible widget
+            self.collapsible_widget.update_content(self.scroll_widget)
 
     def remove_allergies(self):
         for widget in self.allergy_widgets:
-            del widget
+            widget.deleteLater()
 
-    def allergies_into_widget(self, allergies=None):
+    def allergies_into_widget(self):
         #   Widget to be returned.
         widget = QWidget()
         #   Grid layout.
@@ -144,7 +148,7 @@ class Allergy (QWidget):
         column_counter = 0
         row_counter = 0
         #   Traverse grid.
-        for allergy in allergies:
+        for allergy in self.allergies:
             #   Layout to contain Icon + Label.
             allergy_layout = QHBoxLayout()
             allergy_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
