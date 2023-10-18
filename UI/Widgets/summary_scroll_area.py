@@ -72,9 +72,11 @@ class SummaryScrollArea(QScrollArea):
                     #   Last widget is to stretch further than most
                     self.layout.setStretch(i, 5)
 
-    def update_summary_scroll_area(self, general_information=None, allergies=None):
-        self.general_information.update_general_info(general_information=general_information)
+    def update_summary_scroll_area(self, patient=None, allergies=None):
+        self.patient = patient
+        self.general_information.update_general_info(self.patient.general_info)
         self.allergy.update_allergies(allergies=allergies)
+        self.pathologic_background.update_pathological(self.patient)
 
     """     UI      """
     def init_ui(self):

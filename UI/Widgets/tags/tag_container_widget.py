@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QSizePolicy, QVBoxLayout, QScrollArea, QFrame
+from PyQt6.QtWidgets import QWidget, QGridLayout, QSizePolicy, QVBoxLayout, QScrollArea, QFrame, QLabel
 from UI.Widgets.collapsible_box import CollapsibleBox
 from data_models.model_tag import ModelTag
 from mongodb.read.get_affection import GetAffection
@@ -21,7 +21,7 @@ class PathologicalCollapsible(QScrollArea):
         #   TODO No tags to display.
         if self.patient.diagnosis_entries is None:
             pass
-        self.years_container = YearsCollapsible(self, self.patient)
+        self.years_container = YearsCollapsible(self, self.patient, self.text_labels)
         self.collapsible = CollapsibleBox(self, title=self.text_labels.pathologic_lbl, content=self.years_container)
         self.layout = QVBoxLayout()
         self.container_widget = QWidget()
@@ -31,6 +31,7 @@ class PathologicalCollapsible(QScrollArea):
 
     def update_pathological(self, patient):
         self.years_container.update_years_collapsible(patient)
+        self.collapsible.update_size()
 
     def init_ui(self):
         #   Configure margins
@@ -43,19 +44,20 @@ class PathologicalCollapsible(QScrollArea):
 
 class YearsCollapsible(QWidget):
     #   Set of collapsible years containing tags.
-    def __init__(self, parent=None, patient=None):
+    def __init__(self, parent=None, patient=None, text_labels=None):
         super().__init__(parent)
+        #   Button tittle.
+        self.text_labels = text_labels
         """     For testing     """
         self.testing = False
         """     Testing end     """
-
         """     Tags Section    """
         #   One collapsible box per year.
         self.year_container_lyt = self.create_year_container_lyt()
         #   Extract tags into a dict.
         self.year_diagnoses_dict = self.extract_diagnoses_yearly(patient)
         #   Keep track of currently displayed years
-        self.displayed_years = {}# list(self.year_diagnoses_dict.keys())
+        self.displayed_years = {}  # list(self.year_diagnoses_dict.keys())
         #   Get the tags into a layout.
         self.tags_into_layout()
         #   Set layout.
@@ -71,10 +73,16 @@ class YearsCollapsible(QWidget):
             if widget:
                 widget.deleteLater()
 
+        if not self.year_diagnoses_dict:
+            not_lbl = QLabel(self.text_labels.no_data_lbl)
+            self.year_container_lyt.addWidget(not_lbl)
+            return
+
         # Add a CollapsibleBox per Year into scroll area
         for index, year in enumerate(self.year_diagnoses_dict):
             #   Pass each CollapsibleBox all the contained tags
-            year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self.year_diagnoses_dict[year]))
+            year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self.year_diagnoses_dict[year],
+                                                                                      text_labels=self.text_labels))
             self.displayed_years[year] = year_widget
             self.year_container_lyt.addWidget(year_widget)
             #   Allow widgets stretch to avoid overlapping.
@@ -109,58 +117,33 @@ class YearsCollapsible(QWidget):
         year_container_lyt.setSpacing(5)
         return year_container_lyt
 
-    @staticmethod
-    def add_years(self, years=None):
-        #   Add missing years
-        print('Add years:', years)
-        pass
-
     def remove_years(self, years=None):
-        #   Remove years not supposed to be displayed
-        for year in years:
-            #   Delete tags contained inside year.
-            self.displayed_years[year].received_content.remove_tags()
-            #   Delete year
-            self.displayed_years[year].deleteLater()
-            #   Remove year form displayed
-            del self.displayed_years[year]
+        if years is not None and years:
+            #   Remove years not supposed to be displayed
+            for year in years:
+                #   Delete tags contained inside year.
+                self.displayed_years[year].received_content.remove_tags()
+                #   Delete year
+                self.displayed_years[year].deleteLater()
+                #   Remove year form displayed
+                del self.displayed_years[year]
 
     def update_years(self, years):
-        print('Update years:', years)
         #   Update already present years
         for year in years:
             #   Remove tags contained inside year.
             self.displayed_years[year].received_content.remove_tags()
             #   Add renewed tags inside year.
-        print(self.displayed_years)
 
     def update_years_collapsible(self, patient=None):
+        #   Remove years
+        self.remove_years(list(self.year_diagnoses_dict.keys()))
         #   Extract tags into a dict (update).
         self.year_diagnoses_dict = self.extract_diagnoses_yearly(patient)
-        """
-        #   See what years are to be displayed.
-        years_to_display = list(self.year_diagnoses_dict.keys())
-        #   Select years to be updated.
-        to_update = list(set(list(self.displayed_years.keys())).intersection(years_to_display))
-        #   Select years to be deleted.
-        to_delete = list(set(list(self.displayed_years.keys())).difference(years_to_display))
-        #   Select years to add.
-        to_add = list(set(years_to_display).difference(list(self.displayed_years.keys())))
-        
-        #   Delete years.
-        self.remove_years(to_delete) if to_update else None
-        #   Update present years.
-        self.update_years(to_update) if to_update else None
-        #   Add missing years
-        self.add_years(to_add) if to_update else None
-        """
-        self.remove_years(list(self.year_diagnoses_dict.keys()))
         #   Update presented tags
         self.tags_into_layout()
         #   Update currently displayed years array.
         self.displayed_years = list(self.year_diagnoses_dict.keys())
-        #   Tune Ui
-        self.tune_ui()
 
     """     UI      """
 
@@ -170,18 +153,13 @@ class YearsCollapsible(QWidget):
         #   Keep the preferred vertical size policy
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
-    def tune_ui(self):
-        pass
-
 
 class TagsContainer(QWidget):
     #   Set of individual tags.
-    def __init__(self, diagnoses):
+    def __init__(self, diagnoses, text_labels=None):
         super().__init__()
-        """     For testing     """
-        self.testing = False
-
-        """     Testing end     """
+        #   Button tittle.
+        self.text_labels = text_labels
         #   Keep track of tracks tags (as a widget) being displayed.
         self.tags_in_display = []
         #   Save tags (as data)
@@ -219,8 +197,6 @@ class TagsContainer(QWidget):
                 self.tags_array.pop()
 
     def remove_tags(self):
-        #   Testing
-        print('Tags to remove', self.tags_in_display) if self.testing else None
         #   Traverse tags
         for tag in self.tags_in_display:
             #   Remove tag from layout
@@ -250,6 +226,7 @@ class TagsContainer(QWidget):
                                                 color=self.colors_dict[tag[:1]]))
 
     """     UI      """
+
     def init_ui(self):
         #   Configure margins
         self.setContentsMargins(0, 0, 0, 0)

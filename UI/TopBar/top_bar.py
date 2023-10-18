@@ -62,6 +62,7 @@ class TopBar(QWidget):
 
     def update_greetings(self):
         # Update the label with the current time.
+        pass
         self.greetings_lbl.setText(self.determine_greeting() + ' ' + self.username)
 
     def determine_greeting(self):
@@ -90,6 +91,8 @@ class TopBar(QWidget):
         elif midnight < now < sunrise:
             self.config_timer((now.secsTo(sunrise) * 1000) + tolerance)
             return self.text_labels.night
+        else:
+            return 'Hi'
 
     def handle_patient_signal(self):
         return self.patient

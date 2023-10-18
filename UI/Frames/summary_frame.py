@@ -1,13 +1,13 @@
 from UI.Frames.frame import Frame
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+import datetime
 from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout
 from UI.Widgets.status_widget_layout import StatusWidget
 from UI.Widgets.icons.sex_icon import SexIconWidget
 from UI.Widgets.summary_scroll_area import SummaryScrollArea
 from UI.Widgets.patient_name import PatientName
 from UI.TwoD.graphic_view import GraphicView
-import datetime
 
 
 class SummaryFrame(Frame):
@@ -53,7 +53,9 @@ class SummaryFrame(Frame):
         #   Update status bar
         self.patient_status_bar_widget.update_statuses()
         #   Update scroll area
-        self.summary_scroll_area.update_summary_scroll_area()
+        self.summary_scroll_area.update_summary_scroll_area(self.patient)
+        """     Update models       """
+        #   Update skeleton
 
     def customize_status_bar(self):
         self.patient_status_bar_widget.setFixedWidth(50)

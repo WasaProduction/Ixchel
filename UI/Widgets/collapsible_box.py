@@ -48,6 +48,7 @@ class CollapsibleBox(QWidget):
         return 25# self.sizeHint().height() - self.content_area.maximumHeight()
 
     def calculate_content_height(self):
+        print(self.title, 'content:height', self.proxy_content_widget.sizeHint().height())
         return self.proxy_content_widget.sizeHint().height()
 
     def tune_anim_group(self):
@@ -105,14 +106,16 @@ class CollapsibleBox(QWidget):
     def actually_update_content(self, content=None):
         self.received_content = content
         self.proxy_content_widget = self.received_content_into_proxy()
-        #self.content_area.setWidget(self.proxy_content_widget)
         #   Calculate heights
-        print('collapsed_height', self.collapsed_height, 'content_height', self.content_height)
         self.collapsed_height = self.calculate_collapsed_height()
         self.content_height = self.calculate_content_height()
-        print('collapsed_height', self.collapsed_height, 'content_height', self.content_height)
         #   Tune animations based on heights
         self.tune_anim_group()
+
+    def update_size(self, height=0):
+        #   Calculate heights
+        self.collapsed_height = self.calculate_collapsed_height()
+        self.content_height = height if height != 0 else self.calculate_content_height()
 
     def create_toggle_button(self, title):
         toggle_button = QToolButton()
