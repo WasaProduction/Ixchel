@@ -6,6 +6,7 @@ from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyA
 class CollapsibleBox(QWidget):
     def __init__(self, parent=None, title=None, content=None):
         super(CollapsibleBox, self).__init__(parent)
+        self.setStyleSheet("background: pink;")
         if title is None:
             self.title = 'Missing title'
         else:
@@ -48,7 +49,7 @@ class CollapsibleBox(QWidget):
         return 25# self.sizeHint().height() - self.content_area.maximumHeight()
 
     def calculate_content_height(self):
-        print(self.title, 'content:height', self.proxy_content_widget.sizeHint().height())
+        # print(self.title, 'content:height', self.proxy_content_widget.sizeHint().height())
         return self.proxy_content_widget.sizeHint().height()
 
     def tune_anim_group(self):
@@ -112,10 +113,13 @@ class CollapsibleBox(QWidget):
         #   Tune animations based on heights
         self.tune_anim_group()
 
-    def update_size(self, height=0):
+    def update_height(self, height=0):
+        print('Updating height to:', height)
+        #print('self.proxy_content_widget', self.proxy_content_widget.height())
         #   Calculate heights
         self.collapsed_height = self.calculate_collapsed_height()
         self.content_height = height if height != 0 else self.calculate_content_height()
+        self.tune_anim_group()
 
     def create_toggle_button(self, title):
         toggle_button = QToolButton()

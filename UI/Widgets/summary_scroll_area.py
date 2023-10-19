@@ -10,6 +10,7 @@ class SummaryScrollArea(QScrollArea):
     #   Scroll container of General information, hereditary & pathologic background, immunizations and allergies
     def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
+        self.setStyleSheet("background: purple;")
         #   Parameters
         self.text_labels = text_labels
         self.patient = patient
@@ -27,6 +28,7 @@ class SummaryScrollArea(QScrollArea):
 
         #   Container widget
         self.container_widget = QWidget()
+        self.container_widget.setStyleSheet('background: blue;')
         #   Layout
         self.layout = QVBoxLayout()
         self.tune_container_layout()

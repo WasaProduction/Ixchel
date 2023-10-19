@@ -31,13 +31,13 @@ class PathologicalCollapsible(QScrollArea):
 
     def update_pathological(self, patient):
         self.years_container.update_years_collapsible(patient)
-        self.collapsible.update_size()
+        self.collapsible.update_height(self.years_container.content_height)
 
     def init_ui(self):
         #   Configure margins
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.container_widget.setLayout(self.layout)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        #self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.setWidget(self.collapsible)
 
@@ -51,6 +51,7 @@ class YearsCollapsible(QWidget):
         """     For testing     """
         self.testing = False
         """     Testing end     """
+        self.content_height = 0
         """     Tags Section    """
         #   One collapsible box per year.
         self.year_container_lyt = self.create_year_container_lyt()
@@ -75,6 +76,8 @@ class YearsCollapsible(QWidget):
 
         if not self.year_diagnoses_dict:
             not_lbl = QLabel(self.text_labels.no_data_lbl)
+            not_lbl.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+            self.content_height = not_lbl.height()
             self.year_container_lyt.addWidget(not_lbl)
             return
 
@@ -84,6 +87,7 @@ class YearsCollapsible(QWidget):
             year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self.year_diagnoses_dict[year],
                                                                                       text_labels=self.text_labels))
             self.displayed_years[year] = year_widget
+            self.content_height += year_widget.height()
             self.year_container_lyt.addWidget(year_widget)
             #   Allow widgets stretch to avoid overlapping.
             self.year_container_lyt.setStretchFactor(year_widget, 1)

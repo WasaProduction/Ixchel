@@ -18,10 +18,12 @@ class MainWindow(QMainWindow):
         #   Setting window title
         self.setWindowTitle("Ixchel")
         #   Setting window properties
+        """
         self.Width = 800
         self.height = int(0.618 * self.Width)
         self.resize(self.Width, self.height)
-        self.patient = GetPatient('JaimeGQ')
+        """
+        self.patient = GetPatient()#'JaimeGQ')
 
         #   EN = 0
         #   ES = 1
