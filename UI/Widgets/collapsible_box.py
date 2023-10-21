@@ -6,7 +6,6 @@ from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyA
 class CollapsibleBox(QWidget):
     def __init__(self, parent=None, title=None, content=None):
         super(CollapsibleBox, self).__init__(parent)
-        self.setStyleSheet("background: pink;")
         if title is None:
             self.title = 'Missing title'
         else:

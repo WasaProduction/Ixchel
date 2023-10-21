@@ -8,11 +8,11 @@ from mongodb.read.get_relationships import GetRelationships
 
 class WidgetTableButtons(QWidget):
     def __init__(self, parent=None,  dictionary=None, add=False, remove=False, save=False):
-        super(WidgetTableButtons, self).__init__(parent)
+        super().__init__(parent)
         # Table above Add/Remove buttons
         my_layout = QVBoxLayout()
         my_layout.setContentsMargins(0, 0, 0, 0)
-        self.my_table = CustomTableHereditary(dictionary)
+        self.my_table = CustomTableHereditary(self, dictionary)
         my_layout.addWidget(self.my_table)
         # Check if buttons are needed
         if add or remove or save:
@@ -68,7 +68,8 @@ class WidgetTableButtons(QWidget):
 
 
 class CustomTableHereditary(QTableWidget):
-    def __init__(self, dictionary=None):
+    def __init__(self, parent=None, dictionary=None):
+        super().__init__(parent)
         if dictionary is None:
             super().__init__(1, 2)
         else:
@@ -171,12 +172,3 @@ class CustomTableHereditary(QTableWidget):
             if isinstance(combobox, QComboBox) and isinstance(custom_text_edit, CustomTextEdit):
                 resulting_dict[combobox.currentText()] = custom_text_edit.retrieve_data()
         return resulting_dict
-
-    """             Getters/Setters             """
-    @property
-    def relationships(self):
-        return self._remaining_possible_connections
-
-    @relationships.setter
-    def relationships(self, value):
-        self._remaining_possible_connections = value

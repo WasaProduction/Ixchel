@@ -12,6 +12,7 @@ from mongodb.read.get_text_labels import GetTextLabels
 
 class MainWindow(QMainWindow):
     def __init__(self):
+        self.testing =  False
         # Look for all required files
         StartupCheck()
         super().__init__()
@@ -23,7 +24,10 @@ class MainWindow(QMainWindow):
         self.height = int(0.618 * self.Width)
         self.resize(self.Width, self.height)
         """
-        self.patient = GetPatient()#'JaimeGQ')
+        if self.testing:
+            self.patient = GetPatient('JaimeGQ')
+        else:
+            self.patient = GetPatient()
 
         #   EN = 0
         #   ES = 1

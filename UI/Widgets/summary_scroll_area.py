@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QScrollArea, QVBoxLayout, QSizePolicy, QFrame
 from PyQt6.QtCore import Qt, QEvent, QSize
-from UI.Widgets.background import GeneralInformation, HereditaryBackground, Immunizations, Allergy
+from UI.Widgets.background import GeneralInformation, HereditaryBackground, Allergy
 from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
 from data_models.model_allergy import ModelAllergy
 import random
@@ -10,14 +10,12 @@ class SummaryScrollArea(QScrollArea):
     #   Scroll container of General information, hereditary & pathologic background, immunizations and allergies
     def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
-        self.setStyleSheet("background: purple;")
         #   Parameters
         self.text_labels = text_labels
         self.patient = patient
         #   Widgets
         self.general_information = GeneralInformation(self, self.text_labels, patient.general_info)
         self.hereditary_background = HereditaryBackground(self, self.text_labels, 0)
-        self.immunizations = Immunizations(self, self.text_labels, 0)
         my_array = []
         for i in range(100):
             my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
@@ -28,7 +26,6 @@ class SummaryScrollArea(QScrollArea):
 
         #   Container widget
         self.container_widget = QWidget()
-        self.container_widget.setStyleSheet('background: blue;')
         #   Layout
         self.layout = QVBoxLayout()
         self.tune_container_layout()
@@ -58,7 +55,6 @@ class SummaryScrollArea(QScrollArea):
         #   Adding widgets to layout.
         self.layout.addWidget(self.general_information)
         self.layout.addWidget(self.hereditary_background)
-        self.layout.addWidget(self.immunizations)
         self.layout.addWidget(self.allergy)
         self.layout.addWidget(self.pathologic_background)
         # Traverse and print the widgets in the QVBoxLayout.

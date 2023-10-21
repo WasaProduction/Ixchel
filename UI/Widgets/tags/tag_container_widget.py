@@ -7,7 +7,7 @@ from UI.Widgets.tags.tag_individual_widget import TagIndividualWidget
 import math
 
 
-class PathologicalCollapsible(QScrollArea):
+class PathologicalCollapsible(QWidget):
     #   Collapsable container of a set of years containing individual tags
     def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
@@ -24,7 +24,6 @@ class PathologicalCollapsible(QScrollArea):
         self.years_container = YearsCollapsible(self, self.patient, self.text_labels)
         self.collapsible = CollapsibleBox(self, title=self.text_labels.pathologic_lbl, content=self.years_container)
         self.layout = QVBoxLayout()
-        self.container_widget = QWidget()
         self.layout.addWidget(self.collapsible)
         self.layout.setStretchFactor(self.collapsible, 1)
         self.init_ui()
@@ -36,10 +35,9 @@ class PathologicalCollapsible(QScrollArea):
     def init_ui(self):
         #   Configure margins
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.container_widget.setLayout(self.layout)
-        #self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.setFrameShape(QFrame.Shape.NoFrame)
-        self.setWidget(self.collapsible)
+        self.setLayout(self.layout)
+        # self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
 
 class YearsCollapsible(QWidget):
@@ -74,6 +72,7 @@ class YearsCollapsible(QWidget):
             if widget:
                 widget.deleteLater()
 
+        #   No data retrieved.
         if not self.year_diagnoses_dict:
             not_lbl = QLabel(self.text_labels.no_data_lbl)
             not_lbl.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
@@ -84,14 +83,16 @@ class YearsCollapsible(QWidget):
         # Add a CollapsibleBox per Year into scroll area
         for index, year in enumerate(self.year_diagnoses_dict):
             #   Pass each CollapsibleBox all the contained tags
-            year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self.year_diagnoses_dict[year],
+            year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self,
+                                                                                      self.year_diagnoses_dict[year],
                                                                                       text_labels=self.text_labels))
             self.displayed_years[year] = year_widget
+            #   Keep track of height in order to update correctly when updating widget.
             self.content_height += year_widget.height()
             self.year_container_lyt.addWidget(year_widget)
-            #   Allow widgets stretch to avoid overlapping.
+            #   Allow widgets stretch to avoid overlapping text.
             self.year_container_lyt.setStretchFactor(year_widget, 1)
-            #   Avoid overlapping boxes
+            #   Avoid overlapping boxes.
             self.year_container_lyt.setStretch(index, 3)
         self.year_container_lyt.addStretch()
 
@@ -160,8 +161,8 @@ class YearsCollapsible(QWidget):
 
 class TagsContainer(QWidget):
     #   Set of individual tags.
-    def __init__(self, diagnoses, text_labels=None):
-        super().__init__()
+    def __init__(self, parent=None, diagnoses=None, text_labels=None):
+        super().__init__(parent)
         #   Button tittle.
         self.text_labels = text_labels
         #   Keep track of tracks tags (as a widget) being displayed.
@@ -192,6 +193,68 @@ class TagsContainer(QWidget):
                           (len(self.tags_array) / self.max_colum_number))
 
     def place_tags(self):
+        #   Trackers
+        column_tracker = 0
+        row_tracker = 0
+        #   Row length.
+        row_len = 600
+        current_row_len = row_len
+        #   To calculate tag widths.
+        font_metrics = QLabel().fontMetrics()
+        #   Create every tag.
+        for index in range(len(self.tags_array)):
+            #   Tag object.
+            tag = TagIndividualWidget(self.tags_array[-1])
+            #   Calculate tag widths.
+            tag_width = font_metrics.horizontalAdvance(tag.text())
+            #   Tag is bigger than the entire row.
+            if tag_width >= row_len:
+                #   Jump to next row if there are already objects in it
+                if current_row_len != row_len:
+                    row_tracker += 1
+                    column_tracker = 0
+                #   Keep track of displayed tags
+                self.tags_in_display.append(tag)
+                #   Add widget
+                self.my_layout.addWidget(tag, row_tracker, column_tracker)
+                self.tags_array.pop()
+                #   Reset row len.
+                current_row_len = row_len
+                #   Break line
+                row_tracker += 1
+                column_tracker = 0
+                continue
+
+            #   Enough space inline for tag.
+            if current_row_len - tag_width > 0:
+                #   Keep track of displayed tags
+                self.tags_in_display.append(tag)
+                #   Add widget
+                self.my_layout.addWidget(tag, row_tracker, column_tracker)
+                self.tags_array.pop()
+                #   Update remaining space.
+                current_row_len -= tag_width
+                #   Update column.
+                column_tracker += 1
+                continue
+            #   Break line and go to a new line.
+            else:
+                #   Break line
+                row_tracker += 1
+                column_tracker = 0
+                #   Reset row len.
+                current_row_len = row_len
+                #   Keep track of displayed tags
+                self.tags_in_display.append(tag)
+                #   Add widget
+                self.my_layout.addWidget(tag, row_tracker, column_tracker)
+                self.tags_array.pop()
+                #   Update remaining space.
+                current_row_len -= tag_width
+                #   Update column.
+                column_tracker += 1
+
+        """
         # Setting the layout
         for x in range(self.max_row_number):
             for y in range(self.max_colum_number):
@@ -199,6 +262,7 @@ class TagsContainer(QWidget):
                 self.tags_in_display.append(tag)
                 self.my_layout.addWidget(tag, x, y)
                 self.tags_array.pop()
+        """
 
     def remove_tags(self):
         #   Traverse tags
@@ -232,10 +296,11 @@ class TagsContainer(QWidget):
     """     UI      """
 
     def init_ui(self):
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         #   Configure margins
         self.setContentsMargins(0, 0, 0, 0)
         #   Configure H spacing
-        self.my_layout.setHorizontalSpacing(2)
+        self.my_layout.setHorizontalSpacing(3)
         #   Configure V spacing
         self.my_layout.setVerticalSpacing(3)
         # Applying layout to the widget

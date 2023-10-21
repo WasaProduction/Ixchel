@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QTreeWidgetItem, QTreeWidget,\
-    QGridLayout
+    QGridLayout, QSizePolicy
 from PyQt6.QtCore import Qt
+from UI.Frames.editing_area.tables.custom_table_hereditary import WidgetTableButtons
 from UI.Widgets.icons.allergy_icon import AllergyIcon
 from UI.Widgets.collapsible_box import CollapsibleBox
 
@@ -64,9 +65,13 @@ class HereditaryBackground(QWidget):
     def __init__(self, parent=None, text_labels=None, hereditary_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
+
         self.hereditary_layout = QVBoxLayout()
-        self.widget = QWidget()
-        self.collapsible_widget = CollapsibleBox(self, self.text_labels.hereditary_lbl, self.widget)
+        self.my_test_dict_2 = {'abuela_materna': 'diabetes_mellitus_tipo_1', 'abuelo_materno':
+            'carcinoma_de_células_escamosas_de_la_encía', 'papa': 'hiperesplenismo', 'mama': 'anisometropía'}
+
+        self.hereditary_widget = WidgetTableButtons(self, self.my_test_dict_2)
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.hereditary_lbl, self.hereditary_widget)
         #   UI
         self.init_ui()
 
@@ -79,6 +84,7 @@ class HereditaryBackground(QWidget):
         self.setLayout(self.hereditary_layout)
 
 
+"""
 class Immunizations(QWidget):
     def __init__(self, parent=None, text_labels=None, immunizations_information=None):
         super().__init__(parent)
@@ -96,6 +102,7 @@ class Immunizations(QWidget):
         self.immunizations_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.immunizations_layout)
+"""
 
 
 class Allergy (QWidget):
@@ -111,8 +118,8 @@ class Allergy (QWidget):
         #   Widget containing all tags.
         self.widget = self.allergies_into_widget()
         self.scroll_widget = QScrollArea()
-        self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.scroll_widget.setStyleSheet("border: none;")
+        self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        # self.scroll_widget.setStyleSheet("border: none;")
         self.scroll_widget.setWidget(self.widget)
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.scroll_widget)
         #   UI
@@ -134,7 +141,7 @@ class Allergy (QWidget):
             self.collapsible_widget.update_content(self.scroll_widget)
 
     def remove_allergies(self):
-        for widget in self.allergy_widgets:
+        for index, widget in enumerate(self.allergy_widgets):
             widget.deleteLater()
 
     def allergies_into_widget(self):
@@ -143,7 +150,7 @@ class Allergy (QWidget):
         #   Grid layout.
         grid_layout = QGridLayout()
         #   Columns of the Grid (Rows will be added as needed).
-        grid_columns = 4
+        grid_columns = 6
         # Variables to navigate Grid.
         column_counter = 0
         row_counter = 0
@@ -177,6 +184,9 @@ class Allergy (QWidget):
         return widget
 
     def init_ui(self):
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        self.setMinimumHeight(150)
         #   Add expandable widget to layout
         self.allergies_layout.addWidget(self.collapsible_widget)
         #   Remove margins
