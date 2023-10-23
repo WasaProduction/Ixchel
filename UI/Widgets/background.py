@@ -53,12 +53,16 @@ class GeneralInformation(QWidget):
         self.populate_tree()
 
     def init_ui(self):
+        self.collapsible_widget.collapsed_signal.connect(self.general_information_background_collapsed)
         #   Add expandable widget to layout
         self.general_layout.addWidget(self.collapsible_widget)
         #   Remove margins
         self.general_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.general_layout)
+
+    def general_information_background_collapsed(self, height):
+        self.setMaximumHeight(height)
 
 
 class HereditaryBackground(QWidget):
@@ -76,6 +80,7 @@ class HereditaryBackground(QWidget):
         self.init_ui()
 
     def init_ui(self):
+        self.collapsible_widget.collapsed_signal.connect(self.hereditary_background_collapsed)
         #   Add expandable widget to layout
         self.hereditary_layout.addWidget(self.collapsible_widget)
         #   Remove margins
@@ -83,6 +88,11 @@ class HereditaryBackground(QWidget):
         #   Set layout
         self.setLayout(self.hereditary_layout)
 
+    def update_height(self):
+        pass
+
+    def hereditary_background_collapsed(self, height):
+        self.setMaximumHeight(height)
 
 """
 class Immunizations(QWidget):
@@ -183,7 +193,12 @@ class Allergy (QWidget):
         widget.setLayout(grid_layout)
         return widget
 
+    def allergies_collapsed(self, height):
+        self.setMaximumHeight(height)
+
     def init_ui(self):
+        self.collapsible_widget.collapsed_signal.connect(self.allergies_collapsed)
+
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.setMinimumHeight(150)

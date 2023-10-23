@@ -3,9 +3,12 @@ from PyQt6.QtCore import QTimer
 
 
 class CustomSearchBar(QLineEdit):
-    def __init__(self, parent=None, placeholder=None):
+    def __init__(self, parent=None, placeholder=None, function=None):
         super().__init__(parent)
         self.setPlaceholderText(placeholder)
+        self.my_function = function
+        #   Connect return to function.
+        self.returnPressed.connect(lambda: self.execute_function())
         """     Shaking     """
         self.shake_timer = QTimer(self)
         self.shake_timer.timeout.connect(self.update_position)
@@ -13,6 +16,10 @@ class CustomSearchBar(QLineEdit):
         self.shake_duration = 100
         self.max_shakes = 4
         self.shakes_remaining = 0
+
+    def execute_function(self):
+        if self.my_function is not None:
+            self.my_function()
 
     def shake(self):
         if self.shakes_remaining == 0:

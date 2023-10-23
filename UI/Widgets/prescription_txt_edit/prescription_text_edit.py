@@ -5,7 +5,6 @@ from UI.Widgets.prescription_txt_edit.drug_completer import DrugCompleter
 from PyQt6.QtWidgets import QCompleter
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QTextCursor
-from PyQt6.QtCore import pyqtSlot
 #   For highlighter
 from spell_check import SpellCheck
 from UI.Widgets.prescription_txt_edit.drug_highlighter import DrugHighlighter
@@ -297,9 +296,11 @@ class PrescriptionTextEdit(QPlainTextEdit):
             #   Merge previously separated lines into blocks
             my_instructions = self.merge_multiline_instructions(delimiters)
             #   Digest each block as an instruction.
+            """
             for instruction in my_instructions:
-                self.digest_instructions(instruction)
-            return my_instructions
+                print(self.digest_instructions(instruction))
+            """
+            return self.digest_instructions(my_instructions)
         else:
             #   Filter out empty delimiter
             if re.match(r'\d+-', self.document().toPlainText().strip()):
@@ -505,7 +506,7 @@ class PrescriptionTextEdit(QPlainTextEdit):
         instruction_obj['duration'] = Quantity(duration, duration_unit)
 
         #   Testing
-        self.testing_returned_obj(instruction_obj)
+        #self.testing_returned_obj(instruction_obj)
         return instruction_obj
 
     def digest_2_part(self, instruction_obj):

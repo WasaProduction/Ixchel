@@ -1,10 +1,9 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QSizePolicy, QVBoxLayout, QScrollArea, QFrame, QLabel
+from PyQt6.QtWidgets import QWidget, QGridLayout, QSizePolicy, QVBoxLayout, QLabel
 from UI.Widgets.collapsible_box import CollapsibleBox
 from data_models.model_tag import ModelTag
 from mongodb.read.get_affection import GetAffection
 from mongodb.read.get_color import GetColor
 from UI.Widgets.tags.tag_individual_widget import TagIndividualWidget
-import math
 
 
 class PathologicalCollapsible(QWidget):
@@ -22,17 +21,23 @@ class PathologicalCollapsible(QWidget):
         if self.patient.diagnosis_entries is None:
             pass
         self.years_container = YearsCollapsible(self, self.patient, self.text_labels)
-        self.collapsible = CollapsibleBox(self, title=self.text_labels.pathologic_lbl, content=self.years_container)
+        self.collapsible_widget = CollapsibleBox(self, title=self.text_labels.pathologic_lbl,
+                                                 content=self.years_container)
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.collapsible)
-        self.layout.setStretchFactor(self.collapsible, 1)
+        self.layout.addWidget(self.collapsible_widget)
+        self.layout.setStretchFactor(self.collapsible_widget, 1)
         self.init_ui()
 
     def update_pathological(self, patient):
         self.years_container.update_years_collapsible(patient)
-        self.collapsible.update_height(self.years_container.content_height)
+        self.collapsible_widget.update_height(self.years_container.content_height)
+
+    def pathological_collapsed(self, height):
+        self.setMaximumHeight(height)
 
     def init_ui(self):
+        #   Connect signal
+        self.collapsible_widget.collapsed_signal.connect(self.pathological_collapsed)
         #   Configure margins
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
@@ -86,6 +91,9 @@ class YearsCollapsible(QWidget):
             year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self,
                                                                                       self.year_diagnoses_dict[year],
                                                                                       text_labels=self.text_labels))
+            #   Connect signal
+            #year_widget.collapsed_signal.connect(self.year_collapsed)
+            #   Keep track of displayed years.
             self.displayed_years[year] = year_widget
             #   Keep track of height in order to update correctly when updating widget.
             self.content_height += year_widget.height()
@@ -150,8 +158,10 @@ class YearsCollapsible(QWidget):
         #   Update currently displayed years array.
         self.displayed_years = list(self.year_diagnoses_dict.keys())
 
-    """     UI      """
+    def year_collapsed(self, height):
+        self.setMaximumHeight(height)
 
+    """     UI      """
     def init_ui(self):
         #   Remove border
         self.setStyleSheet("border: none;")
@@ -160,7 +170,7 @@ class YearsCollapsible(QWidget):
 
 
 class TagsContainer(QWidget):
-    #   Set of individual tags.
+    #   Set of individual tags displayed in a grid layout.
     def __init__(self, parent=None, diagnoses=None, text_labels=None):
         super().__init__(parent)
         #   Button tittle.
@@ -175,22 +185,12 @@ class TagsContainer(QWidget):
         self.gather_tag_data(diagnoses)
         #   Maximum number of columns for the tags
         self.max_colum_number = 6
-        #   Calculate & Rows required in order to display all the tags.
-        self.extra_row = self.determine_extra_row()
-        self.max_row_number = self.calculate_row_number()
         #   Layout
         self.my_layout = QGridLayout()
         #   Get tags inside layout
         self.place_tags()
         #   UI
         self.init_ui()
-
-    def determine_extra_row(self):
-        return False if len(self.tags_array) % self.max_colum_number == 0 else True
-
-    def calculate_row_number(self):
-        return math.trunc((len(self.tags_array) / self.max_colum_number) + 1 if self.extra_row else
-                          (len(self.tags_array) / self.max_colum_number))
 
     def place_tags(self):
         #   Trackers
@@ -254,16 +254,6 @@ class TagsContainer(QWidget):
                 #   Update column.
                 column_tracker += 1
 
-        """
-        # Setting the layout
-        for x in range(self.max_row_number):
-            for y in range(self.max_colum_number):
-                tag = TagIndividualWidget(self.tags_array[-1])
-                self.tags_in_display.append(tag)
-                self.my_layout.addWidget(tag, x, y)
-                self.tags_array.pop()
-        """
-
     def remove_tags(self):
         #   Traverse tags
         for tag in self.tags_in_display:
@@ -279,9 +269,6 @@ class TagsContainer(QWidget):
         self.remove_tags()
         #   Update data container
         self.gather_tag_data(diagnoses)
-        #   Calculate & Rows required in order to display all the tags.
-        self.extra_row = self.determine_extra_row()
-        self.max_row_number = self.calculate_row_number()
         #   Place new tags.
         self.place_tags()
 

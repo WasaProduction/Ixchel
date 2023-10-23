@@ -2,17 +2,19 @@ from collections import defaultdict
 
 
 class ModelTreatment:
-    def __init__(self, object_id=None, patient_id=None, medic_id=None, drug=None, instruction=None):
+    def __init__(self, object_id=None, patient_id=None, medic_id=None, instructions=None, active=None):
         self.object_id = object_id
         self.patient_id = patient_id
         self.medic_id = medic_id
-        self.drug = drug
-        self.instruction = instruction if instruction is not None else Instruction()
+        self.instructions = [] if instructions is None else instructions
+        #   Depends on the sum of its instructions.
+        self.active = active if active is not None else True
 
 
 class Instruction(defaultdict):
     def __init__(self, instruction_type=None, raw_text=None, instruction=None, drug=None, action=None, quantity=None,
-                 periodicity=None, duration=None, indication_of_use=None, complement=None):
+                 periodicity=None, duration=None, indication_of_use=None, complement=None, start_date=None,
+                 to_deactivate=None, active=False):
         super().__init__()
         #   Instruction type
         self['instruction_type'] = instruction_type
@@ -30,10 +32,16 @@ class Instruction(defaultdict):
         self['periodicity'] = periodicity if periodicity is not None else Periodicity()
         # Duration()
         self['duration'] = duration if duration is not None else Duration()
-        # Indications of use
+        # Indications of use.
         self['indication_of_use'] = indication_of_use if indication_of_use is not None else IndicationsOfUse()
-        # Complement
+        # Complement.
         self['complement'] = complement
+        #   Start date.
+        self['start_date'] = start_date
+        #   Foreseen end date.
+        self['to_deactivate'] = to_deactivate
+        #   Active.
+        self['active'] = active
 
 
 class Quantity(defaultdict):

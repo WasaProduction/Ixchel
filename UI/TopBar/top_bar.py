@@ -18,7 +18,7 @@ class TopBar(QWidget):
         #   Patient
         self.patient_name_label = QLabel('Grevious')
         #   Searchbar
-        self.searchbar = CustomSearchBar(self, self.text_labels.search)
+        self.searchbar = CustomSearchBar(self, self.text_labels.search, self.search_user)
         #   Search button
         self.search_button = QPushButton(self.text_labels.search)
         self.search_button.clicked.connect(self.search_user)
@@ -61,8 +61,8 @@ class TopBar(QWidget):
         self.timer.start(time)
 
     def update_greetings(self):
+        #   TODO unknown error happens Evening or Night
         # Update the label with the current time.
-        pass
         self.greetings_lbl.setText(self.determine_greeting() + ' ' + self.username)
 
     def determine_greeting(self):

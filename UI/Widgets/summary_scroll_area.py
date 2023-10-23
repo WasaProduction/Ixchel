@@ -23,7 +23,6 @@ class SummaryScrollArea(QScrollArea):
         self.pathologic_background = PathologicalCollapsible(self, self.text_labels, self.patient)
         #   UI
         self.init_ui()
-
         #   Container widget
         self.container_widget = QWidget()
         #   Layout
@@ -67,8 +66,10 @@ class SummaryScrollArea(QScrollArea):
                     #   Allow widgets stretch to avoid overlapping.
                     self.layout.setStretch(i, 1)
                 else:
-                    #   Last widget is to stretch further than most
+                    #   Last widget is to stretch further than most.
                     self.layout.setStretch(i, 5)
+        #   Stack widgets atop.
+        self.layout.addStretch()
 
     def update_summary_scroll_area(self, patient=None, allergies=None):
         self.patient = patient

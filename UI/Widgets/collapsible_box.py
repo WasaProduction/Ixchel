@@ -1,9 +1,13 @@
 import time
 from PyQt6.QtWidgets import QToolButton, QWidget, QSizePolicy, QFrame, QScrollArea, QVBoxLayout, QLabel
-from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot, QTimer
+from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyAnimation, Qt, pyqtSlot, QTimer, \
+    pyqtSignal
 
 
 class CollapsibleBox(QWidget):
+    #   Custom signal.
+    collapsed_signal = pyqtSignal(int)
+
     def __init__(self, parent=None, title=None, content=None):
         super(CollapsibleBox, self).__init__(parent)
         if title is None:
@@ -11,7 +15,7 @@ class CollapsibleBox(QWidget):
         else:
             self.title = title
         if content is None:
-            self.received_content = QLabel('Nothing to display :)')
+            self.received_content = QLabel('Nothing to display')
         else:
             self.received_content = content
         #   Toggle button
@@ -22,12 +26,9 @@ class CollapsibleBox(QWidget):
         self.re_enable_timer = QTimer()
         self.re_enable_timer.timeout.connect(self.enable_button)
         #   Expanded flag
-        self.expanded = False
-        # Expandable area
-        #self.content_area = self.create_content_area()
-        # Use proxy to place received_content inside scroll area
+        self.expanded = True
+        # Use proxy to place received_content
         self.proxy_content_widget = self.received_content_into_proxy()
-        #self.content_area.setWidget(self.proxy_content_widget)
         """     Layout      """
         self.my_layout = self.create_layout()
         #   Add widgets
@@ -45,11 +46,10 @@ class CollapsibleBox(QWidget):
 
     @staticmethod
     def calculate_collapsed_height():
-        return 25# self.sizeHint().height() - self.content_area.maximumHeight()
+        return 25
 
     def calculate_content_height(self):
-        # print(self.title, 'content:height', self.proxy_content_widget.sizeHint().height())
-        return self.proxy_content_widget.sizeHint().height()
+        return self.proxy_content_widget.sizeHint().height() + self.calculate_collapsed_height()
 
     def tune_anim_group(self):
         for i in range(self.toggle_animation.animationCount()):
@@ -61,20 +61,13 @@ class CollapsibleBox(QWidget):
             animation.setStartValue(self.collapsed_height)
             #   To collapsed plus the contents.
             animation.setEndValue(self.collapsed_height + self.content_height)
-        """
-        # Override animation for the last animation (affects only the scroll area)
-        content_animation = self.toggle_animation.animationAt(self.toggle_animation.animationCount() - 1)
-        content_animation.setDuration(500)
-        content_animation.setStartValue(0)
-        content_animation.setEndValue(self.content_height)
-        """
 
     def create_anim_group(self):
         toggle_animation = QParallelAnimationGroup(self)
         toggle_animation.addAnimation(QPropertyAnimation(self, b"minimumHeight"))
         toggle_animation.addAnimation(QPropertyAnimation(self, b"maximumHeight"))
         toggle_animation.addAnimation(QPropertyAnimation(self.proxy_content_widget, b"maximumHeight"))
-        #toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
+        # toggle_animation.addAnimation(QPropertyAnimation(self.content_area, b"maximumHeight"))
         return toggle_animation
 
     def create_layout(self):
@@ -113,8 +106,6 @@ class CollapsibleBox(QWidget):
         self.tune_anim_group()
 
     def update_height(self, height=0):
-        print('Updating height to:', height)
-        #print('self.proxy_content_widget', self.proxy_content_widget.height())
         #   Calculate heights
         self.collapsed_height = self.calculate_collapsed_height()
         self.content_height = height if height != 0 else self.calculate_content_height()
@@ -159,6 +150,8 @@ class CollapsibleBox(QWidget):
             self.toggle_button.setChecked(not self.toggle_button.isChecked())
             #   Reset expanded flag.
             self.expanded = not self.expanded
+            #   Emit height via signal.
+            self.collapsed_signal.emit(self.content_height) if self.expanded else self.collapsed_signal.emit(self.collapsed_height)
             self.button_enabled = False
             #   Re-enable the button after x time.
             self.re_enable_timer.start(1000)
