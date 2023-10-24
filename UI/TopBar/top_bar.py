@@ -13,7 +13,6 @@ class TopBar(QWidget):
         self.text_labels = text_labels
         self.patient = GetPatient(parent)
         #   Connect signal to a handler
-        self.patient_signal.connect(self.handle_patient_signal)
         """     Widgets     """
         #   Patient
         self.patient_name_label = QLabel('Grevious')
@@ -61,7 +60,6 @@ class TopBar(QWidget):
         self.timer.start(time)
 
     def update_greetings(self):
-        #   TODO unknown error happens Evening or Night
         # Update the label with the current time.
         self.greetings_lbl.setText(self.determine_greeting() + ' ' + self.username)
 
@@ -71,7 +69,7 @@ class TopBar(QWidget):
         #   Tolerance to update greetings 10 s.
         tolerance = 10000
         #   Day parts.
-        midnight = QTime(0, 0)
+        midnight = QTime(23, 59)
         sunrise = QTime(5, 0)
         noon = QTime(12, 0)
         sunset = QTime(17, 0)
@@ -88,14 +86,11 @@ class TopBar(QWidget):
             self.config_timer((now.secsTo(midnight) * 1000) + tolerance)
             return self.text_labels.evening
         #   Night.
-        elif midnight < now < sunrise:
+        elif now < sunrise:
             self.config_timer((now.secsTo(sunrise) * 1000) + tolerance)
             return self.text_labels.night
         else:
             return 'Hi'
-
-    def handle_patient_signal(self):
-        return self.patient
 
     def search_user(self):
         #   Search for patient.

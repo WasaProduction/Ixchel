@@ -28,13 +28,13 @@ class Instruction(defaultdict):
         self['action'] = action
         #   Quantity
         self['quantity'] = quantity if quantity is not None else Quantity()
-        # Periodicity()
+        #   Periodicity()
         self['periodicity'] = periodicity if periodicity is not None else Periodicity()
-        # Duration()
+        #   Duration()
         self['duration'] = duration if duration is not None else Duration()
-        # Indications of use.
+        #   Indications of use.
         self['indication_of_use'] = indication_of_use if indication_of_use is not None else IndicationsOfUse()
-        # Complement.
+        #   Complement.
         self['complement'] = complement
         #   Start date.
         self['start_date'] = start_date
@@ -42,6 +42,9 @@ class Instruction(defaultdict):
         self['to_deactivate'] = to_deactivate
         #   Active.
         self['active'] = active
+
+    def __missing__(self, key):
+        return ''  # Return an empty string for missing keys
 
 
 class Quantity(defaultdict):
