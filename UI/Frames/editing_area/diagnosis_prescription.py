@@ -6,6 +6,7 @@ from UI.Widgets.collapsible_box import CollapsibleBox
 from UI.Frames.editing_area.tables.custom_formulary_table import CustomFormularyTable
 from data_models.systems_aparatus import SystemsAparatus
 from data_models.physical_examination import PhysicalExamination
+from mongodb.write.create_prescription import CreatePrescription
 # https://stackoverflow.com/questions/28956693/pyqt5-qtextedit-auto-completion
 
 
@@ -54,6 +55,7 @@ class DiagnosisPrescription(QScrollArea):
         examination = {'examination': self.my_physical_examination.retrieve_data()}
         diagnosis = {'diagnosis': self.my_diagnosis.retrieve_data()}
         prescription = {'prescription': self.my_prescription.retrieve_data()}
+        CreatePrescription(prescription['prescription'])
         #   Group all data
         contained_data = [vitals, interrogatory, examination, diagnosis, prescription]
         #   Return contained data

@@ -41,5 +41,4 @@ class PrescriptionFrame(Frame):
 
     @pyqtSlot()
     def retrieve_data(self):
-        print('Container recieved', self.my_editing_area.retrieve_data())
         return self.my_editing_area.retrieve_data()

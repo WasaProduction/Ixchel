@@ -1,9 +1,11 @@
-from mongodb.mongo_affections_vocabulary import MongoAffectionsVocabulary
-from JSON.write.json_diagnosis import JsonDiagnosis
-from data_models.prescriptions.model_treatment import ModelTreatment, Instruction
-from datetime import datetime
+from JSON.write.json_treatment import JsonTreatment
 
 
-class CreateDiagnosis:
+class CreatePrescription:
     def __init__(self, prescription):
-        pass
+        content_obj = prescription
+        #   creation_date=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+        # Pass file contents
+        insertion_obj = JsonTreatment(content_obj)
+        # Insert into db
+        insertion_obj.insert_into_db()

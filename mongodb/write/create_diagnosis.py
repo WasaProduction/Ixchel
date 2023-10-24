@@ -30,4 +30,3 @@ class CreateDiagnosis:
         insertion_obj = JsonDiagnosis(content_obj)
         # Insert into db
         insertion_obj.insert_into_db()
-

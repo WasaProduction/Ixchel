@@ -289,18 +289,21 @@ class PrescriptionTextEdit(QPlainTextEdit):
         #   Check if there's text to consume
         if not self.document().toPlainText().strip():
             return None
+        #   Model to be returned.
+        my_treatment = ModelTreatment()
         #   Look for instructions delimiters (number-) and clean possible errors
         delimiters = self.find_instructions()
         #   Interpret instructions
         if delimiters:
             #   Merge previously separated lines into blocks
             my_instructions = self.merge_multiline_instructions(delimiters)
-            #   Digest each block as an instruction.
+            #   Digest each block as an instruction add them into the model.
             """
             for instruction in my_instructions:
                 print(self.digest_instructions(instruction))
             """
-            return self.digest_instructions(my_instructions)
+            my_treatment.instructions += self.digest_instructions(my_instructions)
+            return my_treatment
         else:
             #   Filter out empty delimiter
             if re.match(r'\d+-', self.document().toPlainText().strip()):
