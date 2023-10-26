@@ -23,7 +23,7 @@ from data_models.prescriptions.model_treatment import *
 #   https://forum.qt.io/topic/13677/adding-a-tooltip-in-qplaintextedit/4
 #   https://stackoverflow.com/questions/42677963/how-to-create-tooltip-for-highlighted-strings-in-qplaintextedit
 class PrescriptionTextEdit(QPlainTextEdit):
-    def __init__(self, parent=None, chk_dict_path='', placeholder_str=None, contained_str='1-\n'):
+    def __init__(self, parent=None, chk_dict_path='', placeholder_str=None, default_str='1-\n'):
         super(PrescriptionTextEdit, self).__init__(parent)
         self.document()
         #   Completer
@@ -43,11 +43,18 @@ class PrescriptionTextEdit(QPlainTextEdit):
             self.setPlaceholderText('Placeholder')
         else:
             self.setPlaceholderText('This is an example')
-        if contained_str is not None:
-            self.insertPlainText(contained_str)
+        if default_str is not None:
+            self.default_str = default_str
+            self.insertPlainText(self.default_str)
         self.tune_ui()
         #   for processing Data
         self.my_lines = []
+
+    def reset_prescription(self):
+        #   Clean whatever is inside the text edit.
+        self.clear()
+        #   Place default text.
+        self.insertPlainText(self.default_str)
 
     """     Completer block     """
 
@@ -291,6 +298,8 @@ class PrescriptionTextEdit(QPlainTextEdit):
             return None
         #   Model to be returned.
         my_treatment = ModelTreatment()
+        #   Preserve text intact.
+        my_treatment.raw_text = self.document().toPlainText()
         #   Look for instructions delimiters (number-) and clean possible errors
         delimiters = self.find_instructions()
         #   Interpret instructions

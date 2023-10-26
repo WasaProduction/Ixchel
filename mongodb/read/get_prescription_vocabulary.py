@@ -2,7 +2,7 @@ from mongodb.connection_handlers.mongo_local_database import MongoLocalDatabase
 from data_models.prescriptions.vocabulary import Vocabulary
 
 
-class GetPrescriptionVocabulary (Vocabulary):
+class GetPrescriptionVocabulary(Vocabulary):
     def __init__(self):
         super().__init__()
         self.collection = MongoLocalDatabase('prescription_vocab').collection

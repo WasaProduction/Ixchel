@@ -34,6 +34,10 @@ class CustomTextEdit(QPlainTextEdit):
             self.insertPlainText(contained_str)
         self.tune_ui()
 
+    def reset_diagnosis(self):
+        #   Clean whatever is inside the text edit.
+        self.clear()
+
     """     Completer block     """
     def update_completer_model(self, new_dictionary):
         self.completer_dictionary = new_dictionary

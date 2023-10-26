@@ -18,7 +18,8 @@ class JsonTreatment:
             "patient_id": self.JsonTreatmentModel.patient_id,
             "medic_id": self.JsonTreatmentModel.medic_id,
             "instructions": self.JsonTreatmentModel.instructions,
-            "active": self.JsonTreatmentModel.active
+            "active": self.JsonTreatmentModel.active,
+            "raw_text": self.JsonTreatmentModel.raw_text
         }
         return dictionary
 

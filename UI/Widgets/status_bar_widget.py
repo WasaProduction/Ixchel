@@ -6,13 +6,12 @@ from PySide6.QtCore import Slot
 import random
 
 
-class StatusWidget(QWidget):
-    def __init__(self, parent=None, under_treatment=True, statuses=None):
+class StatusBarWidget(QWidget):
+    def __init__(self, parent=None, patient=None, statuses=None):
         super().__init__(parent)
-        #   Keep track of medication
-        self.under_treatment = under_treatment
+        self.patient = patient
         #   Medication widget
-        self.meds_btn = UnderMedication()
+        self.meds_btn = UnderMedication(self, self.patient.prescriptions)
         #
         self.statuses = statuses
         self.displayed_statuses = []
@@ -25,7 +24,7 @@ class StatusWidget(QWidget):
 
     def place_statuses(self):
         #   Place treatment
-        if self.under_treatment:
+        if self.patient.prescriptions:
             pass
         #   Place statuses
         for status in range(0, 10): #self.statuses:
@@ -46,7 +45,7 @@ class StatusWidget(QWidget):
             #   Update array
             self.displayed_statuses = []
 
-    def update_statuses(self, under_treatment=False, statuses=None):
+    def update_statuses(self, statuses=None):
         #   Remove previously displayed information
         self.remove_statuses()
         """
@@ -58,7 +57,6 @@ class StatusWidget(QWidget):
             self.meds_btn.update_medication()
         """
         #   Update variables
-        self.under_treatment = under_treatment
         self.statuses = statuses
         #   Place new statuses
         if statuses is not None:
@@ -71,46 +69,60 @@ class StatusWidget(QWidget):
 
 
 class UnderMedication(QWidget):
-    def __init__(self, parent=None, under_treatment=False, meds=None):
+    def __init__(self, parent=None, prescriptions=None):
         super().__init__(parent)
-        self.medicated = under_treatment
+        #   All prescriptions.
+        self.prescriptions = prescriptions
+        #   Keep track of edittable instructions.
+        self.active_instructions = []
+        #   Button icon.
         self.icon = ImageButton(CustomQImage(0))
         self.icon.clicked.connect(lambda: self.modify_meds())
+        #   Initialize dialog.
         self.dialog = ChangeMeds()
         #   Layout
         self.layout = QVBoxLayout()
         #   UI
         self.init_ui()
+        self.update_medication()
 
     @Slot()
     def modify_meds(self):
+        #   Setup dialog.
+        self.dialog = ChangeMeds()
+        #   Shoe dialog.
         self.dialog.exec()
 
-    def button_active(self, active=True):
-        if active:
-            #   Back to normal color
-            pass
+    def button_enabling(self, enabled=True):
+        #   Disable button.
+        self.setEnabled(enabled)
+        #   TODO Change button appearance.
+
+    def extract_active_instructions(self):
+        #   Clear active_instructions contents.
+        self.active_instructions = []
+
+        for prescription in self.prescriptions:
+            #   Discard disabled prescriptions.
+            if prescription.active:
+                for instruction in prescription.instructions:
+                    self.active_instructions.append(instruction)
+
+    def update_medication(self, prescriptions=None):
+        """
+        #   Validate if there are prescriptions to work with.
+        if prescriptions is None:
+            return
+        #   Restore
+        self.prescriptions = prescriptions
+        """
+        #   Retrieve active instructions.
+        self.extract_active_instructions()
+        #   Validate if there are active instructions.
+        if self.active_instructions:
+            self.button_enabling(True)
         else:
-            #   Grey out
-            pass
-        #   Keep track of status
-        self.medicated = active
-
-    def remove_medication(self):
-        pass
-
-    def add_medication(self):
-        pass
-
-    def update_medication(self, under_treatment=False, meds=None):
-        if under_treatment:
-            #   Medication active
-            self.add_medication()
-            self.button_active(under_treatment)
-        else:
-            #   No medication active
-            self.remove_medication()
-            self.button_active(under_treatment)
+            self.button_enabling(False)
 
     def init_ui(self):
         #   Customize margins

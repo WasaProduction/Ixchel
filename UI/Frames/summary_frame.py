@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 import datetime
 from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout
-from UI.Widgets.status_widget_layout import StatusWidget
+from UI.Widgets.status_bar_widget import StatusBarWidget
 from UI.Widgets.icons.sex_icon import SexIconWidget
 from UI.Widgets.summary_scroll_area import SummaryScrollArea
 from UI.Widgets.patient_name import PatientName
@@ -27,7 +27,7 @@ class SummaryFrame(Frame):
         #   Summary scroll area
         self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
         #   Status bar
-        self.patient_status_bar_widget = StatusWidget()
+        self.patient_status_bar_widget = StatusBarWidget(self, self.patient)
         self.customize_status_bar()
         #   Models
         self.skeleton_view = GraphicView(self)

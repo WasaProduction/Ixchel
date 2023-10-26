@@ -8,11 +8,12 @@ from UI.SideBar.side_bar import SideBar
 from mongodb.read.get_patient import GetPatient
 from assets.icons.buttons.button_paths import ButtonPaths
 from mongodb.read.get_text_labels import GetTextLabels
+import random
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        self.testing =  False
+        self.testing = False
         # Look for all required files
         StartupCheck()
         super().__init__()
@@ -31,7 +32,7 @@ class MainWindow(QMainWindow):
 
         #   EN = 0
         #   ES = 1
-        self.text_labels = GetTextLabels(0)
+        self.text_labels = GetTextLabels(random.randint(0, 1))
         self.top_bar = TopBar(self, self.text_labels)
 
         button_paths = ButtonPaths()

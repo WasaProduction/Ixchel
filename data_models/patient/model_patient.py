@@ -5,7 +5,7 @@ from data_models.patient.user_contact import UserContact
 
 class ModelPatient:
     def __init__(self, object_id='', user_id='', username='ARC-77', name='Frodo', lastname_1='', lastname_2='',
-                 diagnosis_entries=None, immutables=None, general_info=None, user_contact=None):
+                 diagnosis_entries=None, immutables=None, general_info=None, user_contact=None, prescriptions=None):
         self.object_id = object_id
         self.user_id = user_id
         self.username = username
@@ -28,6 +28,10 @@ class ModelPatient:
             self.user_contact = UserContact()
         else:
             self.user_contact = user_contact
+        if prescriptions is None:
+            self.prescriptions = []
+        else:
+            self.prescriptions = prescriptions
 
     def restore_model(self):
         self.object_id = ''
@@ -40,3 +44,4 @@ class ModelPatient:
         self.immutables = ModelPatientImmutable()
         self.general_info = GeneralInfo()
         self.user_contact = UserContact()
+        self.prescriptions = []

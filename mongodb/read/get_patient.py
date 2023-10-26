@@ -2,6 +2,7 @@ from data_models.patient.model_patient import ModelPatient
 from data_models.model_diagnosis import ModelDiagnosis
 from data_models.patient.emergency_contacts import EmergencyContacts
 from mongodb.connection_handlers.mongo_local_database import MongoLocalDatabase
+from mongodb.read.get_prescriptions import GetPrescriptions
 from datetime import datetime
 import re
 
@@ -34,6 +35,8 @@ class GetPatient(ModelPatient):
         self.get_user_general_info()
         #   Contact info.
         self.get_user_contact()
+        #   Prescriptions
+        self.prescriptions = GetPrescriptions()
 
     def get_patient_basics(self):
         regex_string = r"^\b({})\b$".format(self.username)

@@ -54,7 +54,11 @@ class DiagnosisPrescription(QScrollArea):
         interrogatory = {'interrogatory': self.my_interrogatory.retrieve_data()}
         examination = {'examination': self.my_physical_examination.retrieve_data()}
         diagnosis = {'diagnosis': self.my_diagnosis.retrieve_data()}
+        #   Retrieve prescription data.
         prescription = {'prescription': self.my_prescription.retrieve_data()}
+        self.my_prescription.reset_prescription()
+        #   Reset prescription data
+        self.my_prescription.reset_prescription()
         CreatePrescription(prescription['prescription'])
         #   Group all data
         contained_data = [vitals, interrogatory, examination, diagnosis, prescription]
