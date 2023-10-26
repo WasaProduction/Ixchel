@@ -44,7 +44,7 @@ class MongoAffectionsVocabulary:
         custom_regex = re.compile(regex_string, re.IGNORECASE)
         del regex_string
         # Querying mongo
-        affection_query = self.local_affections.find({"nombre": custom_regex}, {})
+        affection_query = self.local_affections.find({"name": custom_regex}, {})
         del custom_regex
         # get the JSON into model_affections
         self.json_into_data_model(affection_query)
@@ -56,7 +56,7 @@ class MongoAffectionsVocabulary:
         custom_regex = re.compile(regex_string, re.IGNORECASE)
         del regex_string
         # Querying mongo
-        affection_query = self.local_affections.find({"nombre": custom_regex}, {})
+        affection_query = self.local_affections.find({"name": custom_regex}, {})
         del custom_regex
         # Get the JSON into model_affections
         self.json_into_data_model(affection_query)
@@ -68,7 +68,7 @@ class MongoAffectionsVocabulary:
         custom_regex = re.compile(regex_string, re.IGNORECASE)
         del regex_string
         # Querying mongo
-        affection_query = self.local_affections.find({"nombre": custom_regex}, {})
+        affection_query = self.local_affections.find({"name": custom_regex}, {})
         del custom_regex
         # get the JSON into model_affections
         self.json_into_data_model(affection_query)
@@ -77,9 +77,10 @@ class MongoAffectionsVocabulary:
     # Transform retrieved JSON into an object of AffectionDataModel type
     def json_into_data_model(self, json):
         for i, element in enumerate(json):
-            dummy_item = ModelAffection(element['_id'], element['id_cie'], element['nombre'],
-                                        element['description'], element['nota_sobre_la_codificacion'],
-                                        element['inclusiones'], element['exclusiones'],
-                                        element['codificado_en_otra_parte'])
+            dummy_item = ModelAffection(element['_id'], element['id_cie'], element['name'],
+                                        element['description'], element['coding_note'],
+                                        element['inclusions'], element['exclusions'],
+                                        element['encoded_elsewhere'], element['organ'], element['bone'],
+                                        element['chronic'])
             self.affections_dictionary.append(dummy_item)
             del dummy_item

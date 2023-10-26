@@ -49,3 +49,7 @@ class MultilingualOBJ:
         self.night = None
         self.see_you = None
         self.come_again = None
+        self.expected_end = None
+        self.update_medication = None
+        self.delete = None
+        self.remove = None

@@ -71,4 +71,8 @@ class GetTextLabels(MultilingualOBJ):
             self.night = element['night'][self.language]
             self.see_you = element['see_you'][self.language]
             self.come_again = element['come_again'][self.language]
+            self.expected_end = element['expected_end'][self.language]
+            self.update_medication = element['update_medication'][self.language]
+            self.delete = element['delete'][self.language]
+            self.remove = element['remove'][self.language]
             # self. = element[''][self.language]

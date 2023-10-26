@@ -1,6 +1,6 @@
 class ModelAffection:
     def __init__(self, object_id='', id_cie='', name='', description=None, coding_note=None, inclusions=None,
-                 exclusions=None, coded_elsewhere=None):
+                 exclusions=None, encoded_elsewhere=None, organ=None, bone=None, chronic=False):
         self.object_id = object_id
         self.id_cie = id_cie
         self.name = name
@@ -8,7 +8,10 @@ class ModelAffection:
         self.coding_note = coding_note
         self.inclusions = inclusions
         self.exclusions = exclusions
-        self.coded_elsewhere = coded_elsewhere
+        self.encoded_elsewhere = encoded_elsewhere
+        self.organ = [] if organ is None else organ
+        self.bone = [] if bone is None else bone
+        self.chronic = chronic
 
     """             Getters/Setters             """
     @property

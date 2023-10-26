@@ -190,5 +190,21 @@
   "come_again": [
     "Come again",
     "Vuelve pronto"
+  ],
+  "expected_end": [
+    "Expected end",
+    "Final programado"
+  ],
+  "update_medication": [
+    "Update medication",
+    "Actualizar medicación"
+  ],
+  "delete": [
+    "Delete",
+    "Eliminar"
+  ],
+  "remove": [
+    "Remove",
+    "Remover"
   ]
 }

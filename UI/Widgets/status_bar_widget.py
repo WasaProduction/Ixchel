@@ -3,38 +3,83 @@ from UI.Widgets.image_button import ImageButton
 from UI.Widgets.custom_qimage import CustomQImage
 from UI.Widgets.Alerts.change_meds import ChangeMeds
 from PySide6.QtCore import Slot
+from mongodb.read.get_affection_is_chronic import GetAffectionIsChronic
 import random
 
 
 class StatusBarWidget(QWidget):
-    def __init__(self, parent=None, patient=None, statuses=None):
+    def __init__(self, parent=None, text_labels=None, patient=None, statuses=None):
         super().__init__(parent)
+        self.text_labels = text_labels
         self.patient = patient
         #   Medication widget
-        self.meds_btn = UnderMedication(self, self.patient.prescriptions)
-        #
-        self.statuses = statuses
-        self.displayed_statuses = []
+        self.meds_btn = UnderMedication(self, self.text_labels, self.patient.prescriptions)
+        #   Statuses widget
+        self.statuses_widget = StatusesContainer(self, self.patient)
+        #   Layout
         self.layout = QVBoxLayout(self)
-        #   Place meds
-        self.layout.addWidget(self.meds_btn)
-        #   Place statuses
-        self.place_statuses()
         self.init_ui()
 
+    def update_statuses(self, patient=None):
+        #   Update patient.
+        self.patient = patient
+        #   Update medication.
+        self.meds_btn.update_medication(self.patient.prescriptions)
+        #   Update statuses.
+        self.statuses_widget.update_statuses(self.patient)
+
+    def init_ui(self):
+        #   Place meds
+        self.layout.addWidget(self.meds_btn)
+        self.layout.addWidget(self.statuses_widget)
+        self.layout.setSpacing(2)
+        # Intended to stack all the widgets at the top
+        self.layout.addStretch()
+
+
+class StatusesContainer(QWidget):
+    def __init__(self, parent=None, patient=None):
+        super().__init__(parent)
+        self.patient = patient
+        #   Disease array.
+        self.statuses = []
+        #   Keep track of what's being displayed.
+        self.displayed_statuses = []
+        #   Layout.
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(2)
+        self.setLayout(self.layout)
+
+    def update_statuses(self, patient=None):
+        #   Update patient model.
+        self.patient = patient
+        #   Remove presented statuses.
+        self.remove_statuses()
+        #   Update statuses.
+        self.extract_chronic_diseases()
+        #   Place statuses.
+        self.place_statuses()
+
+    def extract_chronic_diseases(self):
+        #   Traverse all diagnoses.
+        for diagnosis in self.patient.diagnosis_entries:
+            #   Traverse all tags within the diagnoses.
+            for tag in diagnosis.tags_contained:
+                my_disease = GetAffectionIsChronic(tag)
+                if my_disease.chronic:
+                    self.statuses.append(my_disease)
+
     def place_statuses(self):
-        #   Place treatment
-        if self.patient.prescriptions:
-            pass
-        #   Place statuses
-        for status in range(0, 10): #self.statuses:
+        print('statuses', self.statuses)
+        for status in self.statuses:
             #   Create icon.
             icon = ImageButton(CustomQImage(random.choice(range(1, 5))))
+            icon.setToolTip(status.name)
             #   Keep track of displayed icons.
             self.displayed_statuses.append(icon)
             #   Add icon.
             self.layout.addWidget(icon)
-        pass
 
     def remove_statuses(self):
         #   Remove treatments
@@ -42,44 +87,25 @@ class StatusBarWidget(QWidget):
             #   Remove displayed statuses
             for index, displayed_status in enumerate(self.displayed_statuses):
                 displayed_status.deleteLater()
-            #   Update array
-            self.displayed_statuses = []
+        #   Update arrays
+        self.displayed_statuses = []
+        self.statuses = []
 
-    def update_statuses(self, statuses=None):
-        #   Remove previously displayed information
-        self.remove_statuses()
-        """
-        if under_treatment:
-            # Update if there's a treatment
-            self.meds_btn.update_medication()
-        elif not under_treatment and self.meds_btn.medicated:
-            #   Update if previously there was a treatment
-            self.meds_btn.update_medication()
-        """
-        #   Update variables
-        self.statuses = statuses
-        #   Place new statuses
-        if statuses is not None:
-            self.place_statuses()
-
-    def init_ui(self):
-        self.layout.setSpacing(2)
-        # Intended to stack all the widgets at the top
-        self.layout.addStretch()
 
 
 class UnderMedication(QWidget):
-    def __init__(self, parent=None, prescriptions=None):
+    def __init__(self, parent=None, text_labels=None, prescriptions=None):
         super().__init__(parent)
+        self.text_labels = text_labels
         #   All prescriptions.
         self.prescriptions = prescriptions
-        #   Keep track of edittable instructions.
+        #   Keep track of editable instructions.
         self.active_instructions = []
         #   Button icon.
         self.icon = ImageButton(CustomQImage(0))
         self.icon.clicked.connect(lambda: self.modify_meds())
         #   Initialize dialog.
-        self.dialog = ChangeMeds()
+        self.dialog = ChangeMeds(self, self.text_labels)
         #   Layout
         self.layout = QVBoxLayout()
         #   UI
@@ -88,8 +114,8 @@ class UnderMedication(QWidget):
 
     @Slot()
     def modify_meds(self):
-        #   Setup dialog.
-        self.dialog = ChangeMeds()
+        #   Update dialog.
+        self.dialog.update_instructions(self.active_instructions)
         #   Shoe dialog.
         self.dialog.exec()
 
@@ -109,13 +135,11 @@ class UnderMedication(QWidget):
                     self.active_instructions.append(instruction)
 
     def update_medication(self, prescriptions=None):
-        """
         #   Validate if there are prescriptions to work with.
         if prescriptions is None:
             return
         #   Restore
         self.prescriptions = prescriptions
-        """
         #   Retrieve active instructions.
         self.extract_active_instructions()
         #   Validate if there are active instructions.

@@ -28,7 +28,7 @@ class GetPrescriptions(list):
                     instruction_obj['raw_text'] = instruction['raw_text']
                     instruction_obj['drug'] = instruction['drug']
                     instruction_obj['action'] = instruction['action']
-                    #---------------------------------------------------------------------
+                    # ---------------------------------------------------------------------
                     #   Quantity
                     instruction_qty = Quantity()
                     instruction_qty['quantity'] = instruction['quantity']['quantity']

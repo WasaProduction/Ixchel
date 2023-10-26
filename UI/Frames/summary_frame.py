@@ -27,7 +27,7 @@ class SummaryFrame(Frame):
         #   Summary scroll area
         self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
         #   Status bar
-        self.patient_status_bar_widget = StatusBarWidget(self, self.patient)
+        self.patient_status_bar_widget = StatusBarWidget(self, self.text_labels, self.patient)
         self.customize_status_bar()
         #   Models
         self.skeleton_view = GraphicView(self)
@@ -51,7 +51,7 @@ class SummaryFrame(Frame):
         #   Update blood type
         self.patient_blood_label.setText(self.patient.immutables.blood_type)
         #   Update status bar
-        self.patient_status_bar_widget.update_statuses()
+        self.patient_status_bar_widget.update_statuses(patient=self.patient)
         #   Update scroll area
         self.summary_scroll_area.update_summary_scroll_area(self.patient)
         """     Update models       """
