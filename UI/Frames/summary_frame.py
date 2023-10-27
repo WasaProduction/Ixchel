@@ -21,9 +21,11 @@ class SummaryFrame(Frame):
         #   Age
         self.patient_age_label = QLabel(str(self.calculate_age(self.patient.immutables.birthday)))
         self.customize_age_lbl()
-        #
+        #   Blood
         self.patient_blood_label = QLabel(self.patient.immutables.blood_type)
         self.customize_blood_lbl()
+        #   Sex
+        self.sex_icon = SexIconWidget(self)
         #   Summary scroll area
         self.summary_scroll_area = SummaryScrollArea(self, self.text_labels, self.patient)
         #   Status bar
@@ -50,6 +52,8 @@ class SummaryFrame(Frame):
         self.patient_age_label.setText(str(self.calculate_age(self.patient.immutables.birthday)))
         #   Update blood type
         self.patient_blood_label.setText(self.patient.immutables.blood_type)
+        #   Update sex
+        self.sex_icon.update_icon(self.patient.immutables.biological_sex, self.patient.general_info['sex'])
         #   Update status bar
         self.patient_status_bar_widget.update_statuses(patient=self.patient)
         #   Update scroll area
@@ -78,7 +82,7 @@ class SummaryFrame(Frame):
         patient_essential_data_h_layout.setContentsMargins(0, 0, 0, 0)
         patient_essential_data_h_layout.addWidget(self.patient_name_label)
         patient_essential_data_h_layout.addWidget(self.patient_blood_label)
-        patient_essential_data_h_layout.addWidget(SexIconWidget(2))
+        patient_essential_data_h_layout.addWidget(self.sex_icon)
         patient_essential_data_h_widget = QWidget()
         patient_essential_data_h_widget.setLayout(patient_essential_data_h_layout)
         patient_essential_data_h_widget.setFixedHeight(80)

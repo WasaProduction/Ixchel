@@ -1,7 +1,4 @@
-from collections import defaultdict
-
-
-class GeneralInfo(defaultdict):
+class GeneralInfo(dict):
     def __init__(self, used_id=None, weight=None, height=None, sex=None, marital_status=None, occupation=None,
                  religion=None, scholarship=None):
         super().__init__()

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QTreeWidgetItem, QTreeWidget,\
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTreeWidgetItem, QTreeWidget,\
     QGridLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from UI.Frames.editing_area.tables.custom_table_hereditary import WidgetTableButtons
@@ -127,44 +127,43 @@ class Allergy (QWidget):
         #   Layout
         self.allergies_layout = QVBoxLayout()
         self.text_labels = text_labels
-        #   Contain individual tags.
-        self.allergy_widgets = []
         #   Allergies
         self.allergies = allergies
+        self.displayed_allergies = []
         #   Widget containing all tags.
-        self.widget = self.allergies_into_widget()
-        self.scroll_widget = QScrollArea()
-        self.scroll_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        # self.scroll_widget.setStyleSheet("border: none;")
-        self.scroll_widget.setWidget(self.widget)
-        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.scroll_widget)
+        self.allergies_container = QWidget()
+        self.container_layout = QGridLayout()
+        self.contents_height = 0
+        self.allergies_container.setLayout(self.container_layout)
+        self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.allergies_container)
         #   UI
         self.init_ui()
+        self.update_allergies()
 
     def update_allergies(self, allergies=None):
-        if allergies is None:
+        allergies = [] if allergies is None else allergies
+        if allergies:
             self.allergies = allergies
+            #   Remove displayed allergies.
             self.remove_allergies()
+            #   Place new ones.
+            self.place_allergies()
+            #   Update content inside collapsible widget.
+            #self.collapsible_widget.update_height(self.contents_height)
         else:
-            self.allergies = allergies
-            #   Remove self.widget contents
+            self.allergies = []
             self.remove_allergies()
-            #   Remove self.widget
-            #   Create new self.widget with new contents
-            self.widget = self.allergies_into_widget()
-            self.scroll_widget.setWidget(self.widget)
-            #   Update content inside collapsible widget
-            self.collapsible_widget.update_content(self.scroll_widget)
+            self.place_allergies()
+            #self.collapsible_widget.update_height(self.contents_height)
 
     def remove_allergies(self):
-        for index, widget in enumerate(self.allergy_widgets):
-            widget.deleteLater()
+        if self.displayed_allergies:
+            for widget in self.displayed_allergies:
+                widget.deleteLater()
 
-    def allergies_into_widget(self):
-        #   Widget to be returned.
-        widget = QWidget()
-        #   Grid layout.
-        grid_layout = QGridLayout()
+    def place_allergies(self):
+        #   Size of empty container.
+        empty_size = 100
         #   Columns of the Grid (Rows will be added as needed).
         grid_columns = 6
         # Variables to navigate Grid.
@@ -181,36 +180,44 @@ class Allergy (QWidget):
             allergy_label = QLabel(allergy.allergen)
             allergy_layout.addWidget(allergy_icon)
             allergy_layout.addWidget(allergy_label)
-            allergy_layout.addStretch()
             #   Container widget.
             allergy_widget = QWidget()
             allergy_widget.setLayout(allergy_layout)
             #   Place widget into Grid Layout.
-            grid_layout.addWidget(allergy_widget, row_counter, column_counter, Qt.AlignmentFlag.AlignLeft)
+            self.container_layout.addWidget(allergy_widget, row_counter, column_counter)
             #   Keep track of widgets added.
-            self.allergy_widgets.append(allergy_widget)
+            self.displayed_allergies.append(allergy_widget)
             #   Implement column/row order.
             if column_counter < grid_columns:
                 column_counter += 1
             else:
                 column_counter = 0
                 row_counter += 1
-        #   Set grid into widget.
-        widget.setLayout(grid_layout)
-        return widget
+        #   Determine widget size.
+        #   TODO look for bug, if statement should not be reversed.
+        if not self.displayed_allergies:
+            self.contents_height = empty_size
+        else:
+            self.contents_height = row_counter * self.displayed_allergies[-1].height() + empty_size
+            print('row_counter:', row_counter, 'self.displayed_allergies[-1].height()', self.displayed_allergies[-1].height(), self.contents_height)
 
     def allergies_collapsed(self, height):
         self.setMaximumHeight(height)
 
     def init_ui(self):
+        self.setStyleSheet('background: cyan;')
+        self.allergies_container.setStyleSheet('background: pink;')
+        self.container_layout.setContentsMargins(0, 0, 0, 0)
+        self.container_layout.setSpacing(1)
         self.collapsible_widget.collapsed_signal.connect(self.allergies_collapsed)
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        self.setMinimumHeight(150)
+        #self.setMinimumHeight(150)
         #   Add expandable widget to layout
         self.allergies_layout.addWidget(self.collapsible_widget)
         #   Remove margins
         self.allergies_layout.setContentsMargins(0, 0, 0, 0)
+        self.allergies_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         #   Set layout
         self.setLayout(self.allergies_layout)

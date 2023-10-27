@@ -43,13 +43,15 @@ class CollapsibleBox(QWidget):
         self.content_height = self.calculate_content_height()
         #   Tune animations based on heights
         self.tune_anim_group()
+        #   Expandable.
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     @staticmethod
     def calculate_collapsed_height():
         return 25
 
     def calculate_content_height(self):
-        return self.proxy_content_widget.sizeHint().height() + self.calculate_collapsed_height()
+        return (self.proxy_content_widget.sizeHint().height() * 2) + self.calculate_collapsed_height()
 
     def tune_anim_group(self):
         for i in range(self.toggle_animation.animationCount()):
@@ -109,6 +111,7 @@ class CollapsibleBox(QWidget):
         #   Calculate heights
         self.collapsed_height = self.calculate_collapsed_height()
         self.content_height = height if height != 0 else self.calculate_content_height()
+        #self.proxy_content_widget.setMinimumHeight(height if height != 0 else self.calculate_content_height())
         self.tune_anim_group()
 
     def create_toggle_button(self, title):

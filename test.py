@@ -8,8 +8,7 @@ from UI.Frames.summary_frame import SummaryFrame
 from assets.icons.buttons.button_paths import ButtonPaths
 from mongodb.read.get_patient import GetPatient
 from mongodb.read.get_text_labels import GetTextLabels
-from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
-from UI.Widgets.status_bar_widget import StatusBarWidget
+from UI.Widgets.background import Allergy
 
 
 class MainWindow(QMainWindow):
@@ -17,19 +16,21 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("My App")
         self.setGeometry(100, 600, 1000, 500)
-        self.patient = GetPatient('JaimeGq')
+        self.patient = GetPatient()
         button_paths = ButtonPaths()
         # QRcode()
         self.text_labels = GetTextLabels()
         my_layout = QVBoxLayout()
         #my_test_obj = SummaryFrame(self, patient, button_paths, text_labels)
-        my_test_obj = StatusBarWidget(self)
+        my_test_obj = Allergy(self, self.text_labels, self.patient.allergies)
+        #child = my_test_obj.allergies_container
 
 
         """     Tags Section    """
 
         def pusheado():
-            my_test_obj.update_statuses()
+            self.patient = GetPatient('JaimeGQ')
+            my_test_obj.update_allergies(self.patient.allergies)
             pass
             #my_test_obj.update_summary()
             #throttle = ThrottleDebounce(pusheado)
@@ -46,6 +47,7 @@ class MainWindow(QMainWindow):
 
         my_layout.addWidget(pushme)
         my_layout.addWidget(my_test_obj)
+        #my_layout.addWidget(child)
 
         my_widget = QWidget()
         my_widget.setLayout(my_layout)

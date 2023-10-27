@@ -1,40 +1,44 @@
-from PyQt6.QtWidgets import QAbstractButton, QSizePolicy
-from PyQt6.QtGui import QPainter, QPixmap
-from PyQt6.QtCore import QSize
+from PyQt6.QtWidgets import QPushButton, QSizePolicy
+from PyQt6.QtGui import QIcon
 
 
-class SexIconWidget(QAbstractButton):
-    def __init__(self, sex, parent=None):
+class SexIconWidget(QPushButton):
+    def __init__(self, parent=None, birth_sex='None', current_sex='None'):
         super(SexIconWidget, self).__init__(parent)
-        folder = '/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/assets/icons/sex/'
-        if sex == 1:
-            self.pixmap = QPixmap(folder + "male.png")
-            self.setToolTip("Man")
-        elif sex == 2:
-            self.pixmap = QPixmap(folder + "female.png")
-            self.setToolTip("Woman")
-        elif sex == 3:
-            self.pixmap = QPixmap(folder + "trans_female.png")
-            self.setToolTip("Trans-Woman")
-        elif sex == 4:
-            self.pixmap = QPixmap(folder + "trans_male.png")
-            self.setToolTip("Trans-Man")
-        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        # self.pressed.connect(self.update)
+        self.folder = '/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/assets/icons/sex/'
+        #   Used to determine icon.
+        self.birth_sex = birth_sex
+        self.current_sex = current_sex
+        #   Initialize.
+        self.setIcon(QIcon(self.folder + "male.png"))
+        #   Select image:
+        self.update_icon()
+        #   Customize.
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        #   Remove border
+        self.setStyleSheet("border: none;")
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.drawPixmap(event.rect(), self.pixmap)
-        if self.isDown():
-            print("pico")
+    def update_icon(self, birth_sex=0, current_sex='None'):
+        #   Update parameters.
+        self.birth_sex = birth_sex
+        self.current_sex = current_sex
+        #   Run selection
+        self.choose_icon()
 
-    def enterEvent(self, event):
-        # Hover enter
-        print("Entro")
-
-    def leaveEvent(self, event):
-        # Hover exit
-        print("Salio")
-
-    def sizeHint(self):
-        return QSize(30, 30)
+    def choose_icon(self):
+        if self.birth_sex == 'female' and self.current_sex == 'female':
+            self.setIcon(QIcon(self.folder + 'female.png'))
+            self.setToolTip('Woman')
+        elif self.birth_sex == 'male' and self.current_sex == 'male':
+            self.setIcon(QIcon(self.folder + 'male.png'))
+            self.setToolTip('Man')
+        elif self.birth_sex == 'female' and self.current_sex == 'male':
+            self.setIcon(QIcon(self.folder + "trans_male.png"))
+            self.setToolTip('Trans-male')
+        elif self.birth_sex == 'male' and self.current_sex == 'female':
+            self.setIcon(QIcon(self.folder + "trans_female.png"))
+            self.setToolTip("Trans-female")
+        else:
+            #   Unexpected scenario.
+            self.setIcon(QIcon(self.folder + "trans_male.png"))
+            self.setToolTip("Nope")
