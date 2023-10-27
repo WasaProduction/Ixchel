@@ -2,8 +2,6 @@ from PyQt6.QtWidgets import QWidget, QScrollArea, QVBoxLayout, QSizePolicy, QFra
 from PyQt6.QtCore import Qt, QEvent, QSize
 from UI.Widgets.background import GeneralInformation, HereditaryBackground, Allergy
 from UI.Widgets.tags.tag_container_widget import PathologicalCollapsible
-from data_models.model_allergy import ModelAllergy
-import random
 
 
 class SummaryScrollArea(QScrollArea):
@@ -15,11 +13,8 @@ class SummaryScrollArea(QScrollArea):
         self.patient = patient
         #   Widgets
         self.general_information = GeneralInformation(self, self.text_labels, patient.general_info)
-        self.hereditary_background = HereditaryBackground(self, self.text_labels, 0)
-        my_array = []
-        for i in range(100):
-            my_array.append(ModelAllergy('alergia', random.randrange(1, 5), random.randrange(1, 5)))
-        self.allergy = Allergy(self, self.text_labels, my_array)
+        self.hereditary_background = HereditaryBackground(self, self.text_labels, self.patient)
+        self.allergy = Allergy(self, self.text_labels, self.patient.allergies)
         self.pathologic_background = PathologicalCollapsible(self, self.text_labels, self.patient)
         #   UI
         self.init_ui()
@@ -71,10 +66,11 @@ class SummaryScrollArea(QScrollArea):
         #   Stack widgets atop.
         self.layout.addStretch()
 
-    def update_summary_scroll_area(self, patient=None, allergies=None):
+    def update_summary_scroll_area(self, patient=None):
         self.patient = patient
         self.general_information.update_general_info(self.patient.general_info)
-        self.allergy.update_allergies(allergies=allergies)
+        self.hereditary_background.update_hereditary(self.patient)
+        self.allergy.update_allergies(self.patient.allergies)
         self.pathologic_background.update_pathological(self.patient)
 
     """     UI      """

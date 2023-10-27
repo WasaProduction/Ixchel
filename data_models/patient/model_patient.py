@@ -2,10 +2,10 @@ from data_models.patient.model_patient_immutable import ModelPatientImmutable
 from data_models.patient.general_info import GeneralInfo
 from data_models.patient.user_contact import UserContact
 
-
 class ModelPatient:
     def __init__(self, object_id='', user_id='', username='ARC-77', name='Frodo', lastname_1='', lastname_2='',
-                 diagnosis_entries=None, immutables=None, general_info=None, user_contact=None, prescriptions=None):
+                 diagnosis_entries=None, immutables=None, general_info=None, user_contact=None, prescriptions=None,
+                 allergies=None):
         self.object_id = object_id
         self.user_id = user_id
         self.username = username
@@ -32,6 +32,10 @@ class ModelPatient:
             self.prescriptions = []
         else:
             self.prescriptions = prescriptions
+        if allergies is None:
+            self.allergies = []
+        else:
+            self.allergies = allergies
 
     def restore_model(self):
         self.object_id = ''
@@ -45,3 +49,4 @@ class ModelPatient:
         self.general_info = GeneralInfo()
         self.user_contact = UserContact()
         self.prescriptions = []
+        self.allergies = []

@@ -7,19 +7,26 @@ class AllergyIcon(QAbstractButton):
         super().__init__()
         my_layout = QVBoxLayout()
         effect = QGraphicsColorizeEffect()
+        folder = '/Users/jaimegonzalezquirarte/PycharmProjects/Ixchel/assets/icons/allergies/'
         # Pick category/icon
-        if allergy.category == 1:
-            # Drugs
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Allergy_icons/Drug.png")
-        elif allergy.category == 2:
-            # Food
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Allergy_icons/Food.png")
-        elif allergy.category == 3:
+        if allergy.category == 0:
+            # Flora
+            self.pixmap = QPixmap(folder + "Flora.png")
+        elif allergy.category == 1:
             # Fauna
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Allergy_icons/Fauna.png")
+            self.pixmap = QPixmap(folder + "Fauna.png")
+        elif allergy.category == 2:
+            # Ambient
+            self.pixmap = QPixmap(folder + "Default.png")
+        elif allergy.category == 3:
+            # Substances
+            self.pixmap = QPixmap(folder + "Drug.png")
+        elif allergy.category == 4:
+            # Food
+            self.pixmap = QPixmap(folder + "Food.png")
         else:
-            # Default
-            self.pixmap = QPixmap("/Users/jaimegonzalezquirarte/Desktop/App/Allergy_icons/Default.png")
+            # Other
+            self.pixmap = QPixmap(folder + "Default.png")
         # Pick color
         if allergy.severity == 1:
             # Green

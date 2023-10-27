@@ -8,9 +8,11 @@ import random
 
 
 class StatusBarWidget(QWidget):
-    def __init__(self, parent=None, text_labels=None, patient=None, statuses=None):
+    def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
+        #   Multilingual obj.
         self.text_labels = text_labels
+        #   Patient obj.
         self.patient = patient
         #   Medication widget
         self.meds_btn = UnderMedication(self, self.text_labels, self.patient.prescriptions)
@@ -29,9 +31,11 @@ class StatusBarWidget(QWidget):
         self.statuses_widget.update_statuses(self.patient)
 
     def init_ui(self):
-        #   Place meds
+        #   Place medication button.
         self.layout.addWidget(self.meds_btn)
+        #   Place statuses placeholder.
         self.layout.addWidget(self.statuses_widget)
+        #   Customize layout.
         self.layout.setSpacing(2)
         # Intended to stack all the widgets at the top
         self.layout.addStretch()
@@ -62,16 +66,25 @@ class StatusesContainer(QWidget):
         self.place_statuses()
 
     def extract_chronic_diseases(self):
+        #   Tp avoid duplicates
+        tags_contained = []
         #   Traverse all diagnoses.
         for diagnosis in self.patient.diagnosis_entries:
             #   Traverse all tags within the diagnoses.
             for tag in diagnosis.tags_contained:
-                my_disease = GetAffectionIsChronic(tag)
+                #   Avoid duplicates.
+                if tag not in tags_contained:
+                    #   Extract disease from tag.
+                    my_disease = GetAffectionIsChronic(tag)
+                else:
+                    continue
                 if my_disease.chronic:
+                    #   Add status
                     self.statuses.append(my_disease)
+                    #   Keep track of already displayed tags.
+                    tags_contained.append(tag)
 
     def place_statuses(self):
-        print('statuses', self.statuses)
         for status in self.statuses:
             #   Create icon.
             icon = ImageButton(CustomQImage(random.choice(range(1, 5))))
@@ -90,7 +103,6 @@ class StatusesContainer(QWidget):
         #   Update arrays
         self.displayed_statuses = []
         self.statuses = []
-
 
 
 class UnderMedication(QWidget):

@@ -66,9 +66,12 @@ class GeneralInformation(QWidget):
 
 
 class HereditaryBackground(QWidget):
-    def __init__(self, parent=None, text_labels=None, hereditary_information=None):
+    def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
+        #   Multilingual obj.
         self.text_labels = text_labels
+        #   Patient obj.
+        self.patient = patient
 
         self.hereditary_layout = QVBoxLayout()
         self.my_test_dict_2 = {'abuela_materna': 'diabetes_mellitus_tipo_1', 'abuelo_materno':
@@ -87,6 +90,9 @@ class HereditaryBackground(QWidget):
         self.hereditary_layout.setContentsMargins(0, 0, 0, 0)
         #   Set layout
         self.setLayout(self.hereditary_layout)
+
+    def update_hereditary(self, patient=None):
+        pass
 
     def update_height(self):
         pass

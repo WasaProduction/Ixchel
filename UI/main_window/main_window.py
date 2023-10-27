@@ -13,7 +13,7 @@ import random
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        self.testing = False
+        self.testing = not False
         # Look for all required files
         StartupCheck()
         super().__init__()
