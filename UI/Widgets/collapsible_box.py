@@ -28,7 +28,10 @@ class CollapsibleBox(QWidget):
         #   Expanded flag
         self.expanded = True
         # Use proxy to place received_content
-        self.proxy_content_widget = self.received_content_into_proxy()
+        self.proxy_content_widget = QWidget()
+        self.proxy_content_widget.setStyleSheet('background red')
+        self.proxy_v_lay = QVBoxLayout(self.proxy_content_widget)
+        self.received_content_into_proxy()
         """     Layout      """
         self.my_layout = self.create_layout()
         #   Add widgets
@@ -51,7 +54,7 @@ class CollapsibleBox(QWidget):
         return 25
 
     def calculate_content_height(self):
-        return (self.proxy_content_widget.sizeHint().height() * 2) + self.calculate_collapsed_height()
+        return self.proxy_content_widget.sizeHint().height() + self.calculate_collapsed_height()
 
     def tune_anim_group(self):
         for i in range(self.toggle_animation.animationCount()):
@@ -79,12 +82,12 @@ class CollapsibleBox(QWidget):
         my_layout.setContentsMargins(0, 0, 0, 0)
         return my_layout
 
+    def remove_proxy_content(self):
+        self.proxy_v_lay.removeWidget(self.received_content)
+        pass
+
     def received_content_into_proxy(self):
-        proxy_content_widget = QWidget()
-        #   Proxy layout
-        v_lay = QVBoxLayout(proxy_content_widget)
-        v_lay.addWidget(self.received_content)
-        return proxy_content_widget
+        self.proxy_v_lay.addWidget(self.received_content)
 
     def force_collapse(self):
         if self.expanded:
@@ -100,7 +103,7 @@ class CollapsibleBox(QWidget):
 
     def actually_update_content(self, content=None):
         self.received_content = content
-        self.proxy_content_widget = self.received_content_into_proxy()
+        self.received_content_into_proxy()
         #   Calculate heights
         self.collapsed_height = self.calculate_collapsed_height()
         self.content_height = self.calculate_content_height()
@@ -154,7 +157,8 @@ class CollapsibleBox(QWidget):
             #   Reset expanded flag.
             self.expanded = not self.expanded
             #   Emit height via signal.
-            self.collapsed_signal.emit(self.content_height) if self.expanded else self.collapsed_signal.emit(self.collapsed_height)
+            self.collapsed_signal.emit(self.content_height) if self.expanded else \
+                self.collapsed_signal.emit(self.collapsed_height)
             self.button_enabled = False
             #   Re-enable the button after x time.
             self.re_enable_timer.start(1000)

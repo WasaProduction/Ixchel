@@ -40,25 +40,23 @@ class SkeletonGraphicScene(QGraphicsScene):
         self.place_proxy(bone, self.b_w * 4, 0)
         #   Parietal
         bone = self.full_skeleton.cranium.right_parietal
-        #self.place_proxy(bone, self.b_w * 5, 0)
+        self.place_proxy(bone, self.b_w * 5, 0)
         bone = self.full_skeleton.cranium.left_parietal
-        #self.place_proxy(bone, self.b_w * 3, 0)
-        """
+        self.place_proxy(bone, self.b_w * 3, 0)
         #   Temporal
-        bone = ImageButton(pixmap=full_skeleton.cranium.right_temporal.image, text=full_skeleton.cranium.left_temporal.name)
-        #self.place_proxy(bone, self.b_w * 3, self.b_h * 3)
-        bone = ImageButton(pixmap=full_skeleton.cranium.right_temporal.image, text=full_skeleton.cranium.right_temporal.name)
-        #self.place_proxy(bone, self.b_w * 5, self.b_h * 3)
+        bone = self.full_skeleton.cranium.right_temporal
+        self.place_proxy(bone, self.b_w * 3, self.b_h * 3)
+        bone = self.full_skeleton.cranium.right_temporal
+        self.place_proxy(bone, self.b_w * 5, self.b_h * 3)
         #   Occipital
-        bone = ImageButton(pixmap=full_skeleton.cranium.occipital.image, text=full_skeleton.cranium.occipital.name)
-        #self.place_proxy(bone, self.b_w * 4, self.b_h * 3)
+        bone = self.full_skeleton.cranium.occipital
+        self.place_proxy(bone, self.b_w * 4, self.b_h * 3)
         #   Sphenoid
-        bone = ImageButton(pixmap=full_skeleton.cranium.sphenoid.image, text=full_skeleton.cranium.sphenoid.name)
-        #self.place_proxy(bone, self.b_w * 4, self.b_h)
+        bone = self.full_skeleton.cranium.sphenoid
+        self.place_proxy(bone, self.b_w * 4, self.b_h)
         #   Ethmoid
-        bone = ImageButton(pixmap=full_skeleton.cranium.ethmoid.image, text=full_skeleton.cranium.ethmoid.name)
-        #self.place_proxy(bone, self.b_w * 4, self.b_h * 2)
-        """
+        bone = self.full_skeleton.cranium.ethmoid
+        self.place_proxy(bone, self.b_w * 4, self.b_h * 2)
         """     Ear         """
         """
         #   Right

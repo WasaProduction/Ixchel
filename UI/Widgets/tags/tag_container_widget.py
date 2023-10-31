@@ -31,6 +31,7 @@ class PathologicalCollapsible(QWidget):
     def update_pathological(self, patient):
         self.years_container.update_years_collapsible(patient)
         self.collapsible_widget.update_height(self.years_container.content_height)
+        self.setMaximumHeight(self.years_container.content_height + 50)
 
     def pathological_collapsed(self, height):
         self.setMaximumHeight(height)
@@ -133,13 +134,14 @@ class YearsCollapsible(QWidget):
     def remove_years(self, years=None):
         if years is not None and years:
             #   Remove years not supposed to be displayed
-            for year in years:
+            for i, year in enumerate(years):
                 #   Delete tags contained inside year.
                 self.displayed_years[year].received_content.remove_tags()
                 #   Delete year
                 self.displayed_years[year].deleteLater()
                 #   Remove year form displayed
                 del self.displayed_years[year]
+                #years.pop(i)
 
     def update_years(self, years):
         #   Update already present years
