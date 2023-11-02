@@ -1,5 +1,4 @@
 from PyQt6.QtGui import QTextCharFormat, QTextCursor, QTextDocument, QColor
-from PyQt6.QtCore import Qt
 
 
 class PrescriptionInfoDoc(QTextDocument):
@@ -154,10 +153,10 @@ class PrescriptionInfoDoc(QTextDocument):
         cursor.insertText(": Valor numérico incremental seguido de un guión, para indicar diferentes instrucciones.\n",
                           default_format)
         #   Drug.
-        cursor.insertText("\tMedicamento:", drug_format)
+        cursor.insertText("\tMedicamento", drug_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Hyphen.
-        cursor.insertText("\tGuión:", hyphen_format)
+        cursor.insertText("\tGuión", hyphen_format)
         cursor.insertText(": Separador entre medicamento y resto de instrucción.\n", default_format)
         #   Verb.
         cursor.insertText("\tVerbo ", verb_format)
@@ -169,35 +168,30 @@ class PrescriptionInfoDoc(QTextDocument):
         cursor.insertText("\tUnidad", quantity_q_format)
         cursor.insertText(": Unidad.\n", default_format)
         #   Conjunction.
-        cursor.insertText("\tConjunción:", conjunction_format)
+        cursor.insertText("\tConjunción", conjunction_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Periodicity number.
-        cursor.insertText("\tPeriodicidad:", periodicity_n_format)
+        cursor.insertText("\tPeriodicidad", periodicity_n_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Periodicity unit.
-        cursor.insertText("\tUnidad de periodicidad:", periodicity_u_format)
+        cursor.insertText("\tUnidad de periodicidad", periodicity_u_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Preposition.
-        cursor.insertText("\tPreposición:", preposition_format)
+        cursor.insertText("\tPreposición", preposition_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Duration number.
-        cursor.insertText("\tDuración:", duration_n_format)
+        cursor.insertText("\tDuración", duration_n_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Duration unit.
-        cursor.insertText("\tUnidad de duración:", duration_u_format)
+        cursor.insertText("\tUnidad de duración", duration_u_format)
         cursor.insertText(": Algo.\n", default_format)
         #   Semicolon.
-        cursor.insertText("\tPunto y coma:", semicolon_format)
+        cursor.insertText("\tPunto y coma", semicolon_format)
         cursor.insertText(": Usa ; para dejarnos saber hay instrucciones de uso.\n", default_format)
         #   Indication of use.
         cursor.insertText("\tInstrucción de uso:", indication_format)
-        cursor.insertText(": Al redactar te brindaremos un par de opciones frecuentes.\n", default_format)
+        cursor.insertText(" Al redactar te brindaremos un par de opciones frecuentes.\n", default_format)
         #   Conclusion.
         cursor.insertText("\nSeguir este formato nos ayuda a mantener en tu resumen actualizado con todo lo que "
                           "necesitas y en algunos casos, ayudamos a nuestro paciente a seguir un horario bien "
                           "estructurado.", default_format)
-        #   Regards.
-        # Set the alignment to center
-        cursor.insertText("\n\nCiao.", default_format)
-
-

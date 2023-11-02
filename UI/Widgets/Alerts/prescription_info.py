@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout
+from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QTextEdit, QVBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 from UI.Widgets.documents.prescription_info_doc import PrescriptionInfoDoc
 
@@ -22,11 +22,15 @@ class PrescriptionInfo(QDialog):
         self.text_edit.viewport().setAutoFillBackground(False)
         #   Remove border
         self.text_edit.setStyleSheet("border: none;")
-        #   Set the documen with styles to the QTextEdit.
+        #   Set the document with styles to the QTextEdit.
         self.text_edit.setDocument(text_document)
+        #   Exit button.
+        button = QPushButton("Ciao")
+        button.clicked.connect(self.accept)
         #   Layout to be used.
         self.other_layout = QVBoxLayout()
         self.other_layout.addWidget(self.text_edit)
+        self.other_layout.addWidget(button)
 
         self.init_ui()
         #   Show message
@@ -36,7 +40,7 @@ class PrescriptionInfo(QDialog):
     def init_ui(self):
         self.setWindowTitle(self.title)
         self.setMinimumHeight(560)
-        self.setMinimumWidth(700)
+        self.setMinimumWidth(750)
         self.setLayout(self.other_layout)
         self.text_edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.text_edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
