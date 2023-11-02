@@ -9,6 +9,7 @@ from assets.icons.buttons.button_paths import ButtonPaths
 from mongodb.read.get_patient import GetPatient
 from mongodb.read.get_text_labels import GetTextLabels
 from UI.Widgets.background import Allergy
+from UI.Widgets.Alerts.prescription_info import PrescriptionInfo
 
 
 class MainWindow(QMainWindow):
@@ -18,6 +19,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 600, 1000, 500)
         self.patient = GetPatient()
         button_paths = ButtonPaths()
+        PrescriptionInfo()
         # QRcode()
         self.text_labels = GetTextLabels()
         my_layout = QVBoxLayout()

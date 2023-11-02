@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QScrollArea
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QScrollArea
 from UI.Widgets.custom_text_edit import CustomTextEdit
 from UI.Widgets.prescription_txt_edit.prescription_text_edit import PrescriptionTextEdit
 from UI.Widgets.vitals_grid import VitalsGrid
@@ -7,6 +7,9 @@ from UI.Frames.editing_area.tables.custom_formulary_table import CustomFormulary
 from data_models.systems_aparatus import SystemsAparatus
 from data_models.physical_examination import PhysicalExamination
 from mongodb.write.create_prescription import CreatePrescription
+from UI.Widgets.Alerts.prescription_info import PrescriptionInfo
+from UI.Widgets.Alerts.diagnosis_info import DiagnosisInfo
+from UI.Widgets.info_button import InfoButton
 # https://stackoverflow.com/questions/28956693/pyqt5-qtextedit-auto-completion
 
 
@@ -24,20 +27,46 @@ class DiagnosisPrescription(QScrollArea):
         self.my_physical_examination = CustomFormularyTable(self, PhysicalExamination())
         my_collapsible_examination = CollapsibleBox(self, self.text_labels.examination, self.my_physical_examination)
 
-        #   Create label & Text Area
+        """     Create label/info_button & diagnosis text area        """
         diagnosis_label = QLabel(self.text_labels.diagnosis)
+        diagnosis_info_button = InfoButton(self)
+        diagnosis_info_button.clicked_signal.connect(lambda: self.show_diagnosis_info())
+        #   Layout to couple label and info button.
+        p_lbl_btn_lyt = QHBoxLayout()
+        p_lbl_btn_lyt.addWidget(diagnosis_label)
+        p_lbl_btn_lyt.addWidget(diagnosis_info_button)
+        p_lbl_btn_lyt.setSpacing(1)
+        #   Stack them both to the left.
+        p_lbl_btn_lyt.addStretch()
+        p_lbl_btn_widget = QWidget()
+        p_lbl_btn_widget.setLayout(p_lbl_btn_lyt)
+        #   Diagnosis text edit.
         self.my_diagnosis = CustomTextEdit(self, '/Users/jaimegonzalezquirarte/Desktop/App/vocabulario.txt')
+
+        """     Create label/info_button & prescription text area        """
         prescription_label = QLabel(self.text_labels.prescription)
+        prescription_info_button = InfoButton(self, self.text_labels.information)
+        prescription_info_button.clicked_signal.connect(lambda: self.show_prescription_info())
+        #   Layout to couple label and info button.
+        d_lbl_btn_lyt = QHBoxLayout()
+        d_lbl_btn_lyt.addWidget(prescription_label)
+        d_lbl_btn_lyt.addWidget(prescription_info_button)
+        d_lbl_btn_lyt.setSpacing(1)
+        #   Stack them both to the left.
+        d_lbl_btn_lyt.addStretch()
+        d_lbl_btn_widget = QWidget()
+        d_lbl_btn_widget.setLayout(d_lbl_btn_lyt)
+        #   Prescription text edit.
         self.my_prescription = PrescriptionTextEdit(self, '/Users/jaimegonzalezquirarte/Desktop/App/vocabulario.txt')
         #   Container widget layout
         self.vitals_widget = VitalsGrid(self.text_labels)
-        #   Adding elements to layouts
+        #   Adding elements to layout.
         self.scroll_content_layout.addWidget(self.vitals_widget)
         self.scroll_content_layout.addWidget(my_collapsible_interrogatory)
         self.scroll_content_layout.addWidget(my_collapsible_examination)
-        self.scroll_content_layout.addWidget(diagnosis_label)
+        self.scroll_content_layout.addWidget(p_lbl_btn_widget)
         self.scroll_content_layout.addWidget(self.my_diagnosis)
-        self.scroll_content_layout.addWidget(prescription_label)
+        self.scroll_content_layout.addWidget(d_lbl_btn_widget)
         self.scroll_content_layout.addWidget(self.my_prescription)
         #   Container widget
         my_container_widget = QWidget()
@@ -47,6 +76,12 @@ class DiagnosisPrescription(QScrollArea):
         self.setWidget(my_container_widget)
         #   Tune UI
         self.tune_ui()
+
+    def show_diagnosis_info(self):
+        DiagnosisInfo()
+
+    def show_prescription_info(self):
+        PrescriptionInfo(self, self.text_labels.help)
 
     def retrieve_data(self):
         #   Null value , if all parameters are empty

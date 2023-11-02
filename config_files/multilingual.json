@@ -206,5 +206,17 @@
   "remove": [
     "Remove",
     "Remover"
+  ],
+  "help": [
+    "Help",
+    "Ayuda"
+  ],
+  "information": [
+    "Information",
+    "Información"
+  ],
+  "how_to_prescribe": [
+    "How do redact a diagnosis",
+    "Cómo redactar una prescripción."
   ]
 }
