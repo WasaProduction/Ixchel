@@ -7,6 +7,8 @@ from UI.Widgets.collapsible_box import CollapsibleBox
 
 
 class GeneralInformation(QWidget):
+    toggled_signal = pyqtSignal(int)
+
     def __init__(self, parent=None, text_labels=None, general_information=None):
         super().__init__(parent)
         self.text_labels = text_labels
@@ -26,7 +28,11 @@ class GeneralInformation(QWidget):
         self.adjust_tree_widget_height()
         #   Collapsible height
         self.collapsible_widget = CollapsibleBox(self, self.tittle, self.tree)
+        self.collapsible_widget.toggled_signal.connect(self.height_updated)
         self.init_ui()
+
+    def height_updated(self, height):
+        self.toggled_signal.emit(height)
 
     def populate_tree(self):
         #   Traverse self.dict keys and values.
@@ -53,7 +59,7 @@ class GeneralInformation(QWidget):
         self.populate_tree()
 
     def init_ui(self):
-        self.collapsible_widget.collapsed_signal.connect(self.general_information_background_collapsed)
+        self.collapsible_widget.toggled_signal.connect(self.general_information_background_collapsed)
         #   Add expandable widget to layout
         self.general_layout.addWidget(self.collapsible_widget)
         #   Remove margins
@@ -66,6 +72,8 @@ class GeneralInformation(QWidget):
 
 
 class HereditaryBackground(QWidget):
+    toggled_signal = pyqtSignal(int)
+
     def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
         #   Multilingual obj.
@@ -79,11 +87,15 @@ class HereditaryBackground(QWidget):
 
         self.hereditary_widget = WidgetTableButtons(self, self.my_test_dict_2)
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.hereditary_lbl, self.hereditary_widget)
+        self.collapsible_widget.toggled_signal.connect(self.height_updated)
         #   UI
         self.init_ui()
 
+    def height_updated(self, height):
+        self.toggled_signal.emit(height)
+
     def init_ui(self):
-        self.collapsible_widget.collapsed_signal.connect(self.hereditary_background_collapsed)
+        self.collapsible_widget.toggled_signal.connect(self.hereditary_background_collapsed)
         #   Add expandable widget to layout
         self.hereditary_layout.addWidget(self.collapsible_widget)
         #   Remove margins
@@ -123,7 +135,7 @@ class Immunizations(QWidget):
 
 class Allergy (QWidget):
     #   Custom signal.
-    collapsed_signal = pyqtSignal(int)
+    toggled_signal = pyqtSignal(int)
 
     def __init__(self, parent=None, text_labels=None, allergies=None):
         super().__init__(parent)
@@ -141,9 +153,13 @@ class Allergy (QWidget):
         self.contents_height = 0
         self.allergies_container.setLayout(self.container_layout)
         self.collapsible_widget = CollapsibleBox(self, self.text_labels.allergies_lbl, self.allergies_container)
+        self.collapsible_widget.toggled_signal.connect(self.height_updated)
         #   UI
         self.init_ui()
         self.update_allergies()
+
+    def height_updated(self, height):
+        self.toggled_signal.emit(height)
 
     def update_allergies(self, allergies=None):
         allergies = [] if allergies is None else allergies
@@ -163,9 +179,6 @@ class Allergy (QWidget):
             self.remove_allergies()
             self.place_allergies()
             self.collapsible_widget.update_content(self.allergies_container)
-
-        #   Emit updated height.
-        self.collapsed_signal.emit(self.contents_height + 50)
 
     def remove_allergies(self):
         if self.displayed_allergies:
@@ -219,7 +232,7 @@ class Allergy (QWidget):
     def init_ui(self):
         self.container_layout.setContentsMargins(0, 0, 0, 0)
         self.container_layout.setSpacing(1)
-        self.collapsible_widget.collapsed_signal.connect(self.allergies_collapsed)
+        self.collapsible_widget.toggled_signal.connect(self.allergies_collapsed)
 
         self.collapsible_widget.setStyleSheet('background: cyan')
         self.allergies_container.setStyleSheet('background: pink')

@@ -7,7 +7,7 @@ from UI.Widgets.status_bar_widget import StatusBarWidget
 from UI.Widgets.icons.sex_icon import SexIconWidget
 from UI.Widgets.summary_scroll_area import SummaryScrollArea
 from UI.Widgets.patient_name import PatientName
-from UI.TwoD.graphic_view import GraphicView
+#from UI.TwoD.graphic_view import GraphicView
 
 
 class SummaryFrame(Frame):
@@ -32,7 +32,7 @@ class SummaryFrame(Frame):
         self.patient_status_bar_widget = StatusBarWidget(self, self.text_labels, self.patient)
         self.customize_status_bar()
         #   Models
-        self.skeleton_view = GraphicView(self)
+        #self.skeleton_view = GraphicView(self)
         self.init_ui()
 
     @staticmethod
@@ -105,6 +105,7 @@ class SummaryFrame(Frame):
         section_container.setLayout(patient_general_info_layout)
 
         """     Models   """
+        """
         #   Models container
         three_d_models_bar_layout = QVBoxLayout()
         #   Skeleton
@@ -115,10 +116,11 @@ class SummaryFrame(Frame):
         three_d_models_bar_layout.addStretch()
         three_d_models_bar_widget = QWidget()
         three_d_models_bar_widget.setLayout(three_d_models_bar_layout)
+        """
 
         """     Add main widgets to the container        """
         container_layout = QHBoxLayout()
         container_layout.addWidget(section_container, 7)
         container_layout.addWidget(self.patient_status_bar_widget, 1)
-        container_layout.addWidget(three_d_models_bar_widget, 2)
+        #container_layout.addWidget(three_d_models_bar_widget, 2)
         self.setLayout(container_layout)

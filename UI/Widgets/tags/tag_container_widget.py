@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QSizePolicy, QVBoxLayout, QLabel
+from PyQt6.QtCore import pyqtSignal
 from UI.Widgets.collapsible_box import CollapsibleBox
 from data_models.model_tag import ModelTag
 from mongodb.read.get_affection import GetAffection
@@ -7,6 +8,8 @@ from UI.Widgets.tags.tag_individual_widget import TagIndividualWidget
 
 
 class PathologicalCollapsible(QWidget):
+    toggled_signal = pyqtSignal(int)
+
     #   Collapsable container of a set of years containing individual tags
     def __init__(self, parent=None, text_labels=None, patient=None):
         super().__init__(parent)
@@ -21,12 +24,17 @@ class PathologicalCollapsible(QWidget):
         if self.patient.diagnosis_entries is None:
             pass
         self.years_container = YearsCollapsible(self, self.patient, self.text_labels)
+        self.years_container.toggled_signal.connect(self.height_updated)
         self.collapsible_widget = CollapsibleBox(self, title=self.text_labels.pathologic_lbl,
                                                  content=self.years_container)
+        self.collapsible_widget.toggled_signal.connect(self.height_updated)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.collapsible_widget)
         self.layout.setStretchFactor(self.collapsible_widget, 1)
         self.init_ui()
+
+    def height_updated(self, height):
+        self.toggled_signal.emit(height)
 
     def update_pathological(self, patient):
         self.years_container.update_years_collapsible(patient)
@@ -38,7 +46,7 @@ class PathologicalCollapsible(QWidget):
 
     def init_ui(self):
         #   Connect signal
-        self.collapsible_widget.collapsed_signal.connect(self.pathological_collapsed)
+        self.collapsible_widget.toggled_signal.connect(self.pathological_collapsed)
         #   Configure margins
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
@@ -47,6 +55,8 @@ class PathologicalCollapsible(QWidget):
 
 
 class YearsCollapsible(QWidget):
+    toggled_signal = pyqtSignal(int)
+
     #   Set of collapsible years containing tags.
     def __init__(self, parent=None, patient=None, text_labels=None):
         super().__init__(parent)
@@ -57,6 +67,7 @@ class YearsCollapsible(QWidget):
         """     Testing end     """
         self.content_height = 0
         """     Tags Section    """
+        self.test_years = []
         #   One collapsible box per year.
         self.year_container_lyt = self.create_year_container_lyt()
         #   Extract tags into a dict.
@@ -69,6 +80,13 @@ class YearsCollapsible(QWidget):
         self.setLayout(self.year_container_lyt)
         #   Ui.
         self.init_ui()
+
+    def height_updated(self):
+        #   Calculate height.
+        self.content_height = 0
+        for widget in self.test_years:
+            self.content_height += widget.height()
+        self.toggled_signal.emit(self.content_height)
 
     def tags_into_layout(self):
         #   Clear layout
@@ -92,8 +110,10 @@ class YearsCollapsible(QWidget):
             year_widget = CollapsibleBox(self, title=str(year), content=TagsContainer(self,
                                                                                       self.year_diagnoses_dict[year],
                                                                                       text_labels=self.text_labels))
+            year_widget.toggled_signal.connect(self.height_updated)
+
             #   Connect signal
-            #year_widget.collapsed_signal.connect(self.year_collapsed)
+            self.test_years.append(year_widget)
             #   Keep track of displayed years.
             self.displayed_years[year] = year_widget
             #   Keep track of height in order to update correctly when updating widget.
@@ -151,6 +171,7 @@ class YearsCollapsible(QWidget):
             #   Add renewed tags inside year.
 
     def update_years_collapsible(self, patient=None):
+        self.test_years = []
         #   Remove years
         self.remove_years(list(self.year_diagnoses_dict.keys()))
         #   Extract tags into a dict (update).

@@ -6,7 +6,7 @@ from PyQt6.QtCore import QAbstractAnimation, QParallelAnimationGroup, QPropertyA
 
 class CollapsibleBox(QWidget):
     #   Custom signal.
-    collapsed_signal = pyqtSignal(int)
+    toggled_signal = pyqtSignal(int)
 
     def __init__(self, parent=None, title=None, content=None):
         super(CollapsibleBox, self).__init__(parent)
@@ -157,8 +157,7 @@ class CollapsibleBox(QWidget):
             #   Reset expanded flag.
             self.expanded = not self.expanded
             #   Emit height via signal.
-            self.collapsed_signal.emit(self.content_height) if self.expanded else \
-                self.collapsed_signal.emit(self.collapsed_height)
+            self.toggled_signal.emit(self.content_height if self.expanded else self.collapsed_height)
             self.button_enabled = False
             #   Re-enable the button after x time.
             self.re_enable_timer.start(1000)

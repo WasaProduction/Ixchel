@@ -11,21 +11,64 @@ class SummaryScrollArea(QScrollArea):
         #   Parameters
         self.text_labels = text_labels
         self.patient = patient
-        #   Widgets
+        """     Widgets     """
         self.general_information = GeneralInformation(self, self.text_labels, patient.general_info)
         self.hereditary_background = HereditaryBackground(self, self.text_labels, self.patient)
         self.allergy = Allergy(self, self.text_labels, self.patient.allergies)
         self.pathologic_background = PathologicalCollapsible(self, self.text_labels, self.patient)
+        #   Heights.
+        self.general_info_height = self.general_information.height()
+        self.hereditary_background_height = self.hereditary_background.height()
+        self.allergy_height = self.allergy.height()
+        self.pathologic_background_height = self.pathologic_background.height()
+        """     Height signals.     """
+        self.general_information.toggled_signal.connect(self.general_info_toggled)
+        self.allergy.toggled_signal.connect(self.allergy_toggled)
+        self.hereditary_background.toggled_signal.connect(self.hereditary_toggled)
+        self.pathologic_background.toggled_signal.connect(self.pathologic_toggled)
         #   UI
         self.init_ui()
         #   Container widget
         self.container_widget = QWidget()
+        self.container_widget_height = self.container_widget.height()
         #   Layout
         self.layout = QVBoxLayout()
         self.tune_container_layout()
         self.container_widget.setLayout(self.layout)
         self.tune_container_widget()
         self.setWidget(self.container_widget)
+
+    def update_container_widget_height(self):
+        #   Calculate new height.
+        self.container_widget_height = self.general_info_height + self.allergy_height + \
+                                       self.hereditary_background_height + self.pathologic_background_height
+        print('height to apply', self.container_widget_height)
+        #   Apply height.
+        self.container_widget.setMinimumHeight(self.container_widget_height)
+
+    def general_info_toggled(self, height):
+        #   Update section height.
+        self.general_info_height = height
+        #   Update containers height.
+        self.update_container_widget_height()
+
+    def allergy_toggled(self, height):
+        #   Update section height.
+        self.allergy_height = height
+        #   Update containers height.
+        self.update_container_widget_height()
+
+    def hereditary_toggled(self, height):
+        #   Update section height.
+        self.hereditary_background_height = height
+        #   Update containers height.
+        self.update_container_widget_height()
+
+    def pathologic_toggled(self, height):
+        #   Update section height.
+        self.pathologic_background_height = height
+        #   Update containers height.
+        self.update_container_widget_height()
 
     #   Force widget to adapt all available width while retaining its height.
     def eventFilter(self, obj, event):

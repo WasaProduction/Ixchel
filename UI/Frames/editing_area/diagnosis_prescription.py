@@ -30,7 +30,7 @@ class DiagnosisPrescription(QScrollArea):
         """     Create label/info_button & diagnosis text area        """
         diagnosis_label = QLabel(self.text_labels.diagnosis)
         diagnosis_info_button = InfoButton(self)
-        diagnosis_info_button.clicked_signal.connect(lambda: self.show_diagnosis_info())
+        diagnosis_info_button.clicked_signal.connect(lambda: DiagnosisInfo(self, self.text_labels.help))
         #   Layout to couple label and info button.
         p_lbl_btn_lyt = QHBoxLayout()
         p_lbl_btn_lyt.addWidget(diagnosis_label)
@@ -46,7 +46,7 @@ class DiagnosisPrescription(QScrollArea):
         """     Create label/info_button & prescription text area        """
         prescription_label = QLabel(self.text_labels.prescription)
         prescription_info_button = InfoButton(self, self.text_labels.information)
-        prescription_info_button.clicked_signal.connect(lambda: self.show_prescription_info())
+        prescription_info_button.clicked_signal.connect(lambda: PrescriptionInfo(self, self.text_labels.help))
         #   Layout to couple label and info button.
         d_lbl_btn_lyt = QHBoxLayout()
         d_lbl_btn_lyt.addWidget(prescription_label)
@@ -76,12 +76,6 @@ class DiagnosisPrescription(QScrollArea):
         self.setWidget(my_container_widget)
         #   Tune UI
         self.tune_ui()
-
-    def show_diagnosis_info(self):
-        DiagnosisInfo()
-
-    def show_prescription_info(self):
-        PrescriptionInfo(self, self.text_labels.help)
 
     def retrieve_data(self):
         #   Null value , if all parameters are empty

@@ -9,7 +9,7 @@ from assets.icons.buttons.button_paths import ButtonPaths
 from mongodb.read.get_patient import GetPatient
 from mongodb.read.get_text_labels import GetTextLabels
 from UI.Widgets.background import Allergy
-from UI.Widgets.Alerts.prescription_info import PrescriptionInfo
+from UI.Widgets.Alerts.diagnosis_info import DiagnosisInfo
 
 
 class MainWindow(QMainWindow):
@@ -19,20 +19,20 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 600, 1000, 500)
         self.patient = GetPatient()
         button_paths = ButtonPaths()
-        PrescriptionInfo()
         # QRcode()
         self.text_labels = GetTextLabels()
         my_layout = QVBoxLayout()
         #my_test_obj = SummaryFrame(self, patient, button_paths, text_labels)
-        my_test_obj = Allergy(self, self.text_labels, self.patient.allergies)
+        my_test_obj = QWidget()#Allergy(self, self.text_labels, self.patient.allergies)
         #child = my_test_obj.allergies_container
 
 
         """     Tags Section    """
 
         def pusheado():
-            self.patient = GetPatient('JaimeGQ')
-            my_test_obj.update_allergies(self.patient.allergies)
+            DiagnosisInfo()
+            #self.patient = GetPatient('JaimeGQ')
+            #my_test_obj.update_allergies(self.patient.allergies)
             pass
             #my_test_obj.update_summary()
             #throttle = ThrottleDebounce(pusheado)

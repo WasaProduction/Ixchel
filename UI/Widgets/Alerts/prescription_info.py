@@ -4,7 +4,7 @@ from UI.Widgets.documents.prescription_info_doc import PrescriptionInfoDoc
 
 
 class PrescriptionInfo(QDialog):
-    def __init__(self, parent=None, title=None):
+    def __init__(self, parent=None, title='Info'):
         super().__init__(parent)
         #   Variables
         self.title = title
