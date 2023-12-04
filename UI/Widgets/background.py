@@ -233,10 +233,6 @@ class Allergy (QWidget):
         self.container_layout.setContentsMargins(0, 0, 0, 0)
         self.container_layout.setSpacing(1)
         self.collapsible_widget.toggled_signal.connect(self.allergies_collapsed)
-
-        self.collapsible_widget.setStyleSheet('background: cyan')
-        self.allergies_container.setStyleSheet('background: pink')
-
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.allergies_container.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 

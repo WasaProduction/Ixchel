@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from UI.Widgets.image_button import ImageButton
 from UI.Widgets.custom_qimage import CustomQImage
 from UI.Widgets.Alerts.change_meds import ChangeMeds
-from PySide6.QtCore import Slot
+from PyQt6.QtCore import pyqtSlot
 from mongodb.read.get_affection_is_chronic import GetAffectionIsChronic
 import random
 
@@ -124,7 +124,7 @@ class UnderMedication(QWidget):
         self.init_ui()
         self.update_medication()
 
-    @Slot()
+    #@pyqtSlot
     def modify_meds(self):
         #   Update dialog.
         self.dialog.update_instructions(self.active_instructions)

@@ -42,7 +42,6 @@ class SummaryScrollArea(QScrollArea):
         #   Calculate new height.
         self.container_widget_height = self.general_info_height + self.allergy_height + \
                                        self.hereditary_background_height + self.pathologic_background_height
-        print('height to apply', self.container_widget_height)
         #   Apply height.
         self.container_widget.setMinimumHeight(self.container_widget_height)
 
@@ -100,6 +99,7 @@ class SummaryScrollArea(QScrollArea):
             if item is not None:
                 #   Allow widget to occupy the whole layout width.
                 self.layout.setStretchFactor(item.widget(), 1)
+                self.layout.setStretch(i, 1)
                 if i != self.layout.count() - 1:
                     #   Allow widgets stretch to avoid overlapping.
                     self.layout.setStretch(i, 1)
